@@ -1,0 +1,17 @@
+***************
+*** 681,687 ****
+  # change interface channel
+  Node/MobileNode instproc changechannel { whichif newchan } {
+  	$self instvar netif_
+- 	[$netif_($whichif) getchannel] delif $netif_(0)
+  	$netif_($whichif) channel $newchan
+  	$newchan addif $netif_($whichif)
+  }
+--- 681,687 ----
+  # change interface channel
+  Node/MobileNode instproc changechannel { whichif newchan } {
+  	$self instvar netif_
++ 	[$netif_($whichif) getchannel] delif $netif_($whichif)
+  	$netif_($whichif) channel $newchan
+  	$newchan addif $netif_($whichif)
+  }

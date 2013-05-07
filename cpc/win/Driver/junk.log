@@ -1,0 +1,728 @@
+================ Sat Oct 11 00:34:40 2003
+ndisWorkerThread: WorkItem 82020010
+ndisWorkerThread: WorkItem 82035E30
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82020010
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82035E30
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82020010
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82035E30
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82020010
+ndisWorkerThread: WorkItem 82035E30
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 82035E30
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82020010
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82020010
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82020010
+ndisWorkerThread: WorkItem 82035E30
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 82035E30
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82020010
+ndisWorkerThread: WorkItem 82035E30
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82020010
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82035E30
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82020010
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82020010
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 376) ==>ndisMSendX
+***NDIS*** (17, 376) ==>ndisMSendX
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 376) ==>ndisMSendX
+***NDIS*** (17, 376) ==>ndisMSendX
+NdisGetReceivedPacket - Miniort 81F5E130, Context 81EC23C8
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+NdisGetReceivedPacket - Miniort 81F58130, Context 81F0FF30
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+NdisGetReceivedPacket - Miniort 81F57130, Context 81D8DF30
+NdisGetReceivedPacket - Miniort 81F104B0, Context 81EC23C8
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0x81d8ef58
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0x81d8ef58
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0xffa9cf30
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0xffa9cf30
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 376) ==>ndisMSendX
+***NDIS*** (17, 376) ==>ndisMSendX
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 376) ==>ndisMSendX
+Passthru: FltFilterSendPacket: Passthru: in_addr: 120.8.0.67
+Passthru: IPv4AddrCompare: Passthru: in_addr: 120.8.0.67
+Passthru: in_addr: 198.173.253.120
+***NDIS*** (17, 376) ==>ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0x81d8ef58
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0x81d8ef58
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0xffab8df0
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0xffab8df0
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+Passthru: IPv4AddrCompare: Passthru: in_addr: 120.192.168.1
+Passthru: in_addr: 198.173.253.120
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 82035E30
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: ndisWorkerThread: WorkItem FF8DE390
+LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 376) ==>ndisMSendX
+***NDIS*** (17, 376) ==>ndisMSendX
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 376) ==>ndisMSendX
+Passthru: FltFilterSendPacket: Passthru: in_addr: 120.8.0.66
+Passthru: IPv4AddrCompare: Passthru: in_addr: 120.8.0.66
+Passthru: in_addr: 198.173.253.120
+***NDIS*** (17, 376) ==>ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0x81d8ef58
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0x81d8ef58
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0xffab8df0
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0xffab8df0
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+Passthru: IPv4AddrCompare: Passthru: in_addr: 120.192.168.1
+Passthru: in_addr: 198.173.253.120
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 376) ==>ndisMSendX
+***NDIS*** (17, 376) ==>ndisMSendX
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 376) ==>ndisMSendX
+Passthru: FltFilterSendPacket: Passthru: in_addr: 120.8.0.65
+Passthru: IPv4AddrCompare: Passthru: in_addr: 120.8.0.65
+Passthru: in_addr: 198.173.253.120
+***NDIS*** (17, 376) ==>ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0x81d8ef58
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0x81d8ef58
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0xffab8df0
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0xffab8df0
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+Passthru: IPv4AddrCompare: Passthru: in_addr: 120.192.168.1
+Passthru: in_addr: 198.173.253.120
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 376) ==>ndisMSendX
+***NDIS*** (17, 376) ==>ndisMSendX
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 376) ==>ndisMSendX
+Passthru: FltFilterSendPacket: Passthru: in_addr: 120.8.0.64
+Passthru: IPv4AddrCompare: Passthru: in_addr: 120.8.0.64
+Passthru: in_addr: 198.173.253.120
+***NDIS*** (17, 376) ==>ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 482) <==ndisMSendX
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0x81d8ef58
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0x81d8ef58
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0xffab8df0
+***NDIS*** (17, 584) ==>ndisMSendCompleteX
+***NDIS*** (17, 586) packet 0xffab8df0
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+***NDIS*** (17, 644) <==ndisMSendCompleteX
+Passthru: IPv4AddrCompare: Passthru: in_addr: 120.192.168.1
+Passthru: in_addr: 198.173.253.120
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem 82035E30
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: ndisWorkerThread: WorkItem 81F09488
+LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 81F9B1E0
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82007F20
+ndisWorkerThread: WorkItem 82035DB8
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82007F20
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82035DB8
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82007F20
+ndisWorkerThread: WorkItem 82035DB8
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82007F20
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82035DB8
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 82035DB8
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 82035DB8
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 82035DB8
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem FF8DE390
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem 81F09488
+ndisWorkerThread: WorkItem 82035DB8
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx
+ndisWorkerThread: WorkItem FF8DE390
+ndisWorkerThread: WorkItem 82035DB8
+PCAGizmo: LogStubFunctions: Status: 0x00000000; StatusEx
+PCAGizmo: LogStubFunctions: Status: 0xFFFFFFFF; StatusEx

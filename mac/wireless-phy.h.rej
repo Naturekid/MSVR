@@ -1,0 +1,52 @@
+***************
+*** 81,86 ****
+  	//void setnode (MobileNode *node) { node_ = node; }
+  	void node_on();
+  	void node_off();	
+  protected:
+  	double Pt_;		// transmitted signal power (W)
+  	double Pt_consume_;	// power consumption for transmission (W)
+--- 87,94 ----
+  	//void setnode (MobileNode *node) { node_ = node; }
+  	void node_on();
+  	void node_off();	
++ 	
++ 	
+  protected:
+  	double Pt_;		// transmitted signal power (W)
+  	double Pt_consume_;	// power consumption for transmission (W)
+***************
+*** 131,136 ****
+  	
+  	enum ChannelStatus { IDLE, RECV, SEND };
+  	int status_;
+  private:
+  	inline int initialized() {
+  		return (node_ && uptarget_ && downtarget_ && propagation_);
+--- 140,146 ----
+  	
+  	enum ChannelStatus { IDLE, RECV, SEND };
+  	int status_;
++ 
+  private:
+  	inline int initialized() {
+  		return (node_ && uptarget_ && downtarget_ && propagation_);
+***************
+*** 140,145 ****
+  	EnergyModel* em() { return node()->energy_model(); }
+  
+  	friend class Idle_Timer;
+  };
+  
+  #endif /* !ns_WirelessPhy_h */
+--- 150,159 ----
+  	EnergyModel* em() { return node()->energy_model(); }
+  
+  	friend class Idle_Timer;
++ 	
++ 	//std::vector< std::pair<double,double> > ratelist;
++ 	RateList ratelist;
++ 	RXList rxlist;
+  };
+  
+  #endif /* !ns_WirelessPhy_h */

@@ -1,0 +1,57 @@
+***************
+*** 162,169 ****
+  			x, y, z,			// location
+  			energy,				// energy
+  			mh->dh_duration,		// MAC: duration
+- 			ETHER_ADDR(mh->dh_da),		// MAC: source
+- 			ETHER_ADDR(mh->dh_sa),		// MAC: destination
+  			GET_ETHER_TYPE(mh->dh_body)	// MAC: type
+  			);
+  		return;
+--- 162,169 ----
+  			x, y, z,			// location
+  			energy,				// energy
+  			mh->dh_duration,		// MAC: duration
++ 			ETHER_ADDR(mh->dh_ra),		// MAC: source
++ 			ETHER_ADDR(mh->dh_ta),		// MAC: destination
+  			GET_ETHER_TYPE(mh->dh_body)	// MAC: type
+  			);
+  		return;
+***************
+*** 200,207 ****
+  	    sprintf(pt_->buffer() + offset, 
+  		    "-Ma %x -Md %x -Ms %x -Mt %x ",
+  		    mh->dh_duration,
+- 		    ETHER_ADDR(mh->dh_da),
+- 		    ETHER_ADDR(mh->dh_sa),
+  		    GET_ETHER_TYPE(mh->dh_body));
+  		    
+  	     return;
+--- 200,207 ----
+  	    sprintf(pt_->buffer() + offset, 
+  		    "-Ma %x -Md %x -Ms %x -Mt %x ",
+  		    mh->dh_duration,
++ 		    ETHER_ADDR(mh->dh_ra),
++ 		    ETHER_ADDR(mh->dh_ta),
+  		    GET_ETHER_TYPE(mh->dh_body));
+  		    
+  	     return;
+***************
+*** 242,249 ****
+  
+  		//*((u_int16_t*) &mh->dh_fc),
+  		mh->dh_duration,
+- 		ETHER_ADDR(mh->dh_da),
+- 		ETHER_ADDR(mh->dh_sa),
+  		GET_ETHER_TYPE(mh->dh_body));
+  
+  	offset = strlen(pt_->buffer());
+--- 242,249 ----
+  
+  		//*((u_int16_t*) &mh->dh_fc),
+  		mh->dh_duration,
++ 		ETHER_ADDR(mh->dh_ra),
++ 		ETHER_ADDR(mh->dh_ta),
+  		GET_ETHER_TYPE(mh->dh_body));
+  
+  	offset = strlen(pt_->buffer());

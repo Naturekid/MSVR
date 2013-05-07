@@ -1,0 +1,44 @@
+***************
+*** 213,219 ****
+  			Packet::free(p);
+  			return;
+  		}
+- 
+  	/*
+  	 * Decrease node's energy
+  	 */
+--- 238,244 ----
+  			Packet::free(p);
+  			return;
+  		}
++ 	
+  	/*
+  	 * Decrease node's energy
+  	 */
+***************
+*** 284,291 ****
+  	/*
+  	 *  Stamp the packet with the interface arguments
+  	 */
+- 	p->txinfo_.stamp((MobileNode*)node(), ant_->copy(), Pt_, lambda_);
+- 
+  	// Send the packet
+  	channel_->recv(p, this);
+  }
+--- 309,324 ----
+  	/*
+  	 *  Stamp the packet with the interface arguments
+  	 */
++ 	//if (p->txinfo_.getPrLevel() > 0){
++ 	//	double LRXThr = (10* log(RXThresh_ * 1000));
++ 	//	double pwr = pow(10,((p->txinfo_.getPrLevel() * 100.0/60.0) + LRXThr)/10.0)/1000.0;
++ 	//	p->txinfo_.stamp((MobileNode*)node(), ant_->copy(), pwr, lambda_);
++ 	//	printf("using power level %d",pwr); 
++ 	//} else {
++ 		p->txinfo_.stamp((MobileNode*)node(), ant_->copy(), Pt_, lambda_);
++ 	//	printf("using power level %d",Pt_); 
++ 	//}
++ 	
+  	// Send the packet
+  	channel_->recv(p, this);
+  }

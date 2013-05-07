@@ -1,0 +1,19 @@
+***************
+*** 22,29 ****
+  class PacketStamp {
+  public:
+  
+-   PacketStamp() : ant(0), node(0), Pr(-1), lambda(-1) { }
+-   void clear() { ant = 0; node = 0; Pr = -1; lambda = -1; }
+  
+    void init(const PacketStamp *s) {
+  	  Antenna* ant;
+--- 22,29 ----
+  class PacketStamp {
+  public:
+  
++   PacketStamp() : ant(0), node(0), Pr(-1), lambda(-1),PrLevel(-1),rate(0){ }
++   void clear() { ant = 0; node = 0; Pr = -1; lambda = -1; PrLevel = -1; rate = 0;}
+  
+    void init(const PacketStamp *s) {
+  	  Antenna* ant;

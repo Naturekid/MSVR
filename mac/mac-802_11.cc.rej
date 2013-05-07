@@ -1,0 +1,2656 @@
+***************
+*** 31,44 ****
+   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+   * SUCH DAMAGE.
+   *
+-  * $Header: /srl/dirkcvs/nsclick/ns/mac/mac-802_11.cc,v 1.3 2003/04/28 06:13:49 neufeldm Exp $
+   *
+   * Ported from CMU/Monarch's code, nov'98 -Padma.
+   */
+  
+  #include "delay.h"
+  #include "connector.h"
+  #include "packet.h"
+  #include "random.h"
+  #include "mobilenode.h"
+  
+--- 31,46 ----
+   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+   * SUCH DAMAGE.
+   *
++  * $Header: /nfs/jade/vint/CVSROOT/ns-2/mac/mac-802_11.cc,v 1.46 2003/12/10 21:06:57 xuanc Exp $
+   *
+   * Ported from CMU/Monarch's code, nov'98 -Padma.
+   */
+  
+  #include "delay.h"
+  #include "connector.h"
++ #include "agent.h"
+  #include "packet.h"
++ #include "rawpacket.h"
+  #include "random.h"
+  #include "mobilenode.h"
+  
+***************
+*** 51,68 ****
+  #include "mac-802_11.h"
+  #include "cmu-trace.h"
+  
+  
+  // XXX Can't we make these macros inline methods? Otherwise why should we have
+  // inline methods at all??
+  
+- #define CHECK_BACKOFF_TIMER()						\
+  {									\
+  	if(is_idle() && mhBackoff_.paused())				\
+  		mhBackoff_.resume(difs_);				\
+  	if(! is_idle() && mhBackoff_.busy() && ! mhBackoff_.paused())	\
+  		mhBackoff_.pause();					\
+  }
+- 
+  #define TRANSMIT(p, t)                                                  \
+  {                                                                       \
+  	tx_active_ = 1;                                                  \
+--- 53,76 ----
+  #include "mac-802_11.h"
+  #include "cmu-trace.h"
+  
++ // Added by Sushmita to support event tracing
++ #include "agent.h"
++ #include "basetrace.h"
+  
+  // XXX Can't we make these macros inline methods? Otherwise why should we have
+  // inline methods at all??
+  
++ // change wrt Mike's code
++ 
++ /*#define CHECK_BACKOFF_TIMER()						\
+  {									\
+  	if(is_idle() && mhBackoff_.paused())				\
+  		mhBackoff_.resume(difs_);				\
+  	if(! is_idle() && mhBackoff_.busy() && ! mhBackoff_.paused())	\
+  		mhBackoff_.pause();					\
+  }
++ */
++ /*
+  #define TRANSMIT(p, t)                                                  \
+  {                                                                       \
+  	tx_active_ = 1;                                                  \
+***************
+*** 71,77 ****
+           * If I'm transmitting without doing CS, such as when           \
+           * sending an ACK, any incoming packet will be "missed"         \
+           * and hence, must be discarded.                                \
+-          */                                                             \
+          if(rx_state_ != MAC_IDLE) {                                      \
+                  struct hdr_mac802_11 *dh = HDR_MAC802_11(p);                  \
+                                                                          \
+--- 79,85 ----
+           * If I'm transmitting without doing CS, such as when           \
+           * sending an ACK, any incoming packet will be "missed"         \
+           * and hence, must be discarded.                                \
++                                                                       \
+          if(rx_state_ != MAC_IDLE) {                                      \
+                  struct hdr_mac802_11 *dh = HDR_MAC802_11(p);                  \
+                                                                          \
+***************
+*** 81,105 ****
+                  assert(pktRx_);                                          \
+                  struct hdr_cmn *ch = HDR_CMN(pktRx_);                    \
+                                                                          \
+-                 ch->error() = 1;        /* force packet discard */      \
+          }                                                               \
+                                                                          \
+-         /*                                                              \
+           * pass the packet on the "interface" which will in turn        \
+           * place the packet on the channel.                             \
+           *                                                              \
+           * NOTE: a handler is passed along so that the Network          \
+           *       Interface can distinguish between incoming and         \
+           *       outgoing packets.                                      \
+-          */                                                             \
+          downtarget_->recv(p->copy(), this);                             \
+                                                                          \
+          mhSend_.start(t);                                                \
+                                                                          \
+  	mhIF_.start(txtime(p));                                         \
+  }
+  
+- #define SET_RX_STATE(x)			\
+  {					\
+  	rx_state_ = (x);		\
+  	CHECK_BACKOFF_TIMER();		\
+--- 89,114 ----
+                  assert(pktRx_);                                          \
+                  struct hdr_cmn *ch = HDR_CMN(pktRx_);                    \
+                                                                          \
++                 ch->error() = 1;         force packet discard       \
+          }                                                               \
+                                                                          \
++                                                                       \
+           * pass the packet on the "interface" which will in turn        \
+           * place the packet on the channel.                             \
+           *                                                              \
+           * NOTE: a handler is passed along so that the Network          \
+           *       Interface can distinguish between incoming and         \
+           *       outgoing packets.                                      \
++                                                                       \
+          downtarget_->recv(p->copy(), this);                             \
+                                                                          \
+          mhSend_.start(t);                                                \
+                                                                          \
+  	mhIF_.start(txtime(p));                                         \
+  }
++ */
+  
++ /*#define SET_RX_STATE(x)			\
+  {					\
+  	rx_state_ = (x);		\
+  	CHECK_BACKOFF_TIMER();		\
+***************
+*** 110,121 ****
+  	tx_state_ = (x);			\
+  	CHECK_BACKOFF_TIMER();			\
+  }
+  
+  /* ======================================================================
+     Global Variables
+     ====================================================================== */
+  
+- static PHY_MIB PMIB =
+  {
+  	DSSS_CWMin, DSSS_CWMax, DSSS_SlotTime, DSSS_CCATime,
+  	DSSS_RxTxTurnaroundTime, DSSS_SIFSTime, DSSS_PreambleLength,
+--- 119,132 ----
+  	tx_state_ = (x);			\
+  	CHECK_BACKOFF_TIMER();			\
+  }
++ */
+  
++ 
+  /* ======================================================================
+     Global Variables
+     ====================================================================== */
+  
++ /*static PHY_MIB PMIB =
+  {
+  	DSSS_CWMin, DSSS_CWMax, DSSS_SlotTime, DSSS_CCATime,
+  	DSSS_RxTxTurnaroundTime, DSSS_SIFSTime, DSSS_PreambleLength,
+***************
+*** 129,135 ****
+  	MAC_MaxTransmitMSDULifetime, MAC_MaxReceiveLifetime,
+  	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  };
+  
+  /* ======================================================================
+     TCL Hooks for the simulator
+     ====================================================================== */
+--- 140,256 ----
+  	MAC_MaxTransmitMSDULifetime, MAC_MaxReceiveLifetime,
+  	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  };
++ */
++  /* our backoff timer doesn't count down in idle times during a
++ !  * frame-exchange sequence as the mac tx state isn't idle; genreally
++ !  * these idle times are less than DIFS and won't contribute to
++ !  * counting down the backoff period, but this could be a real
++ !  * problem if the frame exchange ends up in a timeout! in that case,
++ !  * i.e. if a timeout happens we've not been counting down for the
++ !  * duration of the timeout, and in fact begin counting down only
++ !  * DIFS after the timeout!! we lose the timeout interval - which
++ !  * will is not the REAL case! also, the backoff timer could be NULL
++ !  * and we could have a pending transmission which we could have
++ !  * sent! one could argue this is an implementation artifact which
++ !  * doesn't violate the spec.. and the timeout interval is expected
++ !  * to be less than DIFS .. which means its not a lot of time we
++ !  * lose.. anyway if everyone hears everyone the only reason a ack will
++ !  * be delayed will be due to a collision => the medium won't really be
++ !  * idle for a DIFS for this to really matter!!
++   */
+  
++  inline void
++  Mac802_11::checkBackoffTimer()
++  {
++        if(is_idle() && mhBackoff_.paused())
++                mhBackoff_.resume(phymib_.getDIFS());
++        if(! is_idle() && mhBackoff_.busy() && ! mhBackoff_.paused())
++                mhBackoff_.pause();
++   }
++ 
++  inline void
++  Mac802_11::transmit(Packet *p, double timeout)
++  {
++        tx_active_ = 1;
++ 
++        if (EOTtarget_) {
++                assert (eotPacket_ == NULL);
++                eotPacket_ = p->copy();
++        }
++ 
++          /*
++ !          * If I'm transmitting without doing CS, such as when
++ !          * sending an ACK, any incoming packet will be "missed"
++ !          * and hence, must be discarded.
++           */
++          if(rx_state_ != MAC_IDLE) {
++                  struct hdr_mac802_11 *dh = HDR_MAC802_11(p);
++ 
++                  assert(dh->dh_fc.fc_type == MAC_Type_Control);
++                  assert(dh->dh_fc.fc_subtype == MAC_Subtype_ACK);
++ 
++                  assert(pktRx_);
++                  struct hdr_cmn *ch = HDR_CMN(pktRx_);
++ 
++                  ch->error() = 1;        /* force packet discard */
++          }
++ 
++          /*
++ !          * pass the packet on the "interface" which will in turn
++ !          * place the packet on the channel.
++ !          *
++ !          * NOTE: a handler is passed along so that the Network
++ !          *       Interface can distinguish between incoming and
++ !          *       outgoing packets.
++ 
++           *       Interface can distinguish between incoming and
++ !          *       outgoing packets.
++           */
++          //printf("trasmesso\n");
++ 	 downtarget_->recv(p->copy(), this);
++ 
++          mhSend_.start(timeout);
++ 
++        mhIF_.start(txtime(p));
++ 
++ }
++  inline void
++  Mac802_11::setRxState(MacState newState)
++  {
++        rx_state_ = newState;
++        checkBackoffTimer();
++  }
++ 
++  inline void
++  Mac802_11::setTxState(MacState newState)
++   {
++        tx_state_ = newState;
++        checkBackoffTimer();
++  }
++ 
++  #ifdef MIKE // need to add rst_cw etc.
++  inline void
++  Mac802_11::postBackoff(int pri)
++   {
++        rst_cw(pri);
++        assert(!mhBackoff_.busy(pri));
++        mhBackoff_.start(pri, cw_[pri], CWOffset_[pri], true);
++  }
++  #endif
++ 
++  /*
++   * This macro is only used in one place, and should be removed.
++   */
++ 
++  #define CFP_BEACON(__p) (                                                                       \
++          (((struct beacon_frame *)HDR_MAC802_11(__p))->bf_fc.fc_type == MAC_Type_Management)     \
++          &&                                                                                      \
++          (((struct beacon_frame *)HDR_MAC802_11(__p))->bf_fc.fc_subtype == MAC_Subtype_Beacon)   \
++  )
++ 
++ // Mike change ends
++ 
++ 
+  /* ======================================================================
+     TCL Hooks for the simulator
+     ====================================================================== */
+***************
+*** 137,176 ****
+  public:
+  	Mac802_11Class() : TclClass("Mac/802_11") {}
+  	TclObject* create(int, const char*const*) {
+- 		return (new Mac802_11(&PMIB, &MMIB));
+- 	}
+  } class_mac802_11;
+  
+  
+  /* ======================================================================
+     Mac Class Functions
+     ====================================================================== */
+- Mac802_11::Mac802_11(PHY_MIB *p, MAC_MIB *m) : Mac(), mhIF_(this), mhNav_(this), mhRecv_(this), mhSend_(this), mhDefer_(this, p->SlotTime), mhBackoff_(this, p->SlotTime)
+  {
+- 	macmib_ = m;
+- 	phymib_ = p;
+  	
+  	nav_ = 0.0;
+  	
+  	tx_state_ = rx_state_ = MAC_IDLE;
+  	tx_active_ = 0;
+- 	
+  	pktRTS_ = 0;
+  	pktCTRL_ = 0;
+  
+- 	cw_ = phymib_->CWMin;
+  	ssrc_ = slrc_ = 0;
+  	
+- 	sifs_ = phymib_->SIFSTime;
+- 	pifs_ = sifs_ + phymib_->SlotTime;
+- 	difs_ = sifs_ + 2*phymib_->SlotTime;
+- 	
+  	// see (802.11-1999, 9.2.10) 
+- 	eifs_ = sifs_ + (8 * ETHER_ACK_LEN / phymib_->PLCPDataRate) + difs_;
+  	
+- 	tx_sifs_ = sifs_ - phymib_->RxTxTurnaroundTime;
+- 	tx_pifs_ = tx_sifs_ + phymib_->SlotTime;
+- 	tx_difs_ = tx_sifs_ + 2 * phymib_->SlotTime;
+  	
+  	sta_seqno_ = 1;
+  	cache_ = 0;
+--- 258,356 ----
+  public:
+  	Mac802_11Class() : TclClass("Mac/802_11") {}
+  	TclObject* create(int, const char*const*) {
++ 	// change wrt Mike's code
++ 	// return (new Mac802_11(&PMIB, &MMIB));
++ 	return (new Mac802_11());
++ 	// Mike change ends!
++ 
++ }
+  } class_mac802_11;
+  
+  
++ // change wrt Mike's code
++ 
++   /* ======================================================================
++ !    Mac  and Phy MIB Class Functions
++      ====================================================================== */
++ 
++  PHY_MIB::PHY_MIB(Mac802_11 *parent)
++   {
++        /*
++         * Bind the phy mib objects.  Note that these will be bound
++ !        * to Mac/802_11 variables
++         */
++ 
++        parent->bind("CWMin_", &CWMin);
++        parent->bind("CWMax_", &CWMax);
++        parent->bind("SlotTime_", &SlotTime);
++        parent->bind("SIFS_", &SIFSTime);
++        parent->bind("PreambleLength_", &PreambleLength);
++        parent->bind("PLCPHeaderLength_", &PLCPHeaderLength);
++        parent->bind_bw("PLCPDataRate_", &PLCPDataRate);
++  }
++ 
++  MAC_MIB::MAC_MIB(Mac802_11 *parent)
++  {
++        /*
++         * Bind the phy mib objects.  Note that these will be bound
++ !        * to Mac/802_11 variables
++         */
++ 
++        parent->bind("RTSThreshold_", &RTSThreshold);
++        parent->bind("ShortRetryLimit_", &ShortRetryLimit);
++        parent->bind("LongRetryLimit_", &LongRetryLimit);
++  }
++ // Mike change ends
++ 
+  /* ======================================================================
+     Mac Class Functions
+     ====================================================================== */
++ // change wrt Mike's code
++ //Mac802_11::Mac802_11(PHY_MIB *p, MAC_MIB *m) : Mac(), mhIF_(this), mhNav_(this), mhRecv_(this), mhSend_(this), mhDefer_(this, p->SlotTime), mhBackoff_(this, p->SlotTime)
++ Mac802_11::Mac802_11() : Mac(), mhIF_(this), mhNav_(this), mhRecv_(this), mhSend_(this), mhDefer_(this), mhBackoff_(this),macmib_(this), phymib_(this), mhBeacon_(this)
++ // Mike change ends
+  {
++ 	// change wrt Mike
++ 	//macmib_ = m;
++ 	//phymib_ = p;
++ 	// change ends
+  	
+  	nav_ = 0.0;
+  	
+  	tx_state_ = rx_state_ = MAC_IDLE;
+  	tx_active_ = 0;
++ 
++ 	// change wrt Mike
++ 	eotPacket_ = NULL;
++ 	// change ends
++ 
++ 
+  	pktRTS_ = 0;
+  	pktCTRL_ = 0;
++ 		
++ 	// change wrt Mike's code
++ 	//cw_ = phymib_->CWMin;
++ 	cw_ = phymib_.getCWMin();
++ 	// change ends
+  
++ 
+  	ssrc_ = slrc_ = 0;
++ 
++ 	// change wrt Mike's code
++ 
++ 	//sifs_ = phymib_->SIFSTime;
++ 	//pifs_ = sifs_ + phymib_->SlotTime;
++ 	//difs_ = sifs_ + 2*phymib_->SlotTime;
+  	
+  	// see (802.11-1999, 9.2.10) 
++ 	//eifs_ = sifs_ + (8 * ETHER_ACK_LEN / phymib_->PLCPDataRate) + difs_;
+  	
++ 	//tx_sifs_ = sifs_ - phymib_->RxTxTurnaroundTime;
++ 	//tx_pifs_ = tx_sifs_ + phymib_->SlotTime;
++ 	//tx_difs_ = tx_sifs_ + 2 * phymib_->SlotTime;
++ 
++ 	// Added by Sushmita
++         et_ = new EventTrace();
+  	
+  	sta_seqno_ = 1;
+  	cache_ = 0;
+***************
+*** 191,196 ****
+  		bind_bw("dataRate_", &dataRate_);
+  	else
+  		dataRate_ = bandwidth_;
+  }
+  
+  
+--- 371,387 ----
+  		bind_bw("dataRate_", &dataRate_);
+  	else
+  		dataRate_ = bandwidth_;
++ 
++ 	// change wrt Mike
++         EOTtarget_ = 0;
++        	bss_id_ = IBSS_ID;
++ 	//-ak-----------
++ 	//printf("bssid in constructor %d\n",bss_id_);
++ 
++ 
++ 	// change ends
++ 
++ 
+  }
+  
+  
+***************
+*** 198,205 ****
+  Mac802_11::command(int argc, const char*const* argv)
+  {
+  	if (argc == 3) {
+- 		if (strcmp(argv[1], "log-target") == 0) {
+- 			logtarget_ = (NsObject*) TclObject::lookup(argv[2]);
+  			if(logtarget_ == 0)
+  				return TCL_ERROR;
+  			return TCL_OK;
+--- 389,412 ----
+  Mac802_11::command(int argc, const char*const* argv)
+  {
+  	if (argc == 3) {
++ 		// change wrt Mike
++ 		//if (strcmp(argv[1], "log-target") == 0) {
++ 		 if (strcmp(argv[1], "eot-target") == 0) {
++                          EOTtarget_ = (NsObject*) TclObject::lookup(argv[2]);
++                          if (EOTtarget_ == 0)
++                                  return TCL_ERROR;
++                          return TCL_OK;
++                } else if (strcmp(argv[1], "bss_id") == 0) {
++                        bss_id_ = atoi(argv[2]);
++ 
++ //-ak-----		       
++ //printf("in command bssid %d \n",bss_id_);
++ 
++                        return TCL_OK;
++                  } else if (strcmp(argv[1], "log-target") == 0) {
++ 		// change ends
++  
++  		logtarget_ = (NsObject*) TclObject::lookup(argv[2]);
+  			if(logtarget_ == 0)
+  				return TCL_ERROR;
+  			return TCL_OK;
+***************
+*** 210,220 ****
+  			assert(cache_);
+  			bzero(cache_, sizeof(Host) * (cache_node_count_+1 ));
+  			return TCL_OK;
+- 		}
+  	}
+  	return Mac::command(argc, argv);
+  }
+  
+  /* ======================================================================
+     Debugging Routines
+     ====================================================================== */
+--- 417,467 ----
+  			assert(cache_);
+  			bzero(cache_, sizeof(Host) * (cache_node_count_+1 ));
+  			return TCL_OK;
++ 		} else if(strcmp(argv[1], "eventtrace") == 0) {
++ 			// command added to support event tracing by Sushmita
++                         et_ = (EventTrace *)TclObject::lookup(argv[2]);
++                         return (TCL_OK);
++                 }
++ 
+  	}
+  	return Mac::command(argc, argv);
+  }
+  
++ // Added by Sushmita to support event tracing
++ void Mac802_11::trace_event(char *eventtype, Packet *p) {
++         if (et_ == NULL) return;
++         char *wrk = et_->buffer();
++         char *nwrk = et_->nbuffer();
++ 	
++         hdr_ip *iph = hdr_ip::access(p);
++         //char *src_nodeaddr =
++ 	//       Address::instance().print_nodeaddr(iph->saddr());
++         //char *dst_nodeaddr =
++         //      Address::instance().print_nodeaddr(iph->daddr());
++ 	
++         struct hdr_mac802_11* dh = HDR_MAC802_11(p);
++ 	
++         //struct hdr_cmn *ch = HDR_CMN(p);
++ 	
++ 	if(wrk != 0) {
++ 		sprintf(wrk, "E -t "TIME_FORMAT" %s %2x ",
++ 			et_->round(Scheduler::instance().clock()),
++                         eventtype,
++                         //ETHER_ADDR(dh->dh_sa)
++                         ETHER_ADDR(dh->dh_ta)
++                         );
++         }
++         if(nwrk != 0) {
++                 sprintf(nwrk, "E -t "TIME_FORMAT" %s %2x ",
++                         et_->round(Scheduler::instance().clock()),
++                         eventtype,
++                         //ETHER_ADDR(dh->dh_sa)
++                         ETHER_ADDR(dh->dh_ta)
++                         );
++         }
++         et_->dump();
++ }
++ 
+  /* ======================================================================
+     Debugging Routines
+     ====================================================================== */
+***************
+*** 226,232 ****
+  
+  	fprintf(stderr, "\t[ %2x %2x %2x %2x ] %x %s %d\n",
+  		*t, dh->dh_duration,
+- 		ETHER_ADDR(dh->dh_da), ETHER_ADDR(dh->dh_sa),
+  		index_, packet_info.name(ch->ptype()), ch->size());
+  }
+  
+--- 473,482 ----
+  
+  	fprintf(stderr, "\t[ %2x %2x %2x %2x ] %x %s %d\n",
+  		*t, dh->dh_duration,
++ 		// change wrt Mike
++ 		//ETHER_ADDR(dh->dh_da), ETHER_ADDR(dh->dh_sa),
++ 		 ETHER_ADDR(dh->dh_ra), ETHER_ADDR(dh->dh_ta),
++ 		// change ends
+  		index_, packet_info.name(ch->ptype()), ch->size());
+  }
+  
+***************
+*** 265,283 ****
+  	struct hdr_mac802_11 *dh = (struct hdr_mac802_11*) hdr;
+  	//dst = (u_int32_t)(dst);
+  
+- 	if(dst > -2)
+  		STORE4BYTE(&dst, (dh->dh_da));
+  
+- 	return ETHER_ADDR(dh->dh_da);
+  }
+  
+  inline int 
+  Mac802_11::hdr_src(char* hdr, int src )
+  {
+  	struct hdr_mac802_11 *dh = (struct hdr_mac802_11*) hdr;
+- 	if(src > -2)
+  		STORE4BYTE(&src, (dh->dh_sa));
+- 	return ETHER_ADDR(dh->dh_sa);
+  }
+  
+  inline int 
+--- 515,568 ----
+  	struct hdr_mac802_11 *dh = (struct hdr_mac802_11*) hdr;
+  	//dst = (u_int32_t)(dst);
+  
++ 	// change wrt Mike
++ 	/*if(dst > -2)
+  		STORE4BYTE(&dst, (dh->dh_da));
+  
++ 	return ETHER_ADDR(dh->dh_da);*/
++ 	
++        if (dst > -2) {
++                if ((bss_id() == IBSS_ID) || (addr() == bss_id())) {
++                        /* if I'm AP (2nd condition above!), the dh_3a
++ !                        * is already set by the MAC whilst fwding; if
++ !                        * locally originated pkt, it might make sense
++ !                        * to set the dh_3a to myself here! don't know
++ !                        * how to distinguish between the two here - and
++ !                        * the info is not critical to the dst station
++ !                        * anyway!
++                         */
++                        STORE4BYTE(&dst, (dh->dh_ra));
++                } else {
++                        /* in BSS mode, the AP forwards everything;
++ !                        * therefore, the real dest goes in the 3rd
++ !                        * address, and the AP address goes in the
++ !                        * destination address
++                         */
++                        STORE4BYTE(&bss_id_, (dh->dh_ra));
++                        STORE4BYTE(&dst, (dh->dh_3a));
++                }
++        }
++ 
++ 
++        return (u_int32_t)ETHER_ADDR(dh->dh_ra);
++ 	// change ends
+  }
+  
+  inline int 
+  Mac802_11::hdr_src(char* hdr, int src )
+  {
+  	struct hdr_mac802_11 *dh = (struct hdr_mac802_11*) hdr;
++ 	// change wrt Mike's code
++ 	/*if(src > -2)
+  		STORE4BYTE(&src, (dh->dh_sa));
++ 	return ETHER_ADDR(dh->dh_sa);*/
++         if(src > -2)
++                STORE4BYTE(&src, (dh->dh_ta));
++         return ETHER_ADDR(dh->dh_ta);
++ 
++ 
++ 	// change ends
++ 
+  }
+  
+  inline int 
+***************
+*** 293,301 ****
+  /* ======================================================================
+     Misc Routines
+     ====================================================================== */
+  inline int
+  Mac802_11::is_idle()
+  {
+  	if(rx_state_ != MAC_IDLE)
+  		return 0;
+  	if(tx_state_ != MAC_IDLE)
+--- 578,619 ----
+  /* ======================================================================
+     Misc Routines
+     ====================================================================== */
++ // change wrt Mike's code
++ #undef INTERLEAVING
++ // change ends
++ 
+  inline int
+  Mac802_11::is_idle()
+  {
++ 	// change wrt Mike's code
++  #ifdef INTERLEAVING
++  #define INTERLEAVING_TIME 0.030
++        Scheduler &s = Scheduler::instance();
++        double st = s.clock();
++ 
++        double nextCycle = floor(st / (INTERLEAVING_TIME*2) + 1)
++                                * INTERLEAVING_TIME*2;
++        double nextSwitch = nextCycle - INTERLEAVING_TIME
++                - phymib_.getDIFS()
++                - phymib_.getSIFS()
++                               + txtime(phymib_.getCTSlen(), basicRate_)
++                - txtime(phymib_.getCTSlen(), basicRate_) * 2
++                - (Random::random() % cw_) * phymib_.getSlotTime();
++        if ((st >= nextSwitch) && (st < nextCycle)) {
++                if (nextCycle > nav_) {
++                        nav_ = nextCycle;
++                        if (mhNav_.busy()) {
++                                mhNav_.stop();
++                        }
++                        mhNav_.start(nextCycle - st);
++                }
++                return(0);
++        }
++ 
++  #endif
++ 
++ 	// change ends
++ 
+  	if(rx_state_ != MAC_IDLE)
+  		return 0;
+  	if(tx_state_ != MAC_IDLE)
+***************
+*** 339,354 ****
+  	case MAC_Type_Control:
+  		switch(mh->dh_fc.fc_subtype) {
+  		case MAC_Subtype_RTS:
+- 			if((u_int32_t)ETHER_ADDR(mh->dh_sa) == \
+- 			   (u_int32_t)index_) {
+  				drop(p, why);
+  				return;
+  			}
+  			/* fall through - if necessary */
+  		case MAC_Subtype_CTS:
+  		case MAC_Subtype_ACK:
+- 			if((u_int32_t)ETHER_ADDR(mh->dh_da) == \
+- 			   (u_int32_t)index_) {
+  				drop(p, why);
+  				return;
+  			}
+--- 657,677 ----
+  	case MAC_Type_Control:
+  		switch(mh->dh_fc.fc_subtype) {
+  		case MAC_Subtype_RTS:
++ 			// change wrt Mike's code
++ 			//if((u_int32_t)ETHER_ADDR(mh->dh_sa) == 
++ 			 if((u_int32_t)ETHER_ADDR(mh->dh_ta) ==  (u_int32_t)index_) {
+  				drop(p, why);
+  				return;
+  			}
++ 			//change ends
++ 
+  			/* fall through - if necessary */
+  		case MAC_Subtype_CTS:
+  		case MAC_Subtype_ACK:
++ 			// change wrt Mike's code
++ 			//if((u_int32_t)ETHER_ADDR(mh->dh_da) == 
++ 			if((u_int32_t)ETHER_ADDR(mh->dh_ra) == \
++ 			 (u_int32_t)index_) {
+  				drop(p, why);
+  				return;
+  			}
+***************
+*** 361,373 ****
+  	case MAC_Type_Data:
+  		switch(mh->dh_fc.fc_subtype) {
+  		case MAC_Subtype_Data:
+- 			if((u_int32_t)ETHER_ADDR(mh->dh_da) == \
+  			   (u_int32_t)index_ ||
+  			   (u_int32_t)ETHER_ADDR(mh->dh_sa) == \
+  			   (u_int32_t)index_ ||
+  			   (u_int32_t)ETHER_ADDR(mh->dh_da) == MAC_BROADCAST) {
+- 				drop(p);
+  				return;
+  			}
+  			break;
+  		default:
+--- 684,705 ----
+  	case MAC_Type_Data:
+  		switch(mh->dh_fc.fc_subtype) {
+  		case MAC_Subtype_Data:
++ 			// change wrt Mike's code
++ 			/*if((u_int32_t)ETHER_ADDR(mh->dh_da) == \
+  			   (u_int32_t)index_ ||
+  			   (u_int32_t)ETHER_ADDR(mh->dh_sa) == \
+  			   (u_int32_t)index_ ||
+  			   (u_int32_t)ETHER_ADDR(mh->dh_da) == MAC_BROADCAST) {
++ 				drop(p,why);
+  				return;
++ 			*/
++ 			if((u_int32_t)ETHER_ADDR(mh->dh_ra) == \
++                            (u_int32_t)index_ ||
++                           (u_int32_t)ETHER_ADDR(mh->dh_ta) == \
++                            (u_int32_t)index_ ||
++                           (u_int32_t)ETHER_ADDR(mh->dh_ra) == MAC_BROADCAST) {
++                                 drop(p,why);
++                                 return;
+  			}
+  			break;
+  		default:
+***************
+*** 390,396 ****
+  	 * Update the NAV so that this does not screw
+  	 * up carrier sense.
+  	 */
+- 	set_nav(usec(eifs_ + txtime(p)));
+  	Packet::free(p);
+  }
+  
+--- 722,731 ----
+  	 * Update the NAV so that this does not screw
+  	 * up carrier sense.
+  	 */
++ 	// change wrt Mike's code
++ 	//set_nav(usec(eifs_ + txtime(p)));
++ 	
++ 	set_nav(usec(phymib_.getEIFS() + txtime(p)));
+  	Packet::free(p);
+  }
+  
+***************
+*** 399,405 ****
+  {
+  	switch(rx_state_) {
+  	case MAC_RECV:
+- 		SET_RX_STATE(MAC_COLL);
+  		/* fall through */
+  	case MAC_COLL:
+  		assert(pktRx_);
+--- 734,742 ----
+  {
+  	switch(rx_state_) {
+  	case MAC_RECV:
++ 		// change wrt Mike's code
++ 		//SET_RX_STATE(MAC_COLL);
++ 		setRxState(MAC_COLL);
+  		/* fall through */
+  	case MAC_COLL:
+  		assert(pktRx_);
+***************
+*** 436,452 ****
+  		/*
+  		 *  Need to send a CTS or ACK.
+  		 */
+- 		mhDefer_.start(sifs_);
+  	} else if(pktRTS_) {
+  		if(mhBackoff_.busy() == 0) {
+  			rTime = (Random::random() % cw_) * phymib_->SlotTime;
+  			mhDefer_.start(difs_ + rTime);
+  		}
+  	} else if(pktTx_) {
+  		if(mhBackoff_.busy() == 0) {
+  			hdr_cmn *ch = HDR_CMN(pktTx_);
+  			struct hdr_mac802_11 *mh = HDR_MAC802_11(pktTx_);
+  			
+  			if ((u_int32_t) ch->size() < macmib_->RTSThreshold ||
+  			    (u_int32_t) ETHER_ADDR(mh->dh_da) == MAC_BROADCAST) {
+  				rTime = (Random::random() % cw_) * phymib_->SlotTime;
+--- 773,817 ----
+  		/*
+  		 *  Need to send a CTS or ACK.
+  		 */
++ 		// change wrt Mike's code
++ 		//mhDefer_.start(sifs_);
++ /*		if (mhDefer_.busy() != 0)
++ 		{
++ 			printf("DeferTimer busy!\n");
++ 			exit(1);
++ 		}*/
++ // 		printf("Mac 802_11 - tx_resume1 (%d)\n", mhDefer_.busy());
++ // 		if(index_ == 1) printf("(%i) tx_resume1......", index_);
++ 		mhDefer_.start(phymib_.getSIFS());
++ 
++ 
+  	} else if(pktRTS_) {
+  		if(mhBackoff_.busy() == 0) {
++ 			// change wrt Mike's code
++ 			/*
+  			rTime = (Random::random() % cw_) * phymib_->SlotTime;
+  			mhDefer_.start(difs_ + rTime);
++ 			*/
++ 			
++ 			/* Modifica Federico 9/12/2004 */
++ /*			 rTime = (Random::random() % cw_)
++                                * phymib_.getSlotTime();
++ 			//printf("Mac 802_11 - tx_resume2\n");
++ // 			if(index_ == 1) printf("(%i) tx_resume2.......", index_);
++                        mhDefer_.start( phymib_.getDIFS() + rTime);*/
++ 		       
++ 			mhBackoff_.start(cw_, is_idle(), phymib_.getDIFS());
++ 			/*
++ 			Fine modifica Federico 9/12/2004
++ 			*/
+  		}
+  	} else if(pktTx_) {
+  		if(mhBackoff_.busy() == 0) {
+  			hdr_cmn *ch = HDR_CMN(pktTx_);
+  			struct hdr_mac802_11 *mh = HDR_MAC802_11(pktTx_);
+  			
++ 			// change wrt Mike's code
++ 			/*
+  			if ((u_int32_t) ch->size() < macmib_->RTSThreshold ||
+  			    (u_int32_t) ETHER_ADDR(mh->dh_da) == MAC_BROADCAST) {
+  				rTime = (Random::random() % cw_) * phymib_->SlotTime;
+***************
+*** 454,466 ****
+  			} else {
+  				mhDefer_.start(sifs_);
+  			}
+  		}
+  	} else if(callback_) {
+  		Handler *h = callback_;
+  		callback_ = 0;
+  		h->handle((Event*) 0);
+  	}
+- 	SET_TX_STATE(MAC_IDLE);
+  }
+  
+  void
+--- 819,857 ----
+  			} else {
+  				mhDefer_.start(sifs_);
+  			}
++ 			*/
++ 			if ((u_int32_t) ch->size() < macmib_.getRTSThreshold()
++                                 || (u_int32_t) ETHER_ADDR(mh->dh_ra)
++                                                == MAC_BROADCAST)
++                        {
++                                /* Modifica Federico 9/12/2004 */
++ /*			       rTime = (Random::random() % cw_)
++                                        * phymib_.getSlotTime();
++ 				//printf("Mac 802_11 - tx_resume3 (%f)\n", rTime);
++ // 				if(index_ == 1) printf("(%i) tx_resume3.....", index_);
++                                mhDefer_.start(phymib_.getDIFS() + rTime);*/
++ 			       
++ 			       
++ 			       mhBackoff_.start(cw_, is_idle(), phymib_.getDIFS());
++ 			       
++ 			       //Fine modifica Federico 9/12/2004
++                         } else {
++ // 		 		printf("Mac 802_11 - tx_resume4\n");
++ // 				if(index_ == 1) printf("(%i) tx_resume4.....", index_);
++                               mhDefer_.start(phymib_.getSIFS());
++                         }
++ 
++ 
+  		}
+  	} else if(callback_) {
+  		Handler *h = callback_;
+  		callback_ = 0;
+  		h->handle((Event*) 0);
+  	}
++ 	// change wrt Mike's code
++ 	//SET_TX_STATE(MAC_IDLE);
++ 	setTxState(MAC_IDLE);
++ 
+  }
+  
+  void
+***************
+*** 468,474 ****
+  {
+  	assert(pktRx_ == 0);
+  	assert(mhRecv_.busy() == 0);
+- 	SET_RX_STATE(MAC_IDLE);
+  }
+  
+  
+--- 859,868 ----
+  {
+  	assert(pktRx_ == 0);
+  	assert(mhRecv_.busy() == 0);
++ 	// change wrt Mike's code
++ 	//SET_RX_STATE(MAC_IDLE);
++ 	setRxState(MAC_IDLE);
++ 
+  }
+  
+  
+***************
+*** 478,483 ****
+  void
+  Mac802_11::backoffHandler()
+  {
+  	if(pktCTRL_) {
+  		assert(mhSend_.busy() || mhDefer_.busy());
+  		return;
+--- 872,880 ----
+  void
+  Mac802_11::backoffHandler()
+  {
++ ///-ak-------
++ //	printf("backoff andler \n");
++ 
+  	if(pktCTRL_) {
+  		assert(mhSend_.busy() || mhDefer_.busy());
+  		return;
+***************
+*** 496,523 ****
+  		return;
+  
+  	assert(mhBackoff_.busy() == 0);
+- 	//if (mhBackoff_.busy() != 0)
+- 	//{
+- 	//	printf("deferHandler:mhBackoff_ busy!\n");
+- 	//	return;
+- 	//}
+  	if(check_pktRTS() == 0)
+  		return;
+  
+  	if(check_pktTx() == 0)
+  		return;
+  }
+  
+  void
+  Mac802_11::navHandler()
+  {
+  	if(is_idle() && mhBackoff_.paused())
+- 		mhBackoff_.resume(difs_);
+  }
+  
+  void
+  Mac802_11::recvHandler()
+  {
+  	recv_timer();
+  }
+  
+--- 899,935 ----
+  		return;
+  
+  	assert(mhBackoff_.busy() == 0);
++ // 	if (mhBackoff_.busy() != 0)
++ // 	{
++ // 		printf("deferHandler:mhBackoff_ busy!\n");
++ // 		return;
++ // 	}
++ 	
++ // 	if(index_ == 1) printf("(%i) invio rts.....", index_);
+  	if(check_pktRTS() == 0)
+  		return;
+  
+  	if(check_pktTx() == 0)
++ 	{
++ // 		printf("Defer %d\n", pippo);
+  		return;
++ 	}
+  }
+  
+  void
+  Mac802_11::navHandler()
+  {
+  	if(is_idle() && mhBackoff_.paused())
++ 		// change wrt Mike's code
++ 		//mhBackoff_.resume(difs_);
++ 		mhBackoff_.resume(phymib_.getDIFS());
++ 
+  }
+  
+  void
+  Mac802_11::recvHandler()
+  {
++ // 	if(index_ == 1) printf("(%i) fine ricezione....", index_);
+  	recv_timer();
+  }
+  
+***************
+*** 531,536 ****
+  void
+  Mac802_11::txHandler()
+  {
+  	tx_active_ = 0;
+  }
+  
+--- 943,956 ----
+  void
+  Mac802_11::txHandler()
+  {
++ 	// change wrtt Mike's code
++        if (EOTtarget_) {
++                assert(eotPacket_);
++                EOTtarget_->recv(eotPacket_, (Handler *) 0);
++                eotPacket_ = NULL;
++        }
++ 
++ 
+  	tx_active_ = 0;
+  }
+  
+***************
+*** 573,578 ****
+  	default:
+  		assert(0);
+  	}
+  	tx_resume();
+  }
+  
+--- 993,1000 ----
+  	default:
+  		assert(0);
+  	}
++ // 	printf("send_timer call tx_resume\n");
++ // 	if(index_ == 1) printf("(%i) send_timer call tx_resume.....", index_);
+  	tx_resume();
+  }
+  
+***************
+*** 602,608 ****
+  			discard(pktCTRL_, DROP_MAC_BUSY); pktCTRL_ = 0;
+  			return 0;
+  		}
+- 		SET_TX_STATE(MAC_CTS);
+  		
+  		/*
+  		 * timeout:  cts + data tx time calculated by
+--- 1024,1033 ----
+  			discard(pktCTRL_, DROP_MAC_BUSY); pktCTRL_ = 0;
+  			return 0;
+  		}
++ 		// change wrt Mike's code
++ 		//SET_TX_STATE(MAC_CTS);
++ 		setTxState(MAC_CTS);
++ 
+  		
+  		/*
+  		 * timeout:  cts + data tx time calculated by
+***************
+*** 611,623 ****
+  		 *           a guess since it is unspecified
+  		 *           (note: mh->dh_duration == cf->cf_duration)
+  		 */
+- 		timeout = txtime(ETHER_CTS_LEN, basicRate_)
+  			+ DSSS_MaxPropagationDelay			// XXX
+  			+ sec(mh->dh_duration)
+  			+ DSSS_MaxPropagationDelay			// XXX
+  			- sifs_
+- 			- txtime(ETHER_ACK_LEN, basicRate_);
+  		
+  		break;
+  		/*
+  		 * IEEE 802.11 specs, section 9.2.8
+--- 1036,1057 ----
+  		 *           a guess since it is unspecified
+  		 *           (note: mh->dh_duration == cf->cf_duration)
+  		 */
++ 		// change wrt Mike's code
++ 		/*timeout = txtime(ETHER_CTS_LEN, basicRate_)
+  			+ DSSS_MaxPropagationDelay			// XXX
+  			+ sec(mh->dh_duration)
+  			+ DSSS_MaxPropagationDelay			// XXX
+  			- sifs_
++ 			- txtime(ETHER_ACK_LEN, basicRate_);*/
+  		
++ 		 timeout = txtime(phymib_.getCTSlen(), basicRate_)
++                         + DSSS_MaxPropagationDelay                      // XXX
++                         + sec(mh->dh_duration)
++                         + DSSS_MaxPropagationDelay                      // XXX
++                        - phymib_.getSIFS()
++                        - txtime(phymib_.getACKlen(), basicRate_);
++ 
++ 
+  		break;
+  		/*
+  		 * IEEE 802.11 specs, section 9.2.8
+***************
+*** 625,640 ****
+  		 * the busy/idle state of the medium.
+  		 */
+  	case MAC_Subtype_ACK:
+- 		SET_TX_STATE(MAC_ACK);
+  
+- 		timeout = txtime(ETHER_ACK_LEN, basicRate_);
+- 		
+  		break;
+  	default:
+  		fprintf(stderr, "check_pktCTRL:Invalid MAC Control subtype\n");
+  		exit(1);
+  	}
+-         TRANSMIT(pktCTRL_, timeout);
+  	return 0;
+  }
+  
+--- 1059,1082 ----
+  		 * the busy/idle state of the medium.
+  		 */
+  	case MAC_Subtype_ACK:
++ 		
++ 		// change wrt Mike's code
++ 		/*SET_TX_STATE(MAC_ACK);
++ 		timeout = txtime(ETHER_ACK_LEN, basicRate_);*/
+  
++ 		setTxState(MAC_ACK);
++                 timeout = txtime(phymib_.getACKlen(), basicRate_);
++ // 		if(index_ == 1) printf("(%i) mando ack.....", index_);
+  		break;
+  	default:
+  		fprintf(stderr, "check_pktCTRL:Invalid MAC Control subtype\n");
+  		exit(1);
+  	}
++ 	// change wrt Mike's code 
++ //       TRANSMIT(pktCTRL_, timeout);
++ 	transmit(pktCTRL_, timeout);
++ 
++ 
+  	return 0;
+  }
+  
+***************
+*** 654,675 ****
+   	switch(mh->dh_fc.fc_subtype) {
+  	case MAC_Subtype_RTS:
+  		if(! is_idle()) {
+  			inc_cw();
+  			mhBackoff_.start(cw_, is_idle());
+  			return 0;
+  		}
+- 		SET_TX_STATE(MAC_RTS);
+  		timeout = txtime(ETHER_RTS_LEN, basicRate_)
+  			+ DSSS_MaxPropagationDelay			// XXX
+  			+ sifs_
+  			+ txtime(ETHER_CTS_LEN, basicRate_)
+  			+ DSSS_MaxPropagationDelay;			// XXX
+  		break;
+  	default:
+  		fprintf(stderr, "check_pktRTS:Invalid MAC Control subtype\n");
+  		exit(1);
+  	}
+-         TRANSMIT(pktRTS_, timeout);
+  	return 0;
+  }
+  
+--- 1096,1130 ----
+   	switch(mh->dh_fc.fc_subtype) {
+  	case MAC_Subtype_RTS:
+  		if(! is_idle()) {
++ // 			printf("Successo\n");
+  			inc_cw();
+  			mhBackoff_.start(cw_, is_idle());
+  			return 0;
+  		}
++ 		// change wrt Mike's code
++ 		/*SET_TX_STATE(MAC_RTS);
+  		timeout = txtime(ETHER_RTS_LEN, basicRate_)
+  			+ DSSS_MaxPropagationDelay			// XXX
+  			+ sifs_
+  			+ txtime(ETHER_CTS_LEN, basicRate_)
+  			+ DSSS_MaxPropagationDelay;			// XXX
++ 		*/
++ 		setTxState(MAC_RTS);
++                timeout = txtime(phymib_.getRTSlen(), basicRate_)
++                        + DSSS_MaxPropagationDelay                      // XXX
++                        + phymib_.getSIFS()
++                        + txtime(phymib_.getCTSlen(), basicRate_)
++                        + DSSS_MaxPropagationDelay;
+  		break;
+  	default:
+  		fprintf(stderr, "check_pktRTS:Invalid MAC Control subtype\n");
+  		exit(1);
+  	}
++ 	// change wrt Mike's code
++ 	// TRANSMIT(pktRTS_, timeout);
++ 	transmit(pktRTS_, timeout);
++   
++ 
+  	return 0;
+  }
+  
+***************
+*** 687,707 ****
+  	mh = HDR_MAC802_11(pktTx_);
+         	//int len = HDR_CMN(pktTx_)->size();
+  
+  	switch(mh->dh_fc.fc_subtype) {
+  	case MAC_Subtype_Data:
+  		if(! is_idle()) {
+- 			sendRTS(ETHER_ADDR(mh->dh_da));
+  			inc_cw();
+  			mhBackoff_.start(cw_, is_idle());
+  			return 0;
+  		}
+- 		SET_TX_STATE(MAC_SEND);
+- 		if((u_int32_t)ETHER_ADDR(mh->dh_da) != MAC_BROADCAST)
+  			timeout = txtime(pktTx_)
+  				+ DSSS_MaxPropagationDelay		// XXX
+  				+ sifs_
+  				+ txtime(ETHER_ACK_LEN, basicRate_)
+- 				+ DSSS_MaxPropagationDelay;		// XXX
+  		else
+  			timeout = txtime(pktTx_);
+  		break;
+--- 1142,1179 ----
+  	mh = HDR_MAC802_11(pktTx_);
+         	//int len = HDR_CMN(pktTx_)->size();
+  
++ 
++ //-ak-----------
++ //	printf("chckpkt TX \n");
++ 
++ 
+  	switch(mh->dh_fc.fc_subtype) {
+  	case MAC_Subtype_Data:
+  		if(! is_idle()) {
++ 			// change wrt Mike's code
++ 			//sendRTS(ETHER_ADDR(mh->dh_da));
++ 			sendRTS(ETHER_ADDR(mh->dh_ra));
++ 
+  			inc_cw();
+  			mhBackoff_.start(cw_, is_idle());
++ // 			pippo = 1;
+  			return 0;
+  		}
++ 		// change wrt Mike's code
++ 		//SET_TX_STATE(MAC_SEND);
++ 		/*if((u_int32_t)ETHER_ADDR(mh->dh_da) != MAC_BROADCAST)
+  			timeout = txtime(pktTx_)
+  				+ DSSS_MaxPropagationDelay		// XXX
+  				+ sifs_
+  				+ txtime(ETHER_ACK_LEN, basicRate_)
++ 				+ DSSS_MaxPropagationDelay;		*/// XXX
++ 		setTxState(MAC_SEND);
++                if((u_int32_t)ETHER_ADDR(mh->dh_ra) != MAC_BROADCAST)
++                         timeout = txtime(pktTx_)
++                                 + DSSS_MaxPropagationDelay              // XXX
++                                + phymib_.getSIFS()
++                                + txtime(phymib_.getACKlen(), basicRate_)
++                                + DSSS_MaxPropagationDelay;             // XXX
+  		else
+  			timeout = txtime(pktTx_);
+  		break;
+***************
+*** 710,720 ****
+  		//printf("pktRTS:%x, pktCTS/ACK:%x, pktTx:%x\n",pktRTS_, pktCTRL_,pktTx_);
+  		exit(1);
+  	}
+-         TRANSMIT(pktTx_, timeout);
+  	return 0;
+  }
+  
+  /*
+   * Low-level transmit functions that actually place the packet onto
+   * the channel.
+   */
+--- 1182,1292 ----
+  		//printf("pktRTS:%x, pktCTS/ACK:%x, pktTx:%x\n",pktRTS_, pktCTRL_,pktTx_);
+  		exit(1);
+  	}
++ 	// change wrt Mike's code
++         //TRANSMIT(pktTx_, timeout);
++ // 	if(index_ == 1) printf("(%i) trasmesso\n",index_);
++ 	transmit(pktTx_, timeout);
++ // 	pippo = 2;
+  	return 0;
+  }
+  
++ // helper function
++ click_wifi_extra* 
++ getWifiExtra(Packet* p)
++ {
++   	struct hdr_cmn* chdr = HDR_CMN(p);
++ 	if (chdr->ptype() == PT_RAW){
++ 		hdr_raw* rhdr = hdr_raw::access(p);
++ 		if (rhdr->subtype == hdr_raw::MADWIFI) {
++ 			click_wifi_extra* ceh = (click_wifi_extra*)(p->accessdata());
++ 			if (ceh->magic == WIFI_EXTRA_MAGIC){
++ 				return ceh;
++ 			}			
++ 		}
++ 	}
++ 	return 0;
++ }
++ 
++ click_wifi* 
++ getWifi(Packet* p)
++ {
++   	struct hdr_cmn* chdr = HDR_CMN(p);
++ 	if (chdr->ptype() == PT_RAW){
++ 		hdr_raw* rhdr = hdr_raw::access(p);
++ 		if (rhdr->subtype == hdr_raw::MADWIFI) {
++ 			click_wifi_extra* ceh = (click_wifi_extra*)(p->accessdata());
++ 			if (ceh->magic == WIFI_EXTRA_MAGIC){
++ 				return (click_wifi*)(p->accessdata() + sizeof(click_wifi_extra));
++ 			}			
++ 		}
++ 	}
++ 	return 0;
++ }
++ 
++ /*void
++   Mac802_11::sendSCANREQ(int dst)
++   {
++   Packet *p = Packet::alloc();
++   hdr_cmn* ch = HDR_CMN(p);
++   struct probereq_frame *pbr = (struct probereq_frame*)p->access(hdr_mac::offset_);
++ 
++   assert(pktTx_);
++   assert(pktRTS_ == 0);
++   
++   
++   ch->uid() = 0;
++   ch->ptype() = PT_MAC;
++   // change wrt Mike's code
++   //ch->size() = ETHER_RTS_LEN;
++   ch->size() = phymib_.getRTSlen();
++   ch->iface() = -2;
++   ch->error() = 0;
++   
++   bzero(srf, MAC_HDR_LEN);
++   
++   pbr->preq_fc.fc_protocol_version = MAC_ProtocolVersion;
++   pbr->preq_fc.fc_type       = MAC_Type_Management;
++   pbr->preq_fc.fc_subtype    = MAC_Subtype_ProbeReq;
++   pbr->preq_fc.fc_to_ds      = 0;
++   pbr->preq_fc.fc_from_ds    = 0;
++   pbr->preq_fc.fc_more_frag  = 0;
++   pbr->preq_fc.fc_retry      = 0;
++   pbr->preq_fc.fc_pwr_mgt    = 0;
++   
++   //rf->rf_duration = RTS_DURATION(pktTx_);
++   STORE4BYTE(&dst, (srf->rf_ra));
++   
++   /*  store rts tx time */
++ 
++ 
++ /*      ch->txtime() = txtime(ch->size(), basicRate_);
++ 	
++ STORE4BYTE(&index_, (srf->rf_ta));*/
++ /* calculate rts duration field */
++ 
++ // change wrt Mike's code
+  /*
++   pbr->rf_duration = usec(sifs_
++   + txtime(ETHER_CTS_LEN, basicRate_)
++   + sifs_
++   + txtime(pktTx_)
++   + sifs_
++   + txtime(ETHER_ACK_LEN, basicRate_));
++ */
++ /*
++   pbr->preq_duration = usec(phymib_.getSIFS()
++   + txtime(phymib_.getCTSlen(), basicRate_)
++   + phymib_.getSIFS()
++   + txtime(pktTx_)
++   + phymib_.getSIFS()
++   + txtime(phymib_.getACKlen(), basicRate_));
++   
++   pktRTS_ = p;
++   
++   }
++ */
++ 
++ /*
+   * Low-level transmit functions that actually place the packet onto
+   * the channel.
+   */
+***************
+*** 734,749 ****
+  	 *
+  	 *  XXX: also skip if destination is a broadcast
+  	 */
+- 	if( (u_int32_t) HDR_CMN(pktTx_)->size() < macmib_->RTSThreshold ||
+- 	    (u_int32_t) dst == MAC_BROADCAST) {
+  		Packet::free(p);
+  		//p = 0;
+  		return;
+  	}
+  
+  	ch->uid() = 0;
+  	ch->ptype() = PT_MAC;
+- 	ch->size() = ETHER_RTS_LEN;
+  	ch->iface() = -2;
+  	ch->error() = 0;
+  
+--- 1306,1342 ----
+  	 *
+  	 *  XXX: also skip if destination is a broadcast
+  	 */
++ 	click_wifi_extra* ceh = getWifiExtra(pktTx_);
++ 	if ((ceh != 0) && ((u_int32_t) dst != MAC_BROADCAST)) { 	
++ 		//nsmadwifi case
++ 		if (!(ceh->flags & WIFI_EXTRA_DO_RTS_CTS)) {
++ 			Packet::free(p);
++ 			//p = 0;
++ 			return;
++ 		}
++ 		
++ 		if	( ceh->power > 0){
++ 			p->txinfo_.setPrLevel(ceh->power);	
++ 		}
++ 		
++ 	} else {
++ 		// normal case
++ 		if( (u_int32_t) HDR_CMN(pktTx_)->size() < macmib_.getRTSThreshold() ||
++             (u_int32_t) dst == MAC_BROADCAST) {
+  		Packet::free(p);
+  		//p = 0;
+  		return;
++ 		}
+  	}
+  
++ 
++ 
++ // 	printf("Uso RTS/CTS\n");
+  	ch->uid() = 0;
+  	ch->ptype() = PT_MAC;
++ 	// change wrt Mike's code
++ 	//ch->size() = ETHER_RTS_LEN;
++ 	ch->size() = phymib_.getRTSlen();
+  	ch->iface() = -2;
+  	ch->error() = 0;
+  
+***************
+*** 768,782 ****
+   	ch->txtime() = txtime(ch->size(), basicRate_);
+  	
+  	STORE4BYTE(&index_, (rf->rf_ta));
+  	/* calculate rts duration field */
+  	rf->rf_duration = usec(sifs_
+  			       + txtime(ETHER_CTS_LEN, basicRate_)
+  			       + sifs_
+  			       + txtime(pktTx_)
+  			       + sifs_
+  			       + txtime(ETHER_ACK_LEN, basicRate_));
+- 	
+- 	
+  	pktRTS_ = p;
+  }
+  
+--- 1361,1388 ----
+   	ch->txtime() = txtime(ch->size(), basicRate_);
+  	
+  	STORE4BYTE(&index_, (rf->rf_ta));
++ 	
++ 	
++ 
++ 
+  	/* calculate rts duration field */
++ 	
++ 	// change wrt Mike's code
++ 	/*
+  	rf->rf_duration = usec(sifs_
+  			       + txtime(ETHER_CTS_LEN, basicRate_)
+  			       + sifs_
+  			       + txtime(pktTx_)
+  			       + sifs_
+  			       + txtime(ETHER_ACK_LEN, basicRate_));
++ 	*/
++ 	   rf->rf_duration = usec(phymib_.getSIFS()
++                               + txtime(phymib_.getCTSlen(), basicRate_)
++                               + phymib_.getSIFS()
++                                + txtime(pktTx_)
++                               + phymib_.getSIFS()
++                               + txtime(phymib_.getACKlen(), basicRate_));
++ 
+  	pktRTS_ = p;
+  }
+  
+***************
+*** 791,797 ****
+  
+  	ch->uid() = 0;
+  	ch->ptype() = PT_MAC;
+- 	ch->size() = ETHER_CTS_LEN;
+  	ch->iface() = -2;
+  	ch->error() = 0;
+  	//ch->direction() = hdr_cmn::DOWN;
+--- 1397,1407 ----
+  
+  	ch->uid() = 0;
+  	ch->ptype() = PT_MAC;
++ 	// change wrt Mike's code
++ 	//ch->size() = ETHER_CTS_LEN;
++ 	ch->size() = phymib_.getCTSlen();
++ 
++ 
+  	ch->iface() = -2;
+  	ch->error() = 0;
+  	//ch->direction() = hdr_cmn::DOWN;
+***************
+*** 816,824 ****
+  	ch->txtime() = txtime(ch->size(), basicRate_);
+  	
+  	/* calculate cts duration */
+  	cf->cf_duration = usec(sec(rts_duration)
+- 			       - sifs_
+- 			       - txtime(ETHER_CTS_LEN, basicRate_));
+  	
+  	pktCTRL_ = p;
+  	
+--- 1426,1440 ----
+  	ch->txtime() = txtime(ch->size(), basicRate_);
+  	
+  	/* calculate cts duration */
++ 	// change wrt Mike's code
++ 	/*cf->cf_duration = usec(sec(rts_duration)
++ 			       - sifs_
++ 			       - txtime(ETHER_CTS_LEN, basicRate_));*/
+  	cf->cf_duration = usec(sec(rts_duration)
++                               - phymib_.getSIFS()
++                               - txtime(phymib_.getCTSlen(), basicRate_));
++ 
++ 
+  	
+  	pktCTRL_ = p;
+  	
+***************
+*** 835,841 ****
+  
+  	ch->uid() = 0;
+  	ch->ptype() = PT_MAC;
+- 	ch->size() = ETHER_ACK_LEN;
+  	ch->iface() = -2;
+  	ch->error() = 0;
+  	
+--- 1451,1459 ----
+  
+  	ch->uid() = 0;
+  	ch->ptype() = PT_MAC;
++ 	// CHANGE WRT Mike's code
++ 	//ch->size() = ETHER_ACK_LEN;
++ 	ch->size() = phymib_.getACKlen();
+  	ch->iface() = -2;
+  	ch->error() = 0;
+  	
+***************
+*** 876,882 ****
+  	/*
+  	 * Update the MAC header
+  	 */
+- 	ch->size() += ETHER_HDR_LEN11;
+  
+  	dh->dh_fc.fc_protocol_version = MAC_ProtocolVersion;
+  	dh->dh_fc.fc_type       = MAC_Type_Data;
+--- 1494,1504 ----
+  	/*
+  	 * Update the MAC header
+  	 */
++ 	// change wrt Mike's code
++ 	//ch->size() += ETHER_HDR_LEN11;
++ 	click_wifi_extra* ceh = getWifiExtra(p);
++ 	ch->size() += phymib_.getHdrLen11();
++ 	// nsmadwifi size fix
+  
+  	dh->dh_fc.fc_protocol_version = MAC_ProtocolVersion;
+  	dh->dh_fc.fc_type       = MAC_Type_Data;
+***************
+*** 895,911 ****
+  	/* store data tx time */
+   	ch->txtime() = txtime(ch->size(), dataRate_);
+  
+- 	if((u_int32_t)ETHER_ADDR(dh->dh_da) != MAC_BROADCAST) {
+  		/* store data tx time for unicast packets */
+  		ch->txtime() = txtime(ch->size(), dataRate_);
+- 		
+  		//dh->dh_duration = DATA_DURATION();
+- 		dh->dh_duration = usec(txtime(ETHER_ACK_LEN, basicRate_)
+-  				       + sifs_);
+  	} else {
+  		/* store data tx time for broadcast packets (see 9.6) */
+  		ch->txtime() = txtime(ch->size(), basicRate_);
+- 		
+  		dh->dh_duration = 0;
+  	}
+  	pktTx_ = p;
+--- 1517,1558 ----
+  	/* store data tx time */
+   	ch->txtime() = txtime(ch->size(), dataRate_);
+  
++ // change wrt Mike's code
++ //	if((u_int32_t)ETHER_ADDR(dh->dh_da) != MAC_BROADCAST) {
++ 
++ 	if((u_int32_t)ETHER_ADDR(dh->dh_ra) != MAC_BROADCAST) {
+  		/* store data tx time for unicast packets */
+  		ch->txtime() = txtime(ch->size(), dataRate_);
++ 		p->txinfo_.setRate(dataRate_);
++ 
++ 
++ 		// nsmadwifi
++ 		if ( ceh != 0 ){
++ 			
++ 			if ( ceh->rate > 0){
++ 				double rate = ((short int)(ceh->rate))*500000; 
++ 				ch->txtime() = txtime(ch->size(),rate);
++ 				p->txinfo_.setRate(rate);
++ 			}
++ 			if	( ceh->power > 0){
++ 				p->txinfo_.setPrLevel(ceh->power);	
++ 			}
++ 		}
++ 
+  		//dh->dh_duration = DATA_DURATION();
++ 		// chnage wrt Mike's code
++ 		//dh->dh_duration = usec(txtime(ETHER_ACK_LEN, basicRate_)
++  				       //+ sifs_);
++ 		dh->dh_duration = usec(txtime(phymib_.getACKlen(), basicRate_)
++                                       + phymib_.getSIFS());
++ 
++ 
++ 
+  	} else {
+  		/* store data tx time for broadcast packets (see 9.6) */
+  		ch->txtime() = txtime(ch->size(), basicRate_);
++ 		p->txinfo_.setRate(basicRate_);
++ 
+  		dh->dh_duration = 0;
+  	}
+  	pktTx_ = p;
+***************
+*** 920,931 ****
+  	assert(pktTx_);
+  	assert(pktRTS_);
+  	assert(mhBackoff_.busy() == 0);
+  
+- 	macmib_->RTSFailureCount++;
+  
+  	ssrc_ += 1;			// STA Short Retry Count
+  
+- 	if(ssrc_ >= macmib_->ShortRetryLimit) {
+  		discard(pktRTS_, DROP_MAC_RETRY_COUNT_EXCEEDED); pktRTS_ = 0;
+  		/* tell the callback the send operation failed 
+  		   before discarding the packet */
+--- 1567,1600 ----
+  	assert(pktTx_);
+  	assert(pktRTS_);
+  	assert(mhBackoff_.busy() == 0);
++ // change wrt Mike's code
++ //	macmib_->RTSFailureCount++;
++ 	macmib_.RTSFailureCount++;
+  
+  
+  	ssrc_ += 1;			// STA Short Retry Count
++ // change wrt Mike's code
++ //	if(ssrc_ >= macmib_->ShortRetryLimit) {
++ 		
++ 	bool failure = false;
++ 	double count = ssrc_;
+  
++ 	click_wifi_extra* ceh = getWifiExtra(pktTx_);
++ 	if ((ceh != 0) && (ceh->max_retries != 0)){
++ 		ceh->retries = ssrc_;
++ 		if (count <= ceh->max_retries){
++ 		
++ 		} else {
++ 			failure = true;	
++ 		}
++ 	} else {
++ 		if(ssrc_ >= macmib_.getShortRetryLimit()) {
++ 			failure = true;	
++ 		}	
++ 	}
++ 
++ 
++ 	if(failure){
+  		discard(pktRTS_, DROP_MAC_RETRY_COUNT_EXCEEDED); pktRTS_ = 0;
+  		/* tell the callback the send operation failed 
+  		   before discarding the packet */
+***************
+*** 936,948 ****
+                           *  re-cycled packets don't keep getting
+                           *  bigger.
+                           */
+-                         ch->size() -= ETHER_HDR_LEN11;
+-                         ch->xmit_reason_ = XMIT_REASON_RTS;
+                          ch->xmit_failure_(pktTx_->copy(),
+                                            ch->xmit_failure_data_);
+                  }
+  		//printf("(%d)....discarding RTS:%x\n",index_,pktRTS_);
+- 		discard(pktTx_, DROP_MAC_RETRY_COUNT_EXCEEDED); pktTx_ = 0;
+  		ssrc_ = 0;
+  		rst_cw();
+  	} else {
+--- 1605,1640 ----
+                           *  re-cycled packets don't keep getting
+                           *  bigger.
+                           */
++ 			// change wrt Mike's code
++                         //ch->size() -= ETHER_HDR_LEN11;
++ 			ch->size() -= phymib_.getHdrLen11();				
++ 			// nsmadwifi size fix
++ 			
++ 			ch->xmit_reason_ = XMIT_REASON_RTS;
+                          ch->xmit_failure_(pktTx_->copy(),
+                                            ch->xmit_failure_data_);
+                  }
++ 
++ 		if (ceh != 0){
++ 			Packet* p2 = pktTx_->copy();
++ 			click_wifi_extra* ceh2 = getWifiExtra(p2);
++ 			ceh2->flags |= WIFI_EXTRA_TX_FAIL;
++ 			ceh2->flags |= WIFI_EXTRA_TX;
++ 			struct hdr_cmn* ch2 = HDR_CMN(p2); 
++ 			ch2->direction() = hdr_cmn::UP; 
++ 			//printf("(%d)....discarding RTS:%x\n",index_,pktRTS_);
++ 			discard(pktTx_, DROP_MAC_RETRY_COUNT_EXCEEDED); // drop before feedback
++ 			uptarget_->recv(p2, (Handler*) 0);
++ 		
++ 		} else {
++ 			//printf("(%d)....discarding RTS:%x\n",index_,pktRTS_);
++ 			discard(pktTx_, DROP_MAC_RETRY_COUNT_EXCEEDED); 
++ 		}
++ 		
++ 		pktRTS_ = 0;
++ 		pktTx_ = 0;
++ 
+  		//printf("(%d)....discarding RTS:%x\n",index_,pktRTS_);
+  		ssrc_ = 0;
+  		rst_cw();
+  	} else {
+***************
+*** 961,968 ****
+  {
+  	struct hdr_cmn *ch;
+  	struct hdr_mac802_11 *mh;
+- 	u_int32_t *rcount, *thresh;
+- 
+  	assert(mhBackoff_.busy() == 0);
+  
+  	assert(pktTx_);
+--- 1653,1661 ----
+  {
+  	struct hdr_cmn *ch;
+  	struct hdr_mac802_11 *mh;
++ // change wrt Mike's code
++ //	u_int32_t *rcount, *thresh;
++ 	u_int32_t *rcount, thresh;
+  	assert(mhBackoff_.busy() == 0);
+  
+  	assert(pktTx_);
+***************
+*** 975,981 ****
+  	 *  Broadcast packets don't get ACKed and therefore
+  	 *  are never retransmitted.
+  	 */
+- 	if((u_int32_t)ETHER_ADDR(mh->dh_da) == MAC_BROADCAST) {
+  		Packet::free(pktTx_); pktTx_ = 0;
+  
+  		/*
+--- 1668,1677 ----
+  	 *  Broadcast packets don't get ACKed and therefore
+  	 *  are never retransmitted.
+  	 */
++ // change wrt Mike's code
++ //	if((u_int32_t)ETHER_ADDR(mh->dh_da) == MAC_BROADCAST) {
++ 		
++ 	if((u_int32_t)ETHER_ADDR(mh->dh_ra) == MAC_BROADCAST) {
+  		Packet::free(pktTx_); pktTx_ = 0;
+  
+  		/*
+***************
+*** 987,994 ****
+  		return;
+  	}
+  
+- 	macmib_->ACKFailureCount++;
+  
+  	if((u_int32_t) ch->size() <= macmib_->RTSThreshold) {
+  		rcount = &ssrc_;
+  		thresh = &macmib_->ShortRetryLimit;
+--- 1683,1694 ----
+  		return;
+  	}
+  
++ // change wrt Mike's code
++ //	macmib_->ACKFailureCount++;
++ 	macmib_.ACKFailureCount++;
+  
++ 	// chnage wrt Mike's code
++ 	/*
+  	if((u_int32_t) ch->size() <= macmib_->RTSThreshold) {
+  		rcount = &ssrc_;
+  		thresh = &macmib_->ShortRetryLimit;
+***************
+*** 996,1019 ****
+  	else {
+  		rcount = &slrc_;
+  		thresh = &macmib_->LongRetryLimit;
+- 	}
+  
+  	(*rcount)++;
+  
+- 	if(*rcount > *thresh) {
+- 		macmib_->FailedCount++;
+  		/* tell the callback the send operation failed 
+  		   before discarding the packet */
+  		hdr_cmn *ch = HDR_CMN(pktTx_);
+  		if (ch->xmit_failure_) {
+-                         ch->size() -= ETHER_HDR_LEN11;
+-                         ch->xmit_reason_ = XMIT_REASON_ACK;
+                          ch->xmit_failure_(pktTx_->copy(),
+                                            ch->xmit_failure_data_);
+                  }
+  
+- 		discard(pktTx_, DROP_MAC_RETRY_COUNT_EXCEEDED); pktTx_ = 0;
+- 		//printf("(%d)DATA discarded: count exceeded\n",index_);
+  		*rcount = 0;
+  		rst_cw();
+  	}
+--- 1696,1794 ----
+  	else {
+  		rcount = &slrc_;
+  		thresh = &macmib_->LongRetryLimit;
++ 	}*/
+  
++ 	if((u_int32_t) ch->size() <= macmib_.getRTSThreshold()) {
++                 rcount = &ssrc_;
++                thresh = macmib_.getShortRetryLimit();
++         }
++         else {
++                 rcount = &slrc_;
++                thresh = macmib_.getLongRetryLimit();
++         }
++ 
++ 
++ 
++ 
+  	(*rcount)++;
+  
++ 
++ 	bool failure = false;
++ 	double count = *rcount;
++ 	click_wifi_extra* ceh = getWifiExtra(pktTx_);
++ 
++ 	if ((ceh != 0) && (ceh->max_retries != 0)){
++ 		ceh->retries = (*rcount);
++ 			
++ 		if (count <= ceh->max_retries){
++ 			double rate = ((short int)(ceh->rate))*500000; 
++ 			ch->txtime() = txtime(ch->size(),rate);
++ 			pktTx_->txinfo_.setRate(rate);
++ 		} else if ( (count-=ceh->max_retries) <= ceh->max_retries1 ){
++ 			double rate = ((short int)(ceh->rate1))*500000; 
++ 			ch->txtime() = txtime(ch->size(),rate);
++ 			pktTx_->txinfo_.setRate(rate);
++ 			ceh->flags |= WIFI_EXTRA_TX_USED_ALT_RATE;
++ 		} else if ( (count-=ceh->max_retries1) <= ceh->max_retries2 ){
++ 			double rate = ((short int)(ceh->rate2))*500000; 
++ 			ch->txtime() = txtime(ch->size(),rate);
++ 			pktTx_->txinfo_.setRate(rate);
++ 			ceh->flags |= WIFI_EXTRA_TX_USED_ALT_RATE;
++ 		} else if ( (count-=ceh->max_retries2) <= ceh->max_retries3 ){
++ 			double rate = ((short int)(ceh->rate3))*500000; 
++ 			ch->txtime() = txtime(ch->size(),rate);
++ 			pktTx_->txinfo_.setRate(rate);
++ 			ceh->flags |= WIFI_EXTRA_TX_USED_ALT_RATE;
++ 		} else {
++ 			failure = true;	
++ 		}
++ 		
++ 	} else {
++ 		if(*rcount >= thresh) {
++ 		//if(count >= (*thresh)){
++ 			failure = true;	
++ 		}	
++ 	}
++ 
++ // change wrt Mike's code
++ 	//if(*rcount > *thresh) {
++ 	//	macmib_->FailedCount++;
++ 	if(failure){
++ 		/* IEEE Spec section 9.2.3.5 says this should be greater than
++ 		   or equal */
++ 		macmib_.FailedCount++;
+  		/* tell the callback the send operation failed 
+  		   before discarding the packet */
+  		hdr_cmn *ch = HDR_CMN(pktTx_);
+  		if (ch->xmit_failure_) {
++ 			// change wrt Mike's code
++                         //ch->size() -= ETHER_HDR_LEN11;
++ 			ch->size() -= phymib_.getHdrLen11();
++ 			// nsmadwifi size fix			
++ 			ch->xmit_reason_ = XMIT_REASON_ACK;
+                          ch->xmit_failure_(pktTx_->copy(),
+                                            ch->xmit_failure_data_);
+                  }
+  
++ 		if (ceh != 0){
++ 			Packet* p2 = pktTx_->copy();
++ 			click_wifi_extra* ceh2 = getWifiExtra(p2);
++ 			ceh2->flags |= WIFI_EXTRA_TX_FAIL;
++ 			ceh2->flags |= WIFI_EXTRA_TX;
++ 			struct hdr_cmn* ch2 = HDR_CMN(p2); 
++ 			ch2->direction() = hdr_cmn::UP; 
++ 			
++ 			// drop packet first
++ 			discard(pktTx_, DROP_MAC_RETRY_COUNT_EXCEEDED); 
++ 			// send feedback to madwifi 
++ 			uptarget_->recv(p2, (Handler*) 0);
++ 		
++ 		} else {
++ 			discard(pktTx_, DROP_MAC_RETRY_COUNT_EXCEEDED); 
++ 			//printf("(%d)DATA discarded: count exceeded\n",index_);
++ 		}
++ 		
++ 		pktTx_ = 0;
+  		*rcount = 0;
+  		rst_cw();
+  	}
+***************
+*** 1022,1028 ****
+  		dh = HDR_MAC802_11(pktTx_);
+  		dh->dh_fc.fc_retry = 1;
+  
+- 		sendRTS(ETHER_ADDR(mh->dh_da));
+  		//printf("(%d)retxing data:%x..sendRTS..\n",index_,pktTx_);
+  		inc_cw();
+  		mhBackoff_.start(cw_, is_idle());
+--- 1797,1810 ----
+  		dh = HDR_MAC802_11(pktTx_);
+  		dh->dh_fc.fc_retry = 1;
+  
++ 		// nletor
++ 		click_wifi* cwh = getWifi(pktTx_);
++ 		cwh->i_fc[1] |= WIFI_FC1_RETRY;	
++ 		//!nletor 
++ 
++ // change wrt Mike's code
++ 		//sendRTS(ETHER_ADDR(mh->dh_da));
++ 		sendRTS(ETHER_ADDR(mh->dh_ra));
+  		//printf("(%d)retxing data:%x..sendRTS..\n",index_,pktTx_);
+  		inc_cw();
+  		mhBackoff_.start(cw_, is_idle());
+***************
+*** 1050,1057 ****
+  	
+  	callback_ = h;
+  	sendDATA(p);
+- 	sendRTS(ETHER_ADDR(dh->dh_da));
+  
+  	/*
+  	 * Assign the data packet a sequence number.
+  	 */
+--- 1832,1846 ----
+  	
+  	callback_ = h;
+  	sendDATA(p);
++ // change wrt Mike's code
++ 	//sendRTS(ETHER_ADDR(dh->dh_da));
++ 	sendRTS(ETHER_ADDR(dh->dh_ra));
+  
++ 
++ 
++ 	//----ak---------
++ 	//printf("bssid in send function %d\n",bss_id());
++ 
+  	/*
+  	 * Assign the data packet a sequence number.
+  	 */
+***************
+*** 1061,1077 ****
+  	 *  If the medium is IDLE, we must wait for a DIFS
+  	 *  Space before transmitting.
+  	 */
+  	if(mhBackoff_.busy() == 0) {
+  		if(is_idle()) {
+  			/*
+  			 * If we are already deferring, there is no
+  			 * need to reset the Defer timer.
+  			 */
+- 			if(mhDefer_.busy() == 0) {
+- 				rTime = (Random::random() % cw_) * (phymib_->SlotTime);
+- 				mhDefer_.start(difs_ + rTime);
+- 			}
+  			
+  		}
+  	/*
+  	 * If the medium is NOT IDLE, then we start
+--- 1850,1881 ----
+  	 *  If the medium is IDLE, we must wait for a DIFS
+  	 *  Space before transmitting.
+  	 */
++ 	 hdr_cmn *ch = HDR_CMN(p);
++ // 	 if(index_ == 1) printf("\nNodo %i - E' arrivato un pacchetto da trasmettere (%i)....", index_, ch->uid());
+  	if(mhBackoff_.busy() == 0) {
+  		if(is_idle()) {
+  			/*
+  			 * If we are already deferring, there is no
+  			 * need to reset the Defer timer.
+  			 */
++ 			 
++ 			/*Modifica Federico 9/12/2004 */
++ /*			if(mhDefer_.busy() == 0) {
++ 			// change wrt Mike's code
++ 			//	rTime = (Random::random() % cw_) * (phymib_->SlotTime);
++ 			//	mhDefer_.start(difs_ + rTime);
++ // 				if(index_ == 1) printf("(%i) uso defer timer....", index_);
++ 			rTime = (Random::random() % cw_)
++                                        * (phymib_.getSlotTime());
++ 				//printf("Mac 802_11 - send\n");
++                                mhDefer_.start(phymib_.getDIFS() + rTime);
++ 			}*/
+  			
++ 			
++ 			mhBackoff_.start(cw_, is_idle(), phymib_.getDIFS());
++ 			/*
++ 			Fine modifica Federico 9/12/2004
++ 			*/
+  		}
+  	/*
+  	 * If the medium is NOT IDLE, then we start
+***************
+*** 1124,1139 ****
+  	 */
+  	if(tx_active_ && hdr->error() == 0) {
+  		hdr->error() = 1;
+  	}
+  
+  	if(rx_state_ == MAC_IDLE) {
+- 		SET_RX_STATE(MAC_RECV);
+  		pktRx_ = p;
+  
+  		/*
+  		 * Schedule the reception of this packet, in
+  		 * txtime seconds.
+  		 */
+  		mhRecv_.start(txtime(p));
+  	} else {
+  		/*
+--- 1930,1953 ----
+  	 */
+  	if(tx_active_ && hdr->error() == 0) {
+  		hdr->error() = 1;
++ 		if(rceh != 0 && hdr->error()){
++ 			rceh->flags |= WIFI_EXTRA_RX_ERR;
++ 		}
+  	}
+  
+  	if(rx_state_ == MAC_IDLE) {
++ // change wrt Mike's code	
++ 	//SET_RX_STATE(MAC_RECV);
++ 	setRxState(MAC_RECV);
++ 
++ 
+  		pktRx_ = p;
+  
+  		/*
+  		 * Schedule the reception of this packet, in
+  		 * txtime seconds.
+  		 */
++ // 		 if(index_ == 1) printf("(%i) ricevo un pacchetto.....", index_);
+  		mhRecv_.start(txtime(p));
+  	} else {
+  		/*
+***************
+*** 1155,1164 ****
+  	u_int32_t src; 
+  	hdr_cmn *ch = HDR_CMN(pktRx_);
+  	hdr_mac802_11 *mh = HDR_MAC802_11(pktRx_);
+- 	u_int32_t dst = ETHER_ADDR(mh->dh_da);
+  	// XXX debug
+  	//struct cts_frame *cf = (struct cts_frame*)pktRx_->access(hdr_mac::offset_);
+- 	//u_int32_t src = ETHER_ADDR(mh->dh_sa);
+  	
+  	u_int8_t  type = mh->dh_fc.fc_type;
+  	u_int8_t  subtype = mh->dh_fc.fc_subtype;
+--- 1969,1981 ----
+  	u_int32_t src; 
+  	hdr_cmn *ch = HDR_CMN(pktRx_);
+  	hdr_mac802_11 *mh = HDR_MAC802_11(pktRx_);
++ // chnage wrt Mike's code
++ //	u_int32_t dst = ETHER_ADDR(mh->dh_da);
++ 	 u_int32_t dst = ETHER_ADDR(mh->dh_ra);
++ 
+  	// XXX debug
+  	//struct cts_frame *cf = (struct cts_frame*)pktRx_->access(hdr_mac::offset_);
++ 	//u_int32_t src = ETHER_ADDR(mh->dh_ta);
+  	
+  	u_int8_t  type = mh->dh_fc.fc_type;
+  	u_int8_t  subtype = mh->dh_fc.fc_subtype;
+***************
+*** 1181,1187 ****
+  	 */
+  	if(rx_state_ == MAC_COLL) {
+  		discard(pktRx_, DROP_MAC_COLLISION);
+- 		set_nav(usec(eifs_));
+  		goto done;
+  	}
+  
+--- 1998,2007 ----
+  	 */
+  	if(rx_state_ == MAC_COLL) {
+  		discard(pktRx_, DROP_MAC_COLLISION);
++ // change wrt Mike's code		
++ 		//set_nav(usec(eifs_));
++ 		
++ 		set_nav(usec(phymib_.getEIFS()));
+  		goto done;
+  	}
+  
+***************
+*** 1193,1199 ****
+  	 */
+  	if( ch->error() ) {
+  		Packet::free(pktRx_);
+- 		set_nav(usec(eifs_));
+  		goto done;
+  	}
+  
+--- 2013,2021 ----
+  	 */
+  	if( ch->error() ) {
+  		Packet::free(pktRx_);
++ // change wrt Mike's code
++ //		set_nav(usec(eifs_));
++ 		set_nav(usec(phymib_.getEIFS()));
+  		goto done;
+  	}
+  
+***************
+*** 1207,1218 ****
+  
+          /* tap out - */
+          if (tap_ && type == MAC_Type_Data &&
+-             MAC_Subtype_Data == subtype ) {
+- 		if (!tap_filterown_ ||
+- 		    ((dst != (u_int32_t)index_) && (dst != MAC_BROADCAST))) {
+- 			tap_->tap(pktRx_);
+- 		}
+- 	}
+  	/*
+  	 * Adaptive Fidelity Algorithm Support - neighborhood infomation 
+  	 * collection
+--- 2029,2036 ----
+  
+          /* tap out - */
+          if (tap_ && type == MAC_Type_Data &&
++             MAC_Subtype_Data == subtype ) 
++ 		tap_->tap(pktRx_);
+  	/*
+  	 * Adaptive Fidelity Algorithm Support - neighborhood infomation 
+  	 * collection
+***************
+*** 1222,1228 ****
+  	 */
+  	if (netif_->node()->energy_model() && 
+  	    netif_->node()->energy_model()->adaptivefidelity()) {
+- 		src = ETHER_ADDR(mh->dh_sa);
+  		netif_->node()->energy_model()->add_neighbor(src);
+  	}
+  	/*
+--- 2040,2048 ----
+  	 */
+  	if (netif_->node()->energy_model() && 
+  	    netif_->node()->energy_model()->adaptivefidelity()) {
++ // change wrt Mike's code
++ 		//src = ETHER_ADDR(mh->dh_sa);
++ 		src = ETHER_ADDR(mh->dh_ta);
+  		netif_->node()->energy_model()->add_neighbor(src);
+  	}
+  	/*
+***************
+*** 1240,1248 ****
+  	switch(type) {
+  
+  	case MAC_Type_Management:
+  		discard(pktRx_, DROP_MAC_PACKET_ERROR);
+  		goto done;
+- 		break;
+  
+  	case MAC_Type_Control:
+  		switch(subtype) {
+--- 2060,2076 ----
+  	switch(type) {
+  
+  	case MAC_Type_Management:
++ 		
++ 		//-ak-----
+  		discard(pktRx_, DROP_MAC_PACKET_ERROR);
+  		goto done;
++ 		/*switch(subtype)
++ 		case MAC_Subtype_ProbeReq;
++ 			recvPREQ(pktRx_);
++ 			break;
++ 		case MAC_Subtype_ProbeRes;
++ 			recvPRES(pktRx_);
++ 			break;*/
+  
+  	case MAC_Type_Control:
+  		switch(subtype) {
+***************
+*** 1264,1269 ****
+  	case MAC_Type_Data:
+  		switch(subtype) {
+  		case MAC_Subtype_Data:
+  			recvDATA(pktRx_);
+  			break;
+  		default:
+--- 2092,2098 ----
+  	case MAC_Type_Data:
+  		switch(subtype) {
+  		case MAC_Subtype_Data:
++ // 			if(index_ == 1) printf("(%i) ricevuto dati....", index_);
+  			recvDATA(pktRx_);
+  			break;
+  		default:
+***************
+*** 1305,1312 ****
+  	/*
+  	 *  Stop deferring - will be reset in tx_resume().
+  	 */
+- 	if(mhDefer_.busy()) mhDefer_.stop();
+  
+  	tx_resume();
+  
+  	mac_log(p);
+--- 2134,2149 ----
+  	/*
+  	 *  Stop deferring - will be reset in tx_resume().
+  	 */
++ 	if(mhDefer_.busy()) 
++ 	{
++ // 		if(index_ == 1) printf("(%i) stoppo defer timer......\n\n\n\n\n\n\n\n\n", index_);
++ 		fflush(stdout);
++ 		Tcl_Sleep(5000);
++ 		mhDefer_.stop();
++ 	}
+  
++ // 	printf("recvRTS call tx_resume\n");
++ // 	if(index_ == 1) printf("(%i) send_timer call recvRTS.....", index_);
+  	tx_resume();
+  
+  	mac_log(p);
+***************
+*** 1335,1345 ****
+  double
+  Mac802_11::txtime(double psz, double drt)
+  {
+- 	double dsz = psz - PLCP_HDR_LEN;
+- 	int plcp_hdr = PLCP_HDR_LEN << 3;
+  	int datalen = (int)dsz << 3;
+- 	
+- 	double t = (((double)plcp_hdr)/phymib_->PLCPDataRate) + (((double)datalen)/drt);
+  	return(t);
+  }
+  
+--- 2172,2191 ----
+  double
+  Mac802_11::txtime(double psz, double drt)
+  {
++ 
++ // change wrt Mike's code
++ //	double dsz = psz - PLCP_HDR_LEN;
++ //	int plcp_hdr = PLCP_HDR_LEN << 3;
++ 	double dsz = psz - phymib_.getPLCPhdrLen();
++         int plcp_hdr = phymib_.getPLCPhdrLen() << 3;
++ 	
+  	int datalen = (int)dsz << 3;
++ // change wrt Mike's code	
++ //	double t = (((double)plcp_hdr)/phymib_->PLCPDataRate) + (((double)datalen)/drt);
++ 	double t = (((double)plcp_hdr)/phymib_.getPLCPDataRate())
++                                        + (((double)datalen)/drt);
++ 
++ 
+  	return(t);
+  }
+  
+***************
+*** 1365,1376 ****
+  
+  	/*
+  	 * The successful reception of this CTS packet implies
+- 	 * that our RTS was successful.  Hence, we can reset
+- 	 * the Short Retry Count and the CW.
+  	 */
+- 	//ssrc_ = 0;
+  	//rst_cw();
+  
+  	tx_resume();
+  
+  	mac_log(p);
+--- 2211,2225 ----
+  
+  	/*
+  	 * The successful reception of this CTS packet implies
++ 	 * that our RTS was successful. 
++ 	 * According to the IEEE spec 9.2.5.3, you must 
++ 	 * reset the ssrc_, but not the congestion window.
+  	 */
++ 	ssrc_ = 0;
+  	//rst_cw();
+  
++ // 	printf("recvCTS call tx_resume\n");
++ // 	if(index_ == 1) printf("(%i) recvCTS call tx_resume.....", index_);
+  	tx_resume();
+  
+  	mac_log(p);
+***************
+*** 1382,1406 ****
+  	struct hdr_mac802_11 *dh = HDR_MAC802_11(p);
+  	u_int32_t dst, src, size;
+  
+- 	{	struct hdr_cmn *ch = HDR_CMN(p);
+  
+- 		dst = ETHER_ADDR(dh->dh_da);
+- 		src = ETHER_ADDR(dh->dh_sa);
+  		size = ch->size();
+  
+  		/*
+  		 * Adjust the MAC packet size - ie; strip
+  		 * off the mac header
+  		 */
+- 		ch->size() -= ETHER_HDR_LEN11;
+  		ch->num_forwards() += 1;
+- 	}
+  
+  	/*
+  	 *  If we sent a CTS, clean up...
+  	 */
+  	if(dst != MAC_BROADCAST) {
+- 		if(size >= macmib_->RTSThreshold) {
+  			if (tx_state_ == MAC_CTS) {
+  				assert(pktCTRL_);
+  				Packet::free(pktCTRL_); pktCTRL_ = 0;
+--- 2231,2273 ----
+  	struct hdr_mac802_11 *dh = HDR_MAC802_11(p);
+  	u_int32_t dst, src, size;
+  
++ 		struct hdr_cmn *ch = HDR_CMN(p);
+  
++ // chnage wrt Mike's code
++ 		//dst = ETHER_ADDR(dh->dh_da);
++ 		//src = ETHER_ADDR(dh->dh_sa);
++ 		 dst = ETHER_ADDR(dh->dh_ra);
++                  src = ETHER_ADDR(dh->dh_ta);
++ 
++ 
+  		size = ch->size();
+  
++ 		
++ 
+  		/*
+  		 * Adjust the MAC packet size - ie; strip
+  		 * off the mac header
+  		 */
++ // change wrt Mike's code	
++ //	ch->size() -= ETHER_HDR_LEN11;
++ 		// nsmadwifi
++ 		click_wifi_extra* rceh = getWifiExtra(p);	
++ 		ch->size() -= phymib_.getHdrLen11();
++ 		// nsmadwifi size fix
++ 		 
+  		ch->num_forwards() += 1;
++ 	
+  
+  	/*
+  	 *  If we sent a CTS, clean up...
+  	 */
+  	if(dst != MAC_BROADCAST) {
++ 
++ // change wrt Mike's code
++ //		if(size >= macmib_->RTSThreshold) {
++ 		//if(size >= macmib_.getRTSThreshold()) {
++ 		if ( 	(!rceh && size >= macmib_.getRTSThreshold()) ||
++ 			 	( rceh && pktCTRL_)){
+  			if (tx_state_ == MAC_CTS) {
+  				assert(pktCTRL_);
+  				Packet::free(pktCTRL_); pktCTRL_ = 0;
+***************
+*** 1418,1423 ****
+  				return;
+  			}
+  			sendACK(src);
+  			tx_resume();
+  		}
+  		/*
+--- 2285,2292 ----
+  				return;
+  			}
+  			sendACK(src);
++ // 			printf("recvDATA call tx_resume1\n");
++ // 			if(index_ == 1) printf("(%i) recvDATA1 call tx_resume.....", index_);
+  			tx_resume();
+  		}
+  		/*
+***************
+*** 1431,1437 ****
+  			}
+  			sendACK(src);
+  			if(mhSend_.busy() == 0)
+  				tx_resume();
+  		}
+  	}
+  
+--- 2300,2310 ----
+  			}
+  			sendACK(src);
+  			if(mhSend_.busy() == 0)
++ 			{
++ // 				printf("recvDATA call tx_resume2\n");
++ // 				if(index_ == 1) printf("(%i) recvDATA2 call tx_resume.....", index_);
+  				tx_resume();
++ 			}
+  		}
+  	}
+  
+***************
+*** 1453,1459 ****
+                          }
+                          h->seqno = dh->dh_scontrol;
+                  } else {
+- 			static int count = 0;
+  			if (++count <= 10) {
+  				printf ("MAC_802_11: accessing MAC cache_ array out of range (src %u, dst %u, size %d)!\n", src, dst, cache_node_count_);
+  				if (count == 10)
+--- 2326,2334 ----
+                          }
+                          h->seqno = dh->dh_scontrol;
+                  } else {
++ 			//static int count = 0;
++ 			//pdc CHECK
++ 			static int count = 11;
+  			if (++count <= 10) {
+  				printf ("MAC_802_11: accessing MAC cache_ array out of range (src %u, dst %u, size %d)!\n", src, dst, cache_node_count_);
+  				if (count == 10)
+***************
+*** 1467,1473 ****
+  	 *  Pass the packet up to the link-layer.
+  	 *  XXX - we could schedule an event to account
+  	 *  for this processing delay.
+- 	 */
+  	//p->incoming = 1;
+  	// XXXXX NOTE: use of incoming flag has been depracated; In order to track direction of pkt flow, direction_ in hdr_cmn is used instead. see packet.h for details. 
+  	
+--- 2342,2384 ----
+  	 *  Pass the packet up to the link-layer.
+  	 *  XXX - we could schedule an event to account
+  	 *  for this processing delay.
++ 	*/
++ 	
++ 	/* in BSS mode, if a station receives a packet via
++ !        * the AP, and higher layers are interested in looking
++ !        * at the src address, we might need to put it at
++ !        * the right place - lest the higher layers end up
++ !        * believing the AP address to be the src addr! a quick
++ !        * grep didn't turn up any higher layers interested in
++ !        * the src addr though!
++ !        * anyway, here if I'm the AP and the destination
++ !        * address (in dh_3a) isn't me, then we have to fwd
++ !        * the packet; we pick the real destination and set
++ !        * set it up for the LL; we save the real src into
++ !        * the dh_3a field for the 'interested in the info'
++ !        * receiver; we finally push the packet towards the
++ !        * LL to be added back to my queue - accomplish this
++ !        * by reversing the direction!*/
++ 
++ 	if ((bss_id() == addr()) && ((u_int32_t)ETHER_ADDR(dh->dh_ra)!= MAC_BROADCAST)&& ((u_int32_t)ETHER_ADDR(dh->dh_3a) != addr()))
++        {
++                struct hdr_cmn *ch = HDR_CMN(p);
++                u_int32_t dst = ETHER_ADDR(dh->dh_3a);
++                u_int32_t src = ETHER_ADDR(dh->dh_ta);
++ 		/* if it is a broadcast pkt then send a copy up
++ +                * my stack also
++ +                */
++                if (dst == MAC_BROADCAST) {
++                        uptarget_->recv(p->copy(), (Handler*) 0);
++                }
++ 
++                ch->next_hop() = dst;
++                STORE4BYTE(&src, (dh->dh_3a));
++                ch->addr_type() = NS_AF_ILINK;
++                ch->direction() = hdr_cmn::DOWN;
++        }
++ 
++ 
+  	//p->incoming = 1;
+  	// XXXXX NOTE: use of incoming flag has been depracated; In order to track direction of pkt flow, direction_ in hdr_cmn is used instead. see packet.h for details. 
+  	
+***************
+*** 1482,1514 ****
+  	struct hdr_cmn *ch = HDR_CMN(p);
+  
+  	if(tx_state_ != MAC_SEND) {
+- 	discard(p, DROP_MAC_INVALID_STATE);
+- 	return;
+  	}
+  	//printf("(%d)...................recving ACK:%x\n",index_,p);
+  	assert(pktTx_);
+- 	Packet::free(pktTx_); pktTx_ = 0;
+  
+  	mhSend_.stop();
+  
+  	/*
+  	 * The successful reception of this ACK packet implies
+  	 * that our DATA transmission was successful.  Hence,
+  	 * we can reset the Short/Long Retry Count and the CW.
+  	 */
+- 	if((u_int32_t) ch->size() <= macmib_->RTSThreshold)
+  		ssrc_ = 0;
+  	else
+  		slrc_ = 0;
+- 
+  	/*
+  	 * Backoff before sending again.
+  	 */
+- 	rst_cw();
+  	assert(mhBackoff_.busy() == 0);
+  	mhBackoff_.start(cw_, is_idle());
+  
+  	tx_resume();
+  
+  	mac_log(p);
+  }
+--- 2393,2447 ----
+  	struct hdr_cmn *ch = HDR_CMN(p);
+  
+  	if(tx_state_ != MAC_SEND) {
++ 		discard(p, DROP_MAC_INVALID_STATE);
++ 		return;
+  	}
+  	//printf("(%d)...................recving ACK:%x\n",index_,p);
+  	assert(pktTx_);
++ 	//Packet::free(pktTx_); pktTx_ = 0;
+  
++ 	// nsmadwifi
++ 	Packet* p2 = 0;	//prepare feedback WIFI_EXTRA_TX
++ 	click_wifi_extra* ceh = getWifiExtra(pktTx_);
++ 	if (ceh != 0){
++ 		p2 = pktTx_->copy();
++ 		click_wifi_extra* ceh2 = getWifiExtra(p2);
++ 		ceh2->flags |= WIFI_EXTRA_TX;
++ 		struct hdr_cmn* ch2 = HDR_CMN(p2); 
++ 		ch2->direction() = hdr_cmn::UP; 
++ 	} 
++ 	//!nsmadwifi
+  	mhSend_.stop();
+  
+  	/*
+  	 * The successful reception of this ACK packet implies
+  	 * that our DATA transmission was successful.  Hence,
+  	 * we can reset the Short/Long Retry Count and the CW.
++ 	 *
++ 	 * need to check the size of the packet we sent that's being
++ 	 * ACK'd, not the size of the ACK packet.
+  	 */
++ 	//pdc CHECK
++ 	if((u_int32_t) HDR_CMN(pktTx_)->size() <= macmib_.getRTSThreshold())
+  		ssrc_ = 0;
+  	else
+  		slrc_ = 0;
++ 	rst_cw();
++ 	Packet::free(pktTx_); pktTx_ = 0;
++ 	
+  	/*
+  	 * Backoff before sending again.
+  	 */
++ 	//rst_cw();
+  	assert(mhBackoff_.busy() == 0);
+  	mhBackoff_.start(cw_, is_idle());
+  
++ // 	printf("recvACK call tx_resume\n");
++ // 	if(index_ == 1) printf("(%i) recvACK call tx_resume.....", index_);
+  	tx_resume();
+  
+  	mac_log(p);
++ 	if (p2 != 0 ){
++ 		uptarget_->recv(p2, (Handler*) 0);	// send feedback WIFI_EXTRA_TX
++ 	}
+  }

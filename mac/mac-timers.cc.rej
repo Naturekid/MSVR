@@ -1,0 +1,228 @@
+***************
+*** 88,94 ****
+  	assert(rtime >= 0.0);
+  
+  
+- // 	printf("MacTimer: schedule\n");
+  	s.schedule(this, &intr, rtime);
+  }
+  
+--- 82,87 ----
+  	assert(rtime >= 0.0);
+  
+  
+  	s.schedule(this, &intr, rtime);
+  }
+  
+***************
+*** 127,136 ****
+  #endif
+  	assert(rtime >= 0.0);
+  
+- // // 	printf("DeferTimer schedule\n");
+- // 	if(mac->index_ == 1) printf("(%i) Defertimer started....", mac->index_);
+  	s.schedule(this, &intr, rtime);
+- // 	printf("DeferTimer: event scheduled (id %d)\n",intr.uid_);
+  }
+  
+  
+--- 120,126 ----
+  #endif
+  	assert(rtime >= 0.0);
+  
+  	s.schedule(this, &intr, rtime);
+  }
+  
+  
+***************
+*** 141,169 ****
+  	paused_ = 0;
+  	stime = 0.0;
+  	rtime = 0.0;
+- // 	printf("DeferiTimer: handle event %d\n", intr.uid_);
+  
+  
+  	mac->deferHandler();
+  }
+  
+- // change wrt Mike's code
+-  /* ======================================================================
+-     Beacon Timer
+-     ====================================================================== */
+- 
+-  void
+-  BeaconTimer::handle(Event *)
+-  {
+-        busy_ = 0;
+-        paused_ = 0;
+-        stime = 0.0;
+-        rtime = 0.0;
+- 
+-        mac->beaconHandler();
+-  }
+- 
+- 
+  /* ======================================================================
+     NAV Timer
+     ====================================================================== */
+--- 131,142 ----
+  	paused_ = 0;
+  	stime = 0.0;
+  	rtime = 0.0;
+  
+  
++ 
+  	mac->deferHandler();
+  }
+  
+  /* ======================================================================
+     NAV Timer
+     ====================================================================== */
+***************
+*** 241,251 ****
+  	mac->backoffHandler();
+  }
+  
+- /* Modifica Federico 9/12/2004 */
+- 
+  void
+- // BackoffTimer::start(int cw, int idle)
+- BackoffTimer::start(int cw, int idle, double difs)
+  {
+  	Scheduler &s = Scheduler::instance();
+  
+--- 214,221 ----
+  	mac->backoffHandler();
+  }
+  
+  void
++ BackoffTimer::start(int cw, int idle)
+  {
+  	Scheduler &s = Scheduler::instance();
+  
+***************
+*** 255,292 ****
+  	paused_ = 0;
+  	stime = s.clock();
+  	
+- 	// change wrt Mike's code
+- 	//rtime = (Random::random() % cw) * mac->phymib_->SlotTime;
+- 	rtime = (Random::random() % cw) * mac->phymib_.getSlotTime();
+  
+  
+  
+  #ifdef USE_SLOT_TIME
+  	ROUND_TIME();
+  #endif
+- 	/* Modificato Federico
+  	difs_wait = 0.0;
+- 	*/
+- /*	if (difs != 0.0)
+- 		printf("Funziona!\n");
+- 	else
+- 		printf("vale zero\n");*/
+- 	difs_wait = difs;
+  
+  	if(idle == 0)
+  		paused_ = 1;
+  	else {
+- 		/*Modificato Federico
+  		assert(rtime >= 0.0);
+- // 		printf("Backoff Timer schedule\n");
+  		s.schedule(this, &intr, rtime);
+- 		*/
+- 		assert(rtime + difs_wait >= 0.0);
+- 		s.schedule(this, &intr, rtime + difs_wait);
+  	}
+  }
+  
+- /*Fine modifica Federico 9/12/2004*/
+  
+  void
+  BackoffTimer::pause()
+--- 225,247 ----
+  	paused_ = 0;
+  	stime = s.clock();
+  	
+  
++ 	rtime = (Random::random() % cw) * mac->phymib_->SlotTime;
+  
+  
+  #ifdef USE_SLOT_TIME
+  	ROUND_TIME();
+  #endif
+  	difs_wait = 0.0;
+  
+  	if(idle == 0)
+  		paused_ = 1;
+  	else {
+  		assert(rtime >= 0.0);
+  		s.schedule(this, &intr, rtime);
+  	}
+  }
+  
+  
+  void
+  BackoffTimer::pause()
+***************
+*** 299,310 ****
+  	double st = s.clock();
+  	double rt = stime + difs_wait;
+  	double sr = st - rt;
+-         // change wrt Mike's code
+- 	//double mst = (mac->phymib_->SlotTime);
+- 	 double mst = (mac->phymib_.getSlotTime());
+  
+- 
+- 
+          int slots = int (sr/mst);
+  
+      //int slots = (int) ((s.clock() - (stime + difs_wait)) / mac->phymib_->SlotTime);
+--- 254,261 ----
+  	double st = s.clock();
+  	double rt = stime + difs_wait;
+  	double sr = st - rt;
++         double mst = (mac->phymib_->SlotTime);
+  
+          int slots = int (sr/mst);
+  
+      //int slots = (int) ((s.clock() - (stime + difs_wait)) / mac->phymib_->SlotTime);
+***************
+*** 313,323 ****
+  	assert(busy_ && ! paused_);
+  
+  	paused_ = 1;
+- // change wrt Mike's code
+- //	rtime -= (slots * mac->phymib_->SlotTime);
+- 	rtime -= (slots * mac->phymib_.getSlotTime());
+- 
+- 
+  	assert(rtime >= 0.0);
+  
+  	difs_wait = 0.0;
+--- 264,270 ----
+  	assert(busy_ && ! paused_);
+  
+  	paused_ = 1;
++ 	rtime -= (slots * mac->phymib_->SlotTime);
+  	assert(rtime >= 0.0);
+  
+  	difs_wait = 0.0;
+***************
+*** 347,354 ****
+  #endif
+  	*/
+  	assert(rtime + difs_wait >= 0.0);
+- //        	printf("BAckoff timer schedule resume\n");
+- 	s.schedule(this, &intr, rtime + difs_wait);
+  }
+  
+  
+--- 294,300 ----
+  #endif
+  	*/
+  	assert(rtime + difs_wait >= 0.0);
++        	s.schedule(this, &intr, rtime + difs_wait);
+  }
+  
+  
