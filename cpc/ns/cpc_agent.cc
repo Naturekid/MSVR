@@ -7,6 +7,7 @@
 /*#include "../cpc_queue.h"*/
 #include "../cpc_rt.h"
 //#define DEBUG
+#include "../../msvr/msvr_packet.h"
 
 CpcAgent::CpcAgent(packet_t type)
 : Agent(type)
@@ -72,6 +73,7 @@ void CpcAgent::processPacket(Packet *p)
 {
 	struct hdr_ip *ih = HDR_IP(p);
 	struct hdr_cmn *ch = HDR_CMN(p);
+	struct hdr_msvr *msvrh = HDR_MSVR(p);
 	struct in_addr src, dst;
 	struct in_addr *next;
 
@@ -83,7 +85,7 @@ void CpcAgent::processPacket(Packet *p)
 	//到了目的地,上传至本节点
 	if (memcmp(&dst, &myAddr_, sizeof(struct in_addr)) == 0) {
 		/*target_->recv(p, (Handler *)0);*/
-		fprintf(stdout,"           processing dst == myaddr \n",this->addr());
+		fprintf(stdout,"           processing dst == myaddr \n");
 		portDmux_->recv(p, (Handler *)0);//这里看上去像是在做上传至本节点的操作
 		return;
 	}
@@ -91,12 +93,14 @@ void CpcAgent::processPacket(Packet *p)
 	int temp = GetDTNFlag();
 	if( temp ){
 		//how to modify the current packet
+		msvrh->dtn_recent_.addr_ = this->addr();
+		//copy the packet and upload
 		Packet *up_p = p->copy();
 		struct hdr_cmn *ch_up = HDR_CMN(up_p);
 		ch_up->direction() = hdr_cmn::UP;
-//#ifdef DEBUG
+#ifdef DEBUG
 		fprintf(stdout," %d         processing uploads\n",this->addr());
-//#endif
+#endif
 		//upload
 		portDmux_->recv(up_p,(Handler *)0);
 	}
@@ -104,7 +108,7 @@ void CpcAgent::processPacket(Packet *p)
 	next = cpc_rt_find(dst);
 
 	if (next != NULL) {
-		fprintf(stdout,"           processing next have things \n",this->addr());
+		fprintf(stdout,"           processing next have things \n");
 		ch->direction() = hdr_cmn::DOWN;
 		ch->addr_type() = NS_AF_INET;
 		ch->last_hop_ = myAddr_.s_addr;

@@ -21,6 +21,7 @@
 
 struct hdr_msvr {
     u_int8_t type;
+    ns_addr_t dtn_recent_;
 	static int offset_;
 
 	inline static int& offset() {
@@ -30,6 +31,7 @@ struct hdr_msvr {
 	inline static void* access(const Packet* p) {
 		return (void*)p->access(offset_);
 	}
+
 };
 
 class MsvrAgent : public CpcAgent {
