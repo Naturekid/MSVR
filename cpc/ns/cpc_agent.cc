@@ -53,6 +53,26 @@ void CpcAgent::recv(Packet *p, Handler *h)
 	{
 		SetDTNFlag( 1 );
 	}
+	// DTN  broadcast
+	if( 0 ){
+		if( ih->ttl_ == 0 )
+		{
+			drop(p);
+			return;
+		}
+		if(GetDTNFlag())
+		{
+			Packet *up_p = p->copy();
+			struct hdr_cmn *ch_up = HDR_CMN(up_p);
+			ch_up->direction() = hdr_cmn::UP;
+			portDmux_->recv(up_p,(Handler *)0);
+		}
+		ih->ttl_ -= 1;
+		struct in_addr dst;
+		dst.s_addr = IP_BROADCAST;
+		this->sendProtPacket((char *)p, sizeof(Packet) , dst);
+		return;
+	}
 	//当packet的类型等于62时,添加自己邻居等操作
 	if (ch->ptype() == type_) {
 		protHandler_((char*)access_cb(p), (int*)0, this);
@@ -119,10 +139,23 @@ void CpcAgent::processPacket(Packet *p)
 #ifdef DEBUG
 		fprintf(stdout,"           processing requesting route \n",this->addr());
 #endif
+		int ifsend = 0;
 		if (src.s_addr != myAddr_.s_addr)
-			reqHandler_((char *)access_cb(p), src, dst, 0, this);
+			ifsend = reqHandler_((char *)access_cb(p), src, dst, 0, this);
 		else
-			reqHandler_(NULL, src, dst, 0, this);
+			ifsend = reqHandler_(NULL, src, dst, 0, this);
+		//if road broken,send to the recent_dtn or the SRC node
+		if( ifsend == -1 )
+		{
+			//src.s_addr = this->addr();
+			if( msvrh->dtn_recent_.addr_ != 0)
+				dst.s_addr = msvrh->dtn_recent_.addr_;
+			else
+				dst.s_addr = src.s_addr;
+			src.s_addr = this->addr();
+			reqHandler_((char *)access_cb(p) , src,dst , 0 , this);
+		}
+
 	}
 }
 
