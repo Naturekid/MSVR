@@ -48,29 +48,32 @@ void CpcAgent::recv(Packet *p, Handler *h)
 			return;
 		}
 	}
-	//check if there is a type means DTN ,change the flag = 1
+	//check if there is a type means self DTN ,change the flag = 1
 	if (ch->ptype() == 100 )
 	{
 		SetDTNFlag( 1 );
 	}
-	// DTN  broadcast
+	// DTN  broadcast conditions
 	if( 0 ){
+		if(GetDTNFlag())
+		{
+			//upload 广播包的内容,暂时有问题
+			//Packet *up_p = p->copy();
+			//struct hdr_cmn *ch_up = HDR_CMN(up_p);
+			//struct hdr_ip *ih_up = HDR_IP(up_p);
+			//ch_up->direction() = hdr_cmn::UP;
+			//ih_up->dst_.port_ = 0;
+			//portDmux_->recv(up_p,(Handler *)0);
+		}
 		if( ih->ttl_ == 0 )
 		{
 			drop(p);
 			return;
 		}
-		if(GetDTNFlag())
-		{
-			Packet *up_p = p->copy();
-			struct hdr_cmn *ch_up = HDR_CMN(up_p);
-			ch_up->direction() = hdr_cmn::UP;
-			portDmux_->recv(up_p,(Handler *)0);
-		}
 		ih->ttl_ -= 1;
 		struct in_addr dst;
 		dst.s_addr = IP_BROADCAST;
-		this->sendProtPacket((char *)p, sizeof(Packet) , dst);
+		this->sendProtPacket((char *)p, sizeof(struct Packet) , dst);
 		return;
 	}
 	//当packet的类型等于62时,添加自己邻居等操作
@@ -197,7 +200,8 @@ CpcAgent::sendProtPacket(char *p, int n, struct in_addr dst)
 
 	ih->saddr() = myAddr_.s_addr;
 	ih->daddr() = dst.s_addr;
-
+	//added by yyq
+	ih->ttl_ = 3;
 	ch->direction() = hdr_cmn::DOWN;
 	ch->addr_type() = NS_AF_INET;
 	ch->last_hop_ = myAddr_.s_addr;
