@@ -336,7 +336,7 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
     if (next.s_addr == -1)
     {
         next = dst;
-        //return -1;
+        return -1;
     }
     // remove passed path
     nextNode = static_cast<MobileNode*>(Node::get_node_by_address(static_cast<nsaddr_t>(next.s_addr)));
