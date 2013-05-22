@@ -9,8 +9,11 @@
 #define CHECKER_H_
 
 #define EXPIRETIME 5.0
+#include <vector>
+#include <list>
+#include <timer-handler.h>
+#include <common/packet.h>
 
-#include "timer-handler.h"
 
 class Checker: public TimerHandler {
 public:
@@ -24,7 +27,7 @@ public:
 	int delBroken_pair(struct Broken_pair *the_pair);
 
 protected:
-	void expire(Event *e);
+	virtual void expire(Event *e);
 
 private:
 	std::list<Broken_pair> broken_pair_list;
@@ -38,7 +41,7 @@ struct Broken_pair {
 };
 
 struct Broadcast_buffer {
-	struct Packet packet;
+	int uid;
 	struct timeval ts;
 };
 

@@ -4,7 +4,12 @@
  *  Created on: May 15, 2013
  *      Author: david
  */
+#include <stdio.h>
+#include <stdlib.h>
+#include <memory.h>
 
+#include <sys/time.h>
+#include <list>
 #include "Checker.h"
 
 Checker::Checker( ) {
@@ -19,7 +24,7 @@ int Checker::existBroadcast_buffer(struct Broadcast_buffer *the_buffer){
 
 	for(std::list<Broadcast_buffer>::iterator iter = broadcast_buffer_list.begin();
 			iter != broadcast_buffer_list.end(); ++iter) {
-		if (*iter  == *the_buffer){
+		if (iter->uid  == the_buffer->uid){
 			gettimeofday(&iter->ts, NULL);
 			return 1;
 		}
@@ -30,7 +35,9 @@ int Checker::existBroadcast_buffer(struct Broadcast_buffer *the_buffer){
 int Checker::existBroken_pair(struct Broken_pair *the_pair){
 	for(std::list<Broken_pair>::iterator iter = broken_pair_list.begin();
 			iter != broken_pair_list.end(); ++iter) {
-		if ( iter->dst == the_pair->dst && iter->src == the_pair->src){
+		struct in_addr x = the_pair->src;
+		struct in_addr y = the_pair->dst;
+		if ( iter->dst.s_addr == x.s_addr && iter->src.s_addr == y.s_addr){
 			gettimeofday(&iter->ts, NULL);
 			return 1;
 		}
@@ -41,11 +48,9 @@ int Checker::existBroken_pair(struct Broken_pair *the_pair){
 int Checker::addBroadcast_buffer(struct Broadcast_buffer *the_buffer){
 	struct Broadcast_buffer x;
 	gettimeofday(&x.ts, NULL);
-	x.packet = the_buffer->packet;
-	if(broadcast_buffer_list.push_back(x))
+	x.uid = the_buffer->uid;
+	broadcast_buffer_list.push_back(x);
 		return 1;
-	else
-		return 0;
 }
 
 int Checker::addBroken_pair(struct Broken_pair *the_pair){
@@ -53,16 +58,16 @@ int Checker::addBroken_pair(struct Broken_pair *the_pair){
 	gettimeofday(&x.ts,NULL);
 	x.dst = the_pair->dst;
 	x.src = the_pair->src;
-	if(broken_pair_list.push_back(x))
+	broken_pair_list.push_back(x);
 		return 1;
-	else
-		return 0;
 }
 
 int Checker::delBroken_pair(struct Broken_pair *the_pair ){
 	for(std::list<Broken_pair>::iterator iter = broken_pair_list.begin();
 			iter != broken_pair_list.end(); ++iter) {
-		if ( iter->dst == the_pair->dst && iter->src == the_pair->src){
+		struct in_addr x = the_pair->src;
+		struct in_addr y = the_pair->dst;
+		if ( iter->dst.s_addr == y.s_addr && iter->src.s_addr == x.s_addr){
 			iter = broken_pair_list.erase(iter);
 			return 1;
 		}
@@ -70,7 +75,7 @@ int Checker::delBroken_pair(struct Broken_pair *the_pair ){
 	return 0;
 }
 
-void Checker::expire(){
+void Checker::expire( Event *e){
 
 	struct timeval now;
 	gettimeofday(&now, NULL);
