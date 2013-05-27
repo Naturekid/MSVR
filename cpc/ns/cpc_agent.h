@@ -8,6 +8,8 @@
 #include "../cpc_defs.h"
 #include "../cpc_prot.h"
 
+#include "Checker.h"
+
 //#define DEBUG
 
 #ifndef HDR_ACCESS
@@ -35,6 +37,7 @@ class CpcAgent : public Agent {
         int DTNFlag_;
         int GetDTNFlag();
         void SetDTNFlag(int n);
+        Checker checker_ ;
 
 	protected:
 		process_route_prot protHandler_;
@@ -46,6 +49,7 @@ class CpcAgent : public Agent {
 
 		struct in_addr myAddr_;
         PortClassifier* portDmux_;
+
 };
 
 #endif /* CPC_AGENT_H */

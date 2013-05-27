@@ -8,6 +8,7 @@
 #include "../cpc_rt.h"
 //#define DEBUG
 #include "../../msvr/msvr_packet.h"
+#include  "Checker.h"
 
 CpcAgent::CpcAgent(packet_t type)
 : Agent(type)
@@ -49,12 +50,15 @@ void CpcAgent::recv(Packet *p, Handler *h)
 		}
 	}
 	//check if there is a type means self DTN ,change the flag = 1
-	if (ch->ptype() == 100 )
+	if ( 0 )
 	{
 		SetDTNFlag( 1 );
+		SetDTNFlag( 0 );
+		return;
 	}
-	// DTN  broadcast conditions
-	if( 0 ){
+	// DTN  broadcast conditions //对于DTN广播包,上传,处理,再转发
+	else if( 0 ){
+
 		if(GetDTNFlag())
 		{
 			//upload 广播包的内容,暂时有问题
@@ -70,6 +74,12 @@ void CpcAgent::recv(Packet *p, Handler *h)
 			drop(p);
 			return;
 		}
+		struct Broadcast_buffer a;
+		a.uid = ch->uid();
+		if(checker_.existBroadcast_buffer( &a ))
+			return ;
+		checker_.addBroadcast_buffer(&a);
+
 		ih->ttl_ -= 1;
 		struct in_addr dst;
 		dst.s_addr = IP_BROADCAST;
@@ -148,17 +158,37 @@ void CpcAgent::processPacket(Packet *p)
 		else
 			ifsend = reqHandler_(NULL, src, dst, 0, this);
 		//if road broken,send to the recent_dtn or the SRC node
-		if( ifsend == -1 )
-		{
-			//src.s_addr = this->addr();
-			if( msvrh->dtn_recent_.addr_ != 0)
-				dst.s_addr = msvrh->dtn_recent_.addr_;
-			else
-				dst.s_addr = src.s_addr;
-			src.s_addr = this->addr();
-			reqHandler_((char *)access_cb(p) , src,dst , 0 , this);
+		if( ifsend != -1){
+			//发送成功,从短路表中删除broken_pair
+			struct Broken_pair a;
+			a.dst = dst;
+			a.src = src;
+			if(checker_.delBroken_pair( &a )){//删除成功,通路通知
+				if( msvrh->dtn_recent_.addr_ != 0)
+					dst.s_addr = msvrh->dtn_recent_.addr_;
+				else
+					dst.s_addr = src.s_addr;
+				src.s_addr = this->addr();
+				reqHandler_((char *)access_cb(p) , src,dst , 0 , this);
+			}
 		}
-
+		else//ifsend == -1,发送失败,查broken_pair 表,添加broken_pair,并且通知上一跳dtn节点
+		{
+			struct Broken_pair a;
+			a.dst = dst;
+			a.src = src;
+			if( ! checker_.existBroken_pair( &a))
+			{
+				checker_.addBroken_pair( &a);
+				//src.s_addr = this->addr();断路通知
+				if( msvrh->dtn_recent_.addr_ != 0)
+					dst.s_addr = msvrh->dtn_recent_.addr_;
+				else
+					dst.s_addr = src.s_addr;
+				src.s_addr = this->addr();
+				reqHandler_((char *)access_cb(p) , src,dst , 0 , this);
+			}
+		}
 	}
 }
 
