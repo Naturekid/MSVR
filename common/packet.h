@@ -183,9 +183,10 @@ static const packet_t PT_BLTRACE = 60;
 static const packet_t PT_AOMDV = 61;
 
 static const packet_t PT_MSVR = 62;
+static const packet_t PT_DTNBUNDLE = 63;
 
         // insert new packet types here
-static packet_t       PT_NTYPE = 63; // This MUST be the LAST one
+static packet_t       PT_NTYPE = 64; // This MUST be the LAST one
 
 enum packetClass
 {
@@ -386,6 +387,8 @@ public:
 		name_[PT_AOMDV]= "AOMDV";
 
 		name_[PT_MSVR] = "MSVR";
+
+		name_[PT_DTNBUNDLE] = "DTNBundle";
 
 		name_[PT_NTYPE]= "undefined";
 	}

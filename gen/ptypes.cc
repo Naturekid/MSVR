@@ -128,6 +128,8 @@ set ptype(aomdv) 61\n\
 set pvals(61) AOMDV\n\
 set ptype(msvr) 62\n\
 set pvals(62) MSVR\n\
+set ptype(dtnbundle) 63\n\
+set pvals(63) DTNBundle\n\
 proc ptype2val {str} {\n\
 global ptype\n\
 set str [string tolower $str]\n\

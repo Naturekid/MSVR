@@ -3427,6 +3427,7 @@ LL 	# network wireless stack\n\
 LRWPAN  # zheng, wpan/p802_15_4mac.cc\n\
 Mac 	# network wireless stack\n\
 AODV 	# routing protocol for ad-hoc networks\n\
+Bundle  # bundle protocol for DTNs\n\
 Diffusion 	# diffusion/diffusion.cc\n\
 IMEP 	# Internet MANET Encapsulation Protocol, for ad-hoc networks\n\
 MIP 	# Mobile IP, mobile/mip-reg.cc\n\

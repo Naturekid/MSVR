@@ -74,6 +74,7 @@ INCLUDES = \
 	-I./diffusion3/filter_core -I./asim/ -I./qs \
 	-I./diffserv -I./satellite \
 	-I./wpan \
+	-I./dtn \
 	-I./cpc
 	#-I./msvr -I./msvr/neigh
 
@@ -335,6 +336,7 @@ OBJ_CC = \
 	wpan/p802_15_4sscs.o wpan/p802_15_4timer.o \
 	wpan/p802_15_4trace.o wpan/p802_15_4transac.o \
 	apps/pbc.o \
+	dtn/mybundle.o \
 	cpc/libcpc.a \
 	msvr/msvr_agent.o msvr/list.o \
 	msvr/neigh/msvr_neigh.o msvr/neigh/msvr_nblist.o \

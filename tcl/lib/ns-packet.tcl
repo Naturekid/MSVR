@@ -162,6 +162,7 @@ foreach prot {
 	Mac 	# network wireless stack
 # Mobility, Ad-Hoc Networks, Sensor Nets:
 	AODV 	# routing protocol for ad-hoc networks
+	Bundle  # bundle protocol for DTNs
 	Diffusion 	# diffusion/diffusion.cc
 	IMEP 	# Internet MANET Encapsulation Protocol, for ad-hoc networks
         MIP 	# Mobile IP, mobile/mip-reg.cc
