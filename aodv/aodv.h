@@ -43,6 +43,8 @@ The AODV code developed by the CMU/MONARCH group was optimized and tuned by Sami
 #include <aodv/aodv_rqueue.h>
 #include <classifier/classifier-port.h>
 
+#include <iostream>
+
 /*
   Allows local repair of routes 
 */

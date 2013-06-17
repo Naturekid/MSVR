@@ -24,7 +24,9 @@ int Checker::existBroadcast_buffer(struct Broadcast_buffer *the_buffer){
 
 	for(std::list<Broadcast_buffer>::iterator iter = broadcast_buffer_list.begin();
 			iter != broadcast_buffer_list.end(); ++iter) {
-		if (iter->uid  == the_buffer->uid){
+		struct hdr_cmn *ch1 = HDR_CMN(iter->pkt);
+		struct hdr_cmn *ch2 = HDR_CMN(the_buffer->pkt);
+		if ( ch1->uid_ == ch2->uid_){
 			gettimeofday(&iter->ts, NULL);
 			return 1;
 		}
@@ -48,7 +50,7 @@ int Checker::existBroken_pair(struct Broken_pair *the_pair){
 int Checker::addBroadcast_buffer(struct Broadcast_buffer *the_buffer){
 	struct Broadcast_buffer x;
 	gettimeofday(&x.ts, NULL);
-	x.uid = the_buffer->uid;
+	x.pkt = the_buffer->pkt->copy();
 	broadcast_buffer_list.push_back(x);
 		return 1;
 }

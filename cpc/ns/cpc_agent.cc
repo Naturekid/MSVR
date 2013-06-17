@@ -50,14 +50,14 @@ void CpcAgent::recv(Packet *p, Handler *h)
 		}
 	}
 	//check if there is a type means self DTN ,change the flag = 1
-	if ( 0 )
+	if ( 1 == ch->size()  )
 	{
 		SetDTNFlag( 1 );
-		SetDTNFlag( 0 );
+		drop(p);
 		return;
 	}
 	// DTN  broadcast conditions //对于DTN广播包,上传,处理,再转发
-	else if( 0 ){
+	else if( ch->ptype_ == PT_DTNBUNDLE && (u_int32_t)ih->daddr() == IP_BROADCAST){
 
 		if(GetDTNFlag())
 		{
@@ -68,16 +68,20 @@ void CpcAgent::recv(Packet *p, Handler *h)
 			//ch_up->direction() = hdr_cmn::UP;
 			//ih_up->dst_.port_ = 0;
 			//portDmux_->recv(up_p,(Handler *)0);
+			ch->direction() = hdr_cmn::UP;
+			portDmux_->recv(p,(Handler *)0);
 		}
 		if( ih->ttl_ == 0 )
 		{
-			drop(p);
+			Packet::free(p);
 			return;
 		}
 		struct Broadcast_buffer a;
-		a.uid = ch->uid();
-		if(checker_.existBroadcast_buffer( &a ))
-			return ;
+		a.pkt = p->copy();
+		if(checker_.existBroadcast_buffer( &a )){
+			Packet::free(p);
+			return ;//遇到了重复的广播分组,直接退出处理就好.
+		}
 		checker_.addBroadcast_buffer(&a);
 
 		ih->ttl_ -= 1;
@@ -123,8 +127,7 @@ void CpcAgent::processPacket(Packet *p)
 		return;
 	}
 	//得先copy数据 再处理
-	int temp = GetDTNFlag();
-	if( temp ){
+	if( GetDTNFlag() ){
 		//how to modify the current packet
 		msvrh->dtn_recent_.addr_ = this->addr();
 		//copy the packet and upload
@@ -136,6 +139,7 @@ void CpcAgent::processPacket(Packet *p)
 #endif
 		//upload
 		portDmux_->recv(up_p,(Handler *)0);
+		return ;
 	}
 
 	next = cpc_rt_find(dst);
@@ -169,6 +173,7 @@ void CpcAgent::processPacket(Packet *p)
 				else
 					dst.s_addr = src.s_addr;
 				src.s_addr = this->addr();
+				ch->size_ = 2;
 				reqHandler_((char *)access_cb(p) , src,dst , 0 , this);
 			}
 		}
@@ -186,6 +191,7 @@ void CpcAgent::processPacket(Packet *p)
 				else
 					dst.s_addr = src.s_addr;
 				src.s_addr = this->addr();
+				ch->size_ = 3;
 				reqHandler_((char *)access_cb(p) , src,dst , 0 , this);
 			}
 		}
@@ -205,7 +211,7 @@ void CpcAgent::dropPacket(struct in_addr dst, const char *msg)
 
 void CpcAgent::sendData(Packet* p, struct in_addr dst)
 {
-	struct hdr_ip *ih = HDR_IP(p);
+	//struct hdr_ip *ih = HDR_IP(p);
 	struct hdr_cmn *ch = HDR_CMN(p);
 	struct in_addr *next;
 

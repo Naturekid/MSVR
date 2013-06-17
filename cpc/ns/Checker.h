@@ -41,7 +41,7 @@ struct Broken_pair {
 };
 
 struct Broadcast_buffer {
-	int uid;
+	Packet* pkt;
 	struct timeval ts;
 };
 
