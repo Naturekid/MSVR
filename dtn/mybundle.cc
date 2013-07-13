@@ -4,41 +4,41 @@
 //#define UTIL_DEBUG
 
 void Utival_cal_Timer::expire(Event*) {
-  a_->m_uti_nodeInfo.uvalue_block_cal();
-  a_->nb_purge();
-  resched(1);
+	a_->m_uti_nodeInfo.uvalue_block_cal();
+	a_->nb_purge();
+	resched(1);
 }
 
 void MyHelloTimer::expire(Event*) {
-  resched(HELLO_INTERVAL);//a_->helloInterval/1000.0);
-  //a_->m_uti_nodeInfo.uvalue_block_cal();
-  a_->sendHello();
+	resched(HELLO_INTERVAL);//a_->helloInterval/1000.0);
+	//a_->m_uti_nodeInfo.uvalue_block_cal();
+	a_->sendHello();
 }
 
 void BundleTimer::expire(Event*) {
-  a_->checkStorage();
-  if (a_->myBundleBuffer->length() >= 1)
-    resched(1);//0.001); // Check buffers every 1 ms
-  else
-    resched(1);//0.01);  // If empty, check buffers every 10 ms
+	a_->checkStorage();
+	if (a_->myBundleBuffer->length() >= 1)
+		resched(1);//0.001); // Check buffers every 1 ms
+	else
+		resched(1);//0.01);  // If empty, check buffers every 10 ms
 }
 
 int hdr_bundle::offset_;
 static class BundleHeaderClass : public PacketHeaderClass {
 public:
-  BundleHeaderClass() : PacketHeaderClass("PacketHeader/Bundle", 
-					  sizeof(hdr_bundle)) {
-    bind_offset(&hdr_bundle::offset_);
-  }
+	BundleHeaderClass() : PacketHeaderClass("PacketHeader/Bundle",
+			sizeof(hdr_bundle)) {
+		bind_offset(&hdr_bundle::offset_);
+	}
 } class_bundlehdr;
 
 
 static class BundleClass : public TclClass {
 public:
-  BundleClass() : TclClass("Agent/Bundle") {}
-  TclObject* create(int, const char*const*) {
-    return (new BundleAgent());
-  }
+	BundleClass() : TclClass("Agent/Bundle") {}
+	TclObject* create(int, const char*const*) {
+		return (new BundleAgent());
+	}
 } class_bundle;
 
 
@@ -46,63 +46,63 @@ BundleAgent::BundleAgent() : Agent(PT_DTNBUNDLE), utival_cal_Timer_(this),  hell
 
 
 	bind("helloInterval_", &helloInterval);
-//  bind("retxTimeout_", &retxTimeout);
-//  bind("deleteForwarded_", &deleteForwarded);
-//  bind("cqsize_", &cqsize);
-//  bind("retxqsize_", &retxqsize);
-//  bind("qsize_", &qsize);
-//  bind("ifqCongestionDuration_", &ifqCongestionDuration);
-//  bind("sentBundles_", &sentBundles);
-//  bind("receivedBundles_", &receivedBundles);
-//  bind("duplicateReceivedBundles_", &duplicateReceivedBundles);
-//  bind("duplicateBundles_", &duplicateBundles);
-//  bind("deletedBundles_", &deletedBundles);
-//  bind("forwardedBundles_", &forwardedBundles);
-//  bind("sentReceipts_", &sentReceipts);
-//  bind("receivedReceipts_", &receivedReceipts);
-//  bind("duplicateReceivedReceipts_", &duplicateReceivedReceipts);
-//  bind("duplicateReceipts_", &duplicateReceipts);
-//  bind("forwardedReceipts_", &forwardedReceipts);
-//  bind("avBundleDelay_", &avBundleDelay);
-//  bind("avReceiptDelay_", &avReceiptDelay);
-//  bind("avBundleHopCount_", &avBundleHopCount);
-//  bind("avReceiptHopCount_", &avReceiptHopCount);
-//  bind("avNumNeighbors_", &avNumNeighbors);
-//  bind("avLinkLifetime_", &avLinkLifetime);
-//  bind("antiPacket_", &antiPacket);
-//  bind("routingProtocol_", &routingProtocol);
-//  bind("initialSpray_", &initialSpray);
+	//  bind("retxTimeout_", &retxTimeout);
+	//  bind("deleteForwarded_", &deleteForwarded);
+	//  bind("cqsize_", &cqsize);
+	//  bind("retxqsize_", &retxqsize);
+	//  bind("qsize_", &qsize);
+	//  bind("ifqCongestionDuration_", &ifqCongestionDuration);
+	//  bind("sentBundles_", &sentBundles);
+	//  bind("receivedBundles_", &receivedBundles);
+	//  bind("duplicateReceivedBundles_", &duplicateReceivedBundles);
+	//  bind("duplicateBundles_", &duplicateBundles);
+	//  bind("deletedBundles_", &deletedBundles);
+	//  bind("forwardedBundles_", &forwardedBundles);
+	//  bind("sentReceipts_", &sentReceipts);
+	//  bind("receivedReceipts_", &receivedReceipts);
+	//  bind("duplicateReceivedReceipts_", &duplicateReceivedReceipts);
+	//  bind("duplicateReceipts_", &duplicateReceipts);
+	//  bind("forwardedReceipts_", &forwardedReceipts);
+	//  bind("avBundleDelay_", &avBundleDelay);
+	//  bind("avReceiptDelay_", &avReceiptDelay);
+	//  bind("avBundleHopCount_", &avBundleHopCount);
+	//  bind("avReceiptHopCount_", &avReceiptHopCount);
+	//  bind("avNumNeighbors_", &avNumNeighbors);
+	//  bind("avLinkLifetime_", &avLinkLifetime);
+	//  bind("antiPacket_", &antiPacket);
+	//  bind("routingProtocol_", &routingProtocol);
+	//  bind("initialSpray_", &initialSpray);
 	bind("bundleStorageSize_", &bundleStorageSize);
-//  bind("congestionControl_", &congestionControl);
-//  bind("bundleStorageThreshold_", &bundleStorageThreshold);
-//  bind("CVRR_", &CVRR);
-//  bind("limitRR_", &limitRR);
-//  bind("dropStrategy_", &dropStrategy);
-//  bundleDelaysum=0;
-//  receiptDelaysum=0;
-//  bundleHopCountsum=0;
-//  receiptHopCountsum=0;
+	//  bind("congestionControl_", &congestionControl);
+	//  bind("bundleStorageThreshold_", &bundleStorageThreshold);
+	//  bind("CVRR_", &CVRR);
+	//  bind("limitRR_", &limitRR);
+	//  bind("dropStrategy_", &dropStrategy);
+	//  bundleDelaysum=0;
+	//  receiptDelaysum=0;
+	//  bundleHopCountsum=0;
+	//  receiptHopCountsum=0;
 
-  utival_cal_Timer_.resched((rand()%1000)/1000000.0);
-  helloTimer_.resched((rand()%helloInterval)/1000.0); // To avoid synchronization
-  bundleTimer_.resched((rand()%1000)/1000000.0);      // To avoid synchronization
-//  neighborFreeBytes=NULL;
-//  countRR=NULL;
-//  ownDP=NULL;
-//   neighborNeighborId=NULL;
-//   neighborDP=NULL;
-//   neighborLastSeen=NULL;
-//   neighborFirstSeen=NULL;
-//   neighborId=NULL;
-//   neighborBundleTableSize=NULL;
-//   neighborBundles=NULL;
-//   neighbors=0;
-//   bundleNeighborId=NULL;
-//   bundleNeighborEid=NULL;
-//   bundleNeighborFragments=NULL;
-//   bundleNeighborFragmentNumber=NULL;
-//   bundleNeighborLastSeen=NULL;
-//   bundleNeighbors=0;
+	utival_cal_Timer_.resched((rand()%1000)/1000000.0);
+	helloTimer_.resched((rand()%helloInterval)/1000.0); // To avoid synchronization
+	bundleTimer_.resched((rand()%1000)/1000000.0);      // To avoid synchronization
+	//  neighborFreeBytes=NULL;
+	//  countRR=NULL;
+	//  ownDP=NULL;
+	//   neighborNeighborId=NULL;
+	//   neighborDP=NULL;
+	//   neighborLastSeen=NULL;
+	//   neighborFirstSeen=NULL;
+	//   neighborId=NULL;
+	//   neighborBundleTableSize=NULL;
+	//   neighborBundles=NULL;
+	//   neighbors=0;
+	//   bundleNeighborId=NULL;
+	//   bundleNeighborEid=NULL;
+	//   bundleNeighborFragments=NULL;
+	//   bundleNeighborFragmentNumber=NULL;
+	//   bundleNeighborLastSeen=NULL;
+	//   bundleNeighbors=0;
 
 	myBundleBuffer = new BundlePacketQueue();
 	myBundleStorage = new BundlePacketQueue();
@@ -110,17 +110,17 @@ BundleAgent::BundleAgent() : Agent(PT_DTNBUNDLE), utival_cal_Timer_(this),  hell
 	controlPktBuffer = new BundlePacketQueue();
 	LIST_INIT(&nbhead);
 
-//   bundleStorage=new PacketQueue();
-//   reTxBundleStorage=new PacketQueue();
-//   mgmntBundleStorage=new PacketQueue();
-//   bundleBuffer=new PacketQueue();
-//   reTxBundleBuffer=new PacketQueue();
-//   mgmntBundleBuffer=new PacketQueue();
-  ifqueue=0;
-//  last_transmission=0;
-//  dropsRR=0;
-//  repsRR=0;
-//  lastCVRR=0;
+	//   bundleStorage=new PacketQueue();
+	//   reTxBundleStorage=new PacketQueue();
+	//   mgmntBundleStorage=new PacketQueue();
+	//   bundleBuffer=new PacketQueue();
+	//   reTxBundleBuffer=new PacketQueue();
+	//   mgmntBundleBuffer=new PacketQueue();
+	ifqueue=0;
+	//  last_transmission=0;
+	//  dropsRR=0;
+	//  repsRR=0;
+	//  lastCVRR=0;
 
 	duplicateFrag = 0;
 }
@@ -131,58 +131,58 @@ int BundleAgent::command(int argc, const char*const* argv) {
 	std::cout<<"argc::"<<argc<<' '<<argv[1]<<' '<<argv[2]<<"---------------------------------------------"<<std::endl;
 #endif
 
-  if(argc == 3) {
-    if(strcmp(argv[1], "if-queue") == 0) {
-      ifqueue=(PriQueue*) TclObject::lookup(argv[2]);
-      if(ifqueue == 0)
-		return TCL_ERROR;
-      return TCL_OK;
-    }
-    if(strcmp(argv[1], "index") == 0) {
-        m_uti_nodeInfo.index = atoi(argv[2]);
+	if(argc == 3) {
+		if(strcmp(argv[1], "if-queue") == 0) {
+			ifqueue=(PriQueue*) TclObject::lookup(argv[2]);
+			if(ifqueue == 0)
+				return TCL_ERROR;
+			return TCL_OK;
+		}
+		if(strcmp(argv[1], "index") == 0) {
+			m_uti_nodeInfo.index = atoi(argv[2]);
 
-        //registration!
-        Packet* pkt=allocpkt();
-        hdr_cmn* ch=hdr_cmn::access(pkt);
-        ch->size() = 1;
-        target_->recv(pkt, (Handler*)0);
+			//registration!
+			Packet* pkt=allocpkt();
+			hdr_cmn* ch=hdr_cmn::access(pkt);
+			ch->size() = 1;
+			target_->recv(pkt, (Handler*)0);
 
-        return TCL_OK;
-      }
-  }
+			return TCL_OK;
+		}
+	}
 
-  if (argc == 8) {
-    if (strcmp(argv[1], "send") == 0) {
-      sentBundles++; // Stats
-      if ((myBundleBuffer->byteLength() + midBundleBuffer->byteLength() + atoi(argv[3])) > bundleStorageSize) {
- 		return (TCL_OK);
-      }
-      Packet* pkt=allocpkt();
-      hdr_cmn* ch=hdr_cmn::access(pkt);
-      ch->size()=atoi(argv[3]);
-      hdr_bundle* bh=hdr_bundle::access(pkt);
-      bh->originating_timestamp=CURRENT_TIME;
-      bh->lifetime=atof(argv[4]);
+	if (argc == 8) {
+		if (strcmp(argv[1], "send") == 0) {
+			sentBundles++; // Stats
+			if ((myBundleBuffer->byteLength() + midBundleBuffer->byteLength() + atoi(argv[3])) > bundleStorageSize) {
+				return (TCL_OK);
+			}
+			Packet* pkt=allocpkt();
+			hdr_cmn* ch=hdr_cmn::access(pkt);
+			ch->size()=atoi(argv[3]);
+			hdr_bundle* bh=hdr_bundle::access(pkt);
+			bh->originating_timestamp=CURRENT_TIME;
+			bh->lifetime=atof(argv[4]);
 
-      bh->type= TYPE_DATA;
-      bh->src=here_.addr_;
-      bh->prev=here_.addr_;
-      bh->dst=atoi(argv[2]);
-//      bh->hop_count=0;
-      bh->bundle_id=ch->uid(); // Unique bundle ID
-      bh->custody_transfer=atoi(argv[5]);
-      bh->return_receipt=atoi(argv[6]);
+			bh->type= TYPE_DATA;
+			bh->src=here_.addr_;
+			bh->prev=here_.addr_;
+			bh->dst=atoi(argv[2]);
+			//      bh->hop_count=0;
+			bh->bundle_id=ch->uid(); // Unique bundle ID
+			bh->custody_transfer=atoi(argv[5]);
+			bh->return_receipt=atoi(argv[6]);
 
 
-      bh->initial_timestamp= CURRENT_TIME;
-      myBundleBuffer->enque(pkt);
+			bh->initial_timestamp= CURRENT_TIME;
+			myBundleBuffer->enque(pkt);
 
-      Packet* pkt2 = pkt->copy();
-      myBundleStorage->enque(pkt2);
-      return (TCL_OK);
-    }
-  }
-  return (Agent::command(argc, argv));
+			Packet* pkt2 = pkt->copy();
+			myBundleStorage->enque(pkt2);
+			return (TCL_OK);
+		}
+	}
+	return (Agent::command(argc, argv));
 }
 
 
@@ -221,124 +221,124 @@ int BundleAgent::command(int argc, const char*const* argv) {
 //}
 
 Packet* BundleAgent::copyBundle(Packet* pkt) {
-  Packet* newpkt=allocpkt();
-  hdr_cmn* ch=hdr_cmn::access(pkt);
-  hdr_bundle* bh=hdr_bundle::access(pkt);
-  hdr_cmn* newch=hdr_cmn::access(newpkt);
-  hdr_bundle* newbh=hdr_bundle::access(newpkt);
-  newch->size()=ch->size();
-  newbh->originating_timestamp=bh->originating_timestamp;
-  newbh->lifetime=bh->lifetime;
-  newbh->type=bh->type;
-  newbh->src=bh->src;
-  newbh->prev=bh->prev;
-  newbh->dst=bh->dst;
-//  newbh->hop_count=bh->hop_count;
-  newbh->bundle_id=bh->bundle_id;
-//  newbh->reverse_eid=bh->reverse_eid;
-  newbh->custody_transfer=bh->custody_transfer;
-  newbh->return_receipt=bh->return_receipt;
-//  newbh->priority=bh->priority;
-//  newbh->sent_tos=bh->sent_tos;
-//  for(int n=0; n < 100; n++) {
-//    newbh->sent_to[n]=bh->sent_to[n];
-//    newbh->sent_when[n]=bh->sent_when[n];
-//  }
-//  newbh->spray=bh->spray;
-//  newbh->nretx=bh->nretx;
-  newbh->initial_timestamp=bh->initial_timestamp;
-  return newpkt;
+	Packet* newpkt=allocpkt();
+	hdr_cmn* ch=hdr_cmn::access(pkt);
+	hdr_bundle* bh=hdr_bundle::access(pkt);
+	hdr_cmn* newch=hdr_cmn::access(newpkt);
+	hdr_bundle* newbh=hdr_bundle::access(newpkt);
+	newch->size()=ch->size();
+	newbh->originating_timestamp=bh->originating_timestamp;
+	newbh->lifetime=bh->lifetime;
+	newbh->type=bh->type;
+	newbh->src=bh->src;
+	newbh->prev=bh->prev;
+	newbh->dst=bh->dst;
+	//  newbh->hop_count=bh->hop_count;
+	newbh->bundle_id=bh->bundle_id;
+	//  newbh->reverse_eid=bh->reverse_eid;
+	newbh->custody_transfer=bh->custody_transfer;
+	newbh->return_receipt=bh->return_receipt;
+	//  newbh->priority=bh->priority;
+	//  newbh->sent_tos=bh->sent_tos;
+	//  for(int n=0; n < 100; n++) {
+	//    newbh->sent_to[n]=bh->sent_to[n];
+	//    newbh->sent_when[n]=bh->sent_when[n];
+	//  }
+	//  newbh->spray=bh->spray;
+	//  newbh->nretx=bh->nretx;
+	newbh->initial_timestamp=bh->initial_timestamp;
+	return newpkt;
 }
 
 
 /*
-*first´ú±íÒª·¢µÄÆðÊ¼·ÖÆ¬£¬last
-*/
+ *firstï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Æ¬ï¿½ï¿½last
+ */
 void BundleAgent::sendBundle(Packet* pkt, int next_hop, int first, int last) {
-  hdr_cmn* ch=hdr_cmn::access(pkt);
-  hdr_bundle* bh=hdr_bundle::access(pkt);
-  //fragments: ·Ö³É¶àÉÙÆ¬
-  int fragments=(ch->size()/1460)+1; // Fragment to IP packets, save 40 bytes for overhead
-  if ((ch->size()%1460) == 0)
-    fragments--;
-//  int retx=0;
+	hdr_cmn* ch=hdr_cmn::access(pkt);
+	hdr_bundle* bh=hdr_bundle::access(pkt);
+	//fragments: ï¿½Ö³É¶ï¿½ï¿½ï¿½Æ¬
+	int fragments=(ch->size()/1460)+1; // Fragment to IP packets, save 40 bytes for overhead
+	if ((ch->size()%1460) == 0)
+		fragments--;
+	//  int retx=0;
 
-  if ((first==0)&&(last==0))
-    last=fragments;
-//  else
-  	//retxÎª1±íÊ¾Ö»ÊÇ·¢ËÍBundleµÄÒ»²¿·Ö·ÖÆ¬
-//    retx=1;
-  for(int i=first; i < last; i++) {
-    Packet* newpkt=allocpkt();
-    hdr_bundle* newbh=hdr_bundle::access(newpkt);
-    hdr_ip* newiph=hdr_ip::access(newpkt);
-    hdr_cmn* newch=hdr_cmn::access(newpkt);
+	if ((first==0)&&(last==0))
+		last=fragments;
+	//  else
+	//retxÎª1ï¿½ï¿½Ê¾Ö»ï¿½Ç·ï¿½ï¿½ï¿½Bundleï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö·ï¿½Æ¬
+	//    retx=1;
+	for(int i=first; i < last; i++) {
+		Packet* newpkt=allocpkt();
+		hdr_bundle* newbh=hdr_bundle::access(newpkt);
+		hdr_ip* newiph=hdr_ip::access(newpkt);
+		hdr_cmn* newch=hdr_cmn::access(newpkt);
 
-    if(fragments > 1)
-      		newbh->is_fragment = true;
-    	else
-    		newbh->is_fragment = false;
+		if(fragments > 1)
+			newbh->is_fragment = true;
+		else
+			newbh->is_fragment = false;
 
-    if ((i==(fragments-1))&&((ch->size()%1460) > 0))
-      newch->size()=(ch->size()%1460)+40;
-    else
-      newch->size()=1500;
-	//ÎªÊ²Ã´ÒªÀ´Ò»¸öÐÂBundle??: Ã¿¸ö°ü¶¼»áÓÐbundleÍ·²¿¡£
-    newbh->nfragments=fragments;
+		if ((i==(fragments-1))&&((ch->size()%1460) > 0))
+			newch->size()=(ch->size()%1460)+40;
+		else
+			newch->size()=1500;
+		//ÎªÊ²Ã´Òªï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Bundle??: Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bundleÍ·ï¿½ï¿½ï¿½ï¿½
+		newbh->nfragments=fragments;
 
-	//i±íÊ¾µÚ¼¸¶Î¡£
-    newbh->fragment=i;
-    newbh->bundle_size=ch->size();
-    newbh->originating_timestamp=bh->originating_timestamp;
-    newbh->lifetime=bh->lifetime;
-    newbh->type = bh->type;
-    newbh->src=bh->src;
-    newbh->prev=here_.addr_;
-    newbh->dst=bh->dst;
-//    newbh->hop_count=bh->hop_count+1;
-    newbh->bundle_id=bh->bundle_id;
-	newbh->ack_bundle_id = bh->ack_bundle_id;
-//    newbh->reverse_eid=bh->reverse_eid;
-    newbh->custody_transfer=bh->custody_transfer;
-    newbh->return_receipt=bh->return_receipt;
-//    newbh->priority=bh->priority;
-//    newbh->sent_tos=0;
-//    for(int n=0; n < 100; n++) {
-//      newbh->sent_to[n]=-1;
-//      newbh->sent_when[n]=0;
-//    }
-//    newbh->spray=bh->spray;
-//    newbh->nretx=bh->nretx;
-    newbh->initial_timestamp=bh->initial_timestamp;
-    newch->iface()=UNKN_IFACE.value();
-    newch->direction()=hdr_cmn::NONE;
-    newiph->saddr()=here_.addr_;
-    newiph->sport()=here_.port_;
-    newiph->dport()=here_.port_;
-    newiph->daddr()=next_hop;
-//    int buffered=0;
+		//iï¿½ï¿½Ê¾ï¿½Ú¼ï¿½ï¿½Î¡ï¿½
+		newbh->fragment=i;
+		newbh->bundle_size=ch->size();
+		newbh->originating_timestamp=bh->originating_timestamp;
+		newbh->lifetime=bh->lifetime;
+		newbh->type = bh->type;
+		newbh->src=bh->src;
+		newbh->prev=here_.addr_;
+		newbh->dst=bh->dst;
+		//    newbh->hop_count=bh->hop_count+1;
+		newbh->bundle_id=bh->bundle_id;
+		newbh->ack_bundle_id = bh->ack_bundle_id;
+		//    newbh->reverse_eid=bh->reverse_eid;
+		newbh->custody_transfer=bh->custody_transfer;
+		newbh->return_receipt=bh->return_receipt;
+		//    newbh->priority=bh->priority;
+		//    newbh->sent_tos=0;
+		//    for(int n=0; n < 100; n++) {
+		//      newbh->sent_to[n]=-1;
+		//      newbh->sent_when[n]=0;
+		//    }
+		//    newbh->spray=bh->spray;
+		//    newbh->nretx=bh->nretx;
+		newbh->initial_timestamp=bh->initial_timestamp;
+		newch->iface()=UNKN_IFACE.value();
+		newch->direction()=hdr_cmn::NONE;
+		newiph->saddr()=here_.addr_;
+		newiph->sport()=here_.port_;
+		newiph->dport()=here_.port_;
+		newiph->daddr()=next_hop;
+		//    int buffered=0;
 
-	target_->recv(newpkt);
-  }
+		target_->recv(newpkt);
+	}
 }
 
 void BundleAgent::dropOldest() {
-//  int n=0;
-//  Packet* pkt=0;
-//  double max_lifetime=0;
-//  int max_n=0;
-//  while (n < bundleStorage->length()) {
-//    pkt=bundleStorage->lookup(n);
-//    hdr_bundle* bh=hdr_bundle::access(pkt);
-//    if (NOW - bh->originating_timestamp > max_lifetime) {
-//      max_lifetime=(NOW - bh->originating_timestamp);
-//      max_n=n;
-//    }
-//    n++;
-//  }
-//  pkt=bundleStorage->lookup(max_n);
-//  bundleStorage->remove(pkt);
-//  Packet::free(pkt);
+	//  int n=0;
+	//  Packet* pkt=0;
+	//  double max_lifetime=0;
+	//  int max_n=0;
+	//  while (n < bundleStorage->length()) {
+	//    pkt=bundleStorage->lookup(n);
+	//    hdr_bundle* bh=hdr_bundle::access(pkt);
+	//    if (NOW - bh->originating_timestamp > max_lifetime) {
+	//      max_lifetime=(NOW - bh->originating_timestamp);
+	//      max_n=n;
+	//    }
+	//    n++;
+	//  }
+	//  pkt=bundleStorage->lookup(max_n);
+	//  bundleStorage->remove(pkt);
+	//  Packet::free(pkt);
 }
 
 //void BundleAgent::dropMostSpread() {
@@ -380,62 +380,62 @@ void BundleAgent::dropOldest() {
 //}
 
 void BundleAgent::dropRandom() {
-//  int n=Random::integer(bundleStorage->length());
-//  Packet* pkt=bundleStorage->lookup(n);
-//  bundleStorage->remove(pkt);
-//  Packet::free(pkt);
+	//  int n=Random::integer(bundleStorage->length());
+	//  Packet* pkt=bundleStorage->lookup(n);
+	//  bundleStorage->remove(pkt);
+	//  Packet::free(pkt);
 }
 
 void BundleAgent::removeExpiredBundles() {
-  int n=0;
-  Packet* pkt=0;
+	int n=0;
+	Packet* pkt=0;
 
 #ifdef DEBUG
 	//for debugging
-//	std::cout<<"CHeck EXPIRE! node "<<m_uti_nodeInfo.index<<std::endl;
+	//	std::cout<<"CHeck EXPIRE! node "<<m_uti_nodeInfo.index<<std::endl;
 #endif
 
-  while (n < myBundleStorage->length()) {
-    pkt = myBundleStorage->lookup(n);
-    hdr_bundle* bh = hdr_bundle::access(pkt);
-    if (CURRENT_TIME - bh->originating_timestamp > bh->lifetime) {
-    	//ÖØ´«
-    	bh->originating_timestamp = NOW;
+	while (n < myBundleStorage->length()) {
+		pkt = myBundleStorage->lookup(n);
+		hdr_bundle* bh = hdr_bundle::access(pkt);
+		if (CURRENT_TIME - bh->originating_timestamp > bh->lifetime) {
+			//ï¿½Ø´ï¿½
+			bh->originating_timestamp = NOW;
 
-    	Packet* pkt2 = pkt->copy();
-    	myBundleBuffer->delete_by_id(bh->bundle_id);
-    	myBundleBuffer->enque(pkt2);
+			Packet* pkt2 = pkt->copy();
+			myBundleBuffer->delete_by_id(bh->bundle_id);
+			myBundleBuffer->enque(pkt2);
 
 #ifdef DEBUG
-    	//for debugging
-    	hdr_bundle* bh2 = hdr_bundle::access(pkt2);
-    	std::cout<<"Im RETRANS!!"<<std::endl;
-    	std::cout<<bh2->dst<<std::endl;
-//    	if(myBundleBuffer->length())
-//    			std::cout<<"Im node "<<m_uti_nodeInfo.index <<" My bundleBuffer "<<myBundleBuffer->length()<<endl;
+			//for debugging
+			hdr_bundle* bh2 = hdr_bundle::access(pkt2);
+			std::cout<<"Im RETRANS!!"<<std::endl;
+			std::cout<<bh2->dst<<std::endl;
+			//    	if(myBundleBuffer->length())
+			//    			std::cout<<"Im node "<<m_uti_nodeInfo.index <<" My bundleBuffer "<<myBundleBuffer->length()<<endl;
 
 #endif
 
-    }
-    n++;
-  }
+		}
+		n++;
+	}
 
-//  n=0;
-//  Packet* midpkt=0;
-//  while (n < midBundleBuffer->length()) {
-//	  midpkt = myBundleStorage->lookup(n);
-//	  hdr_bundle* bh = hdr_bundle::access(midpkt);
-//	  if (NOW - bh->originating_timestamp > bh->lifetime) {
-//
-//		  midBundleBuffer->remove(midpkt);
-//
-//    }
-//    n++;
-//  }
+	//  n=0;
+	//  Packet* midpkt=0;
+	//  while (n < midBundleBuffer->length()) {
+	//	  midpkt = myBundleStorage->lookup(n);
+	//	  hdr_bundle* bh = hdr_bundle::access(midpkt);
+	//	  if (NOW - bh->originating_timestamp > bh->lifetime) {
+	//
+	//		  midBundleBuffer->remove(midpkt);
+	//
+	//    }
+	//    n++;
+	//  }
 }
 
 void BundleAgent::checkStorage() {
-  //ifqCongestionDuration=NOW-last_transmission; // Stats
+	//ifqCongestionDuration=NOW-last_transmission; // Stats
 
 	//bundleStore_size = myBundleStore->byteLength();
 	//midBuffer_size	 = midBundleBuffer->byteLength();
@@ -447,8 +447,8 @@ void BundleAgent::checkStorage() {
 #endif
 
 	removeExpiredBundles();
-//	removeExpiredBundles(midBundleBuffer);
-	//Õý³£·¢ËÍ
+	//	removeExpiredBundles(midBundleBuffer);
+	//ï¿½ï¿½ï¿½ï¿½
 	Packet* pkt= 0;
 	Packet* controlPkt = 0;
 
@@ -471,8 +471,8 @@ void BundleAgent::checkStorage() {
 		forward(controlPkt);
 	}
 
-	//¼ì²éÊÇ·ñÓÐ³¬Ê±fragment£¬ÓÐÔò·¢ËÍÖØ´«ÇëÇó
-	//Ö»ÄÜÏòÉÏÒ»Ìø·¢ËÍÖØ´«ÇëÇó¡£
+	//ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ð³ï¿½Ê±fragmentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½
+	//Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (!fragMap.empty())
 	{
 		std::map<int, std::map<int,packet_info> >::iterator itr;
@@ -483,7 +483,7 @@ void BundleAgent::checkStorage() {
 			if (CURRENT_TIME - itr_iner->second.recv_time > MAX_BUFFER_TIME)
 			{
 				hdr_bundle* bh_nak = hdr_bundle::access(itr_iner->second.p);
-				sendNAK(bh_nak->prev, itr->first);  //ÔÝÊ±¿¼ÂÇ½«Õû¸öBUNDLEÖØ´«
+				sendNAK(bh_nak->prev, itr->first);  //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½BUNDLEï¿½Ø´ï¿½
 			}
 		}
 	}
@@ -491,14 +491,14 @@ void BundleAgent::checkStorage() {
 }
 
 /*
-*	·¢ËÍº¯Êý:
-*		1. Ñ¡ÔñÏÂÒ»Ìø
-*		2. ·¢ËÍ
-*		3. ×¢Òâ·ÖÆ¬1500¡¾ÔÚsendBundleÖÐ½øÐÐ¡¿
-*/
+ *	ï¿½ï¿½ï¿½Íºï¿½ï¿½ï¿½:
+ *		1. Ñ¡ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+ *		2. ï¿½ï¿½ï¿½ï¿½
+ *		3. ×¢ï¿½ï¿½ï¿½Æ¬1500ï¿½ï¿½ï¿½ï¿½sendBundleï¿½Ð½ï¿½ï¿½Ð¡ï¿½
+ */
 void BundleAgent::forward(Packet *p){
-//	hdr_cmn* ch=hdr_cmn::access(p);
-//	hdr_ip* iph=hdr_ip::access(p);
+	//	hdr_cmn* ch=hdr_cmn::access(p);
+	//	hdr_ip* iph=hdr_ip::access(p);
 	hdr_bundle* bh=hdr_bundle::access(p);
 
 	DTN_Neighbor *nb = nbhead.lh_first;
@@ -517,7 +517,7 @@ void BundleAgent::forward(Packet *p){
 	nb = nbhead.lh_first;
 #endif
 
-	//°´Ä¿µÄµØ×ø±êºÍÐ§ÓÃÖµµÄ±È¶ÔËã³ö×î¼ÑÏÂÒ»Ìø, if dst node is in my nblist ,then send pkt straight
+	//ï¿½ï¿½Ä¿ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½Öµï¿½Ä±È¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½, if dst node is in my nblist ,then send pkt straight
 	for(nb = nbhead.lh_first; nb; nb = nbn) {
 		if(nb->nb_addr == bh->dst){
 			sendBundle(p, bh->dst, 0, 0);
@@ -527,7 +527,7 @@ void BundleAgent::forward(Packet *p){
 	}
 
 	for(nb = nbhead.lh_first; nb; nb = nbn) {
-		//È¡µÃÄ¿µÄ½Úµã×ø±ê
+		//È¡ï¿½ï¿½Ä¿ï¿½Ä½Úµï¿½ï¿½ï¿½ï¿½
 		Node *dstnode;
 		double dst_x, dst_y, dst_z;
 		dstnode = Node::get_node_by_address(bh->dst);
@@ -536,31 +536,31 @@ void BundleAgent::forward(Packet *p){
 #ifdef DEBUG
 		//for debugging
 		std::cout<<"my index:"<<m_uti_nodeInfo.index<<" location: "<<m_uti_nodeInfo.locX<<' '<<m_uti_nodeInfo.locY<<endl;
-//		std::cout<<"dst's index:"<<bh->dst<<" location: "<<dst_x<<' '<<dst_y<<endl;
-//		std::cout<<"nb's index:"<<nb->nb_addr<<" location: "<<nb->locX<<' '<<nb->locY<<endl;
+		//		std::cout<<"dst's index:"<<bh->dst<<" location: "<<dst_x<<' '<<dst_y<<endl;
+		//		std::cout<<"nb's index:"<<nb->nb_addr<<" location: "<<nb->locX<<' '<<nb->locY<<endl;
 #endif
 
 		double a = sqrt(pow(dst_x - m_uti_nodeInfo.getLocX(), 2.0) + pow(dst_y - m_uti_nodeInfo.getLocY(), 2.0)) - sqrt(pow(dst_x - nb->locX, 2.0) + pow(dst_y - nb->locY, 2.0));
 		a = a/sqrt(pow(dst_x - nb->locX, 2.0) + pow(dst_y - nb->locY, 2.0));
 
-//		nb->orient = m_uti_nodeInfo.orient_block_cal(nb->locX - m_uti_nodeInfo.getLocX(), nb->locY - m_uti_nodeInfo.getLocY());
+		//		nb->orient = m_uti_nodeInfo.orient_block_cal(nb->locX - m_uti_nodeInfo.getLocX(), nb->locY - m_uti_nodeInfo.getLocY());
 		int orient = m_uti_nodeInfo.orient_block_cal(dst_x - m_uti_nodeInfo.getLocX(), dst_y - m_uti_nodeInfo.getLocY());
 
-//		double b = (nb->syn_utilValue[nb->orient] - m_uti_nodeInfo.getSynValue(nb->orient))/m_uti_nodeInfo.getSynValue(nb->orient);
+		//		double b = (nb->syn_utilValue[nb->orient] - m_uti_nodeInfo.getSynValue(nb->orient))/m_uti_nodeInfo.getSynValue(nb->orient);
 #ifdef DEBUG
 		//for debugging
 		std::cout<<nb->nb_addr<<"nb->syn_utilValue[orient]:"<<nb->syn_utilValue[orient]<<" m_uti_nodeInfo.getSynValue(orient): "<<m_uti_nodeInfo.getSynValue(orient)<<endl;
-//		for (int orient11=0; orient11<BLOCK; orient11++)
-//		{
-//			std::cout<<nb->syn_utilValue[orient11]<<endl;
-//		}
+		//		for (int orient11=0; orient11<BLOCK; orient11++)
+		//		{
+		//			std::cout<<nb->syn_utilValue[orient11]<<endl;
+		//		}
 #endif
 		double b = 0;
 		if(m_uti_nodeInfo.getSynValue(orient))
 			b = (nb->syn_utilValue[orient] - m_uti_nodeInfo.getSynValue(orient));// /abs(m_uti_nodeInfo.getSynValue(orient));
 		else
 			b = nb->syn_utilValue[orient];
-		//·ÀÖ¹Êý¾ÝÔ½·¢Ô½Ô¶
+		//ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½Ô½ï¿½ï¿½Ô½Ô¶
 		if (a < 0)
 		{
 			if(b < 0)
@@ -593,10 +593,10 @@ void BundleAgent::forward(Packet *p){
 		nbn = nb->nb_link.le_next;
 	}//end for
 	if(temp_max_node == m_uti_nodeInfo.index)
-		//Ã»ÓÐ¸üºÃÏÂÒ»Ìø½Úµã
+		//Ã»ï¿½Ð¸ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Úµï¿½
 		myBundleBuffer->enque(p);
 	else
-		//·¢ËÍBundle
+		//ï¿½ï¿½ï¿½ï¿½Bundle
 		sendBundle(p, temp_max_node, 0, 0);
 }
 
@@ -648,8 +648,8 @@ void BundleAgent::sendHello() {
 
 #ifdef DEBUG
 	//for debugging
-//	std::cout<<"Im node "<<m_uti_nodeInfo.index<<" send a Hello!";
-//	std::cout<<" at location "<<m_uti_nodeInfo.locX<<' '<<m_uti_nodeInfo.locY<<std::endl;
+	//	std::cout<<"Im node "<<m_uti_nodeInfo.index<<" send a Hello!";
+	//	std::cout<<" at location "<<m_uti_nodeInfo.locX<<' '<<m_uti_nodeInfo.locY<<std::endl;
 #endif
 
 	//ch->ptype()=PT_MESSAGE; // This is a hack that puts Hello messages first in the IFQ
@@ -661,16 +661,18 @@ void BundleAgent::sendHello() {
 	iph->sport()=here_.port_;
 	iph->daddr()=IP_BROADCAST;
 	iph->dport()=0;
-	//TTLµÄÉèÖÃ£¡
+	//TTLï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½
 	if (nb_sum() < NB_THRESHOLD)
-		iph->ttl_ = HELLO_TTL_L;
+		//iph->ttl_ = HELLO_TTL_L;
+		iph->ttl_ = 15;
 	else
-		iph->ttl_ = HELLO_TTL_S;
+		//iph->ttl_ = HELLO_TTL_S;
+		iph->ttl_ = 15;
 
 	hdr_bundle* bh=hdr_bundle::access(pkt);
 	bh->type= TYPE_HELLO;
 	bh->src = here_.addr_;
-	//Ð´Èë½ÚµãµÄÐ§ÓÃÖµ
+	//Ð´ï¿½ï¿½Úµï¿½ï¿½Ð§ï¿½ï¿½Öµ
 	bh->node_info.locX = m_uti_nodeInfo.locX;
 	bh->node_info.locY = m_uti_nodeInfo.locY;
 	for (int i=0; i<BLOCK; i++)
@@ -683,8 +685,8 @@ void BundleAgent::sendHello() {
 }
 
 void BundleAgent::recv(Packet* pkt, Handler*) {
-//	hdr_cmn* ch=hdr_cmn::access(pkt);
-//	hdr_ip* iph=hdr_ip::access(pkt);
+	//	hdr_cmn* ch=hdr_cmn::access(pkt);
+	//	hdr_ip* iph=hdr_ip::access(pkt);
 	hdr_bundle* bh=hdr_bundle::access(pkt);
 
 #ifdef DEBUG
@@ -697,31 +699,31 @@ void BundleAgent::recv(Packet* pkt, Handler*) {
 #endif
 
 	switch(bh->type){
-		case TYPE_ACK:
-			recvACK(pkt);
-			break;
-		case TYPE_DATA:
-			recvData(pkt);
-			break;
-		case TYPE_DISRU:
-			recvDisruption(pkt);
-			break;
-		case TYPE_HELLO:
-			recvHello(pkt);
-			break;
-		case TYPE_NAK:
-			recvNAK(pkt);
-			break;
-		default:
-			fprintf(stderr, "Invalid DTN type (%x)\n", bh->type);
-			exit(1);
+	case TYPE_ACK:
+		recvACK(pkt);
+		break;
+	case TYPE_DATA:
+		recvData(pkt);
+		break;
+	case TYPE_DISRU:
+		recvDisruption(pkt);
+		break;
+	case TYPE_HELLO:
+		recvHello(pkt);
+		break;
+	case TYPE_NAK:
+		recvNAK(pkt);
+		break;
+	default:
+		fprintf(stderr, "Invalid DTN type (%x)\n", bh->type);
+		exit(1);
 	}
 }
 
 /*
-*	´¦ÀíÈ·ÈÏ£¬É¾³ý»º´æ¶ÔÓ¦Êý¾Ý
-*	£¨¸ù¾ÝBundleidÉ¾³ý£¬½ÚµãÊÕµ½ÍêÕûµÄBUNDLE²Å»á·¢ack£©
-*/
+ *	ï¿½ï¿½ï¿½ï¿½È·ï¿½Ï£ï¿½É¾ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½
+ *	ï¿½ï¿½ï¿½ï¿½ï¿½BundleidÉ¾ï¿½ï¿½Úµï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½BUNDLEï¿½Å»á·¢ackï¿½ï¿½
+ */
 void BundleAgent::recvACK(Packet * p){
 	hdr_bundle* bh=hdr_bundle::access(p);
 
@@ -757,12 +759,12 @@ void BundleAgent::recvACK(Packet * p){
 //}
 
 /*
-*	´¦Àíµ½´ïÊý¾Ý£¬·ÖÎªÁ½´óÀà
-*				Ä¿µÄµØÎª±¾½Úµã/ÎªÖ¸¶¨ÏÂÒ»Ìø
-*				ÖÐ¼ä»º´æÊý¾Ý
-*/
+ *	ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ *				Ä¿ï¿½Äµï¿½Îªï¿½ï¿½ï¿½Úµï¿½/ÎªÖ¸ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+ *				ï¿½Ð¼ä»ºï¿½ï¿½ï¿½ï¿½ï¿½
+ */
 void BundleAgent::recvData(Packet * p){
-//	hdr_cmn* ch=hdr_cmn::access(p);
+	//	hdr_cmn* ch=hdr_cmn::access(p);
 	hdr_ip* iph=hdr_ip::access(p);
 	hdr_bundle* bh=hdr_bundle::access(p);
 
@@ -775,9 +777,9 @@ void BundleAgent::recvData(Packet * p){
 	if (check_bundle(p))
 	{
 		if(bh->is_fragment){
-			//ÊÕµ½Ò»¸ö·ÖÆ¬£¬
-			//´æÈë·Ö×é±í
-			//ÊÇ²»ÊÇÖØ¸´µÄ·ÖÆ¬?
+			//ï¿½Õµï¿½Ò»ï¿½ï¿½ï¿½ï¿½Æ¬ï¿½ï¿½
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			//ï¿½Ç²ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½Ä·ï¿½Æ¬?
 			if(fragMap.count(bh->bundle_id)) {
 
 				if(!fragMap[bh->bundle_id].count(bh->fragment)){
@@ -788,22 +790,22 @@ void BundleAgent::recvData(Packet * p){
 					duplicateFrag++;
 				}
 #ifdef DEBUG
-	// std::map<int, std::map<int,packet_info> > fragMap
-	std::map<int,packet_info>::iterator itr = fragMap[bh->bundle_id].begin();
-	if(m_uti_nodeInfo.index == 7){
-		std::cout<<fragMap[bh->bundle_id].size()<<std::endl;
-		while(itr!= fragMap[bh->bundle_id].end()){
+				// std::map<int, std::map<int,packet_info> > fragMap
+				std::map<int,packet_info>::iterator itr = fragMap[bh->bundle_id].begin();
+				if(m_uti_nodeInfo.index == 7){
+					std::cout<<fragMap[bh->bundle_id].size()<<std::endl;
+					while(itr!= fragMap[bh->bundle_id].end()){
 
-			std::cout<<itr->first<<' '<<itr->second.recv_time <<std::endl;
-			itr++;
-		}
-	}
+						std::cout<<itr->first<<' '<<itr->second.recv_time <<std::endl;
+						itr++;
+					}
+				}
 #endif
-				//¼ì²é·ÖÆ¬ÊÇ·ñÒÑÊÕÈ«
+				//ï¿½ï¿½ï¿½ï¿½Æ¬ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½È«
 				if(fragMap[bh->bundle_id].size() == (unsigned int)bh->nfragments){
-					//ÒÑÊÕÈ«,µ÷ÓÃ×é×°º¯Êý
+					//ï¿½ï¿½ï¿½ï¿½È«,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½
 					//check_bundle(process_for_reassembly(int bundle_id));
-					//p»áÔÚprocessÖÐ±»ÊÍ·Å
+					//pï¿½ï¿½ï¿½ï¿½processï¿½Ð±ï¿½ï¿½Í·ï¿½
 					int temp_bundle_id = bh->bundle_id;
 					nsaddr_t temp_prev = bh->prev;
 
@@ -811,57 +813,57 @@ void BundleAgent::recvData(Packet * p){
 					sendCustAck(temp_bundle_id, temp_prev);
 				}
 				else{
-					//Î´ÊÕÈ«£¬ÖØ´«²»ÔÚÕâ´¦Àí£¬¼ûCheckStorage()
+					//Î´ï¿½ï¿½È«ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â´¦ï¿½?ï¿½ï¿½CheckStorage()
 
 				}
 
 			}else{
 				packet_info_n.recv_time = CURRENT_TIME;
 				packet_info_n.p 		= p;
-//				std::map<int,packet_info> tempMap;
-//				fragMap.insert(pair<int, std::map<int,packet_info> >(bh->bundle_id, tempMap));
-//				(fragMap[bh->bundle_id]).insert(pair<int,packet_info>(bh->fragment, packet_info_n));
+				//				std::map<int,packet_info> tempMap;
+				//				fragMap.insert(pair<int, std::map<int,packet_info> >(bh->bundle_id, tempMap));
+				//				(fragMap[bh->bundle_id]).insert(pair<int,packet_info>(bh->fragment, packet_info_n));
 				(fragMap[bh->bundle_id])[bh->fragment] = packet_info_n;
 #ifdef DEBUG
-	// std::map<int, std::map<int,packet_info> > fragMap
-	std::map<int,packet_info>::iterator itr = fragMap[bh->bundle_id].begin();
-	if(m_uti_nodeInfo.index == 7){
-		std::cout<<fragMap[bh->bundle_id].size()<<std::endl;
-		while(itr!= fragMap[bh->bundle_id].end()){
+				// std::map<int, std::map<int,packet_info> > fragMap
+				std::map<int,packet_info>::iterator itr = fragMap[bh->bundle_id].begin();
+				if(m_uti_nodeInfo.index == 7){
+					std::cout<<fragMap[bh->bundle_id].size()<<std::endl;
+					while(itr!= fragMap[bh->bundle_id].end()){
 
-			std::cout<<itr->first<<' '<<itr->second.recv_time <<std::endl;
-			itr++;
-		}
-	}
+						std::cout<<itr->first<<' '<<itr->second.recv_time <<std::endl;
+						itr++;
+					}
+				}
 #endif
 			}
 		}else{
-			//ÍêÕûbundle,Ã»ÓÐ·ÖÆ¬
+			//ï¿½ï¿½ï¿½ï¿½bundle,Ã»ï¿½Ð·ï¿½Æ¬
 			//myBundleStore.enque(p);
-			//¡¾¡¾¡¾¼ì²éÖØ¸´¡¿¡¿¡¿
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 			sendCustAck(bh->bundle_id, bh->prev);
 		}
 	}
-//	Packet::free(p);
+	//	Packet::free(p);
 }
 
 /*
-*	´¦Àí¶ÏÂ·£¬(ÖØ´«)·ÖÎª±¾½Úµã¶ÏÂ·ºÍÆäËû½Úµã¶ÏÂ·
-*		¶ÌÂ·°üÊÇ°´ÕÕ(src, dst) £¨ÉÏÒ»ÌøDTN???, Ä¿µÄµØ£©Åä¶Ô·¢ËÍ
-*/
+ *	ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½(ï¿½Ø´ï¿½)ï¿½ï¿½Îªï¿½ï¿½ï¿½Úµï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½Â·
+ *		ï¿½ï¿½Â·ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½(src, dst) ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½DTN???, Ä¿ï¿½ÄµØ£ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½
+ */
 void BundleAgent::recvDisruption(Packet * p){
 	hdr_bundle *disbh = hdr_bundle::access(p);
-//	Packet* newpkt = midBundleBuffer->lookup_by_SrcDst(bh->src, bh->dst);
+	//	Packet* newpkt = midBundleBuffer->lookup_by_SrcDst(bh->src, bh->dst);
 	int n=0;
 	while (n < midBundleBuffer->length()) {
-			Packet* pkt = midBundleBuffer->lookup(n);
-			hdr_bundle* bh=hdr_bundle::access(pkt);
-			if (bh->src == disbh->src && bh->dst == disbh->dst){
-				myBundleBuffer->enque(pkt);//ÊÕµ½È·ÈÏºóÔÙÉ¾³ýmidBuffer
-			}
-			n++;
+		Packet* pkt = midBundleBuffer->lookup(n);
+		hdr_bundle* bh=hdr_bundle::access(pkt);
+		if (bh->src == disbh->src && bh->dst == disbh->dst){
+			myBundleBuffer->enque(pkt);//ï¿½Õµï¿½È·ï¿½Ïºï¿½ï¿½ï¿½É¾ï¿½ï¿½midBuffer
 		}
+		n++;
+	}
 	//
 	if(n == 0){
 		sendNAK(disbh->src, disbh->bundle_id);
@@ -870,8 +872,8 @@ void BundleAgent::recvDisruption(Packet * p){
 }
 
 /*
-*	ÖØ´«Ä³Bundle»ò²¿·Ö
-*/
+ *	ï¿½Ø´ï¿½Ä³Bundleï¿½ò²¿·ï¿½
+ */
 void BundleAgent::recvNAK(Packet * p){
 #ifdef DEBUG
 	//for debugging
@@ -887,22 +889,22 @@ void BundleAgent::recvNAK(Packet * p){
 }
 
 /*
-*	´¦Àí¹ã²¥HelloÊý¾Ý°ü£¬Î¬»¤ÁÚ¾ÓÁÐ±í¡¾¶Ô·½Ïò½øÐÐÔ¤²â?¡¿
-*/
+ *	ï¿½ï¿½ï¿½ï¿½ã²¥Helloï¿½ï¿½Ý°ï¿½Î¬ï¿½ï¿½ï¿½Ú¾ï¿½ï¿½Ð±?ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½?ï¿½ï¿½
+ */
 void BundleAgent::recvHello(Packet * p){
 	hdr_bundle *bh = hdr_bundle::access(p);
 	DTN_Neighbor *nb ;//= nbhead.lh_first;//;
 
 #ifdef DEBUG
 	//for debugging
-//	std::cout<<"recvHello::Im node "<<m_uti_nodeInfo.index<<std::endl;
-//	std::cout<<"Im node "<<m_uti_nodeInfo.index<<std::endl;
-//
-//				DTN_Neighbor *nbn;
-//				for(; nb; nb = nbn) {
-//					std::cout<<nb->nb_addr<<' '<<nb->locX<<' '<<nb->locY<<endl;
-//					nbn = nb->nb_link.le_next;
-//				}
+	//	std::cout<<"recvHello::Im node "<<m_uti_nodeInfo.index<<std::endl;
+	//	std::cout<<"Im node "<<m_uti_nodeInfo.index<<std::endl;
+	//
+	//				DTN_Neighbor *nbn;
+	//				for(; nb; nb = nbn) {
+	//					std::cout<<nb->nb_addr<<' '<<nb->locX<<' '<<nb->locY<<endl;
+	//					nbn = nb->nb_link.le_next;
+	//				}
 #endif
 
 	nb = nb_lookup(bh->src);
@@ -913,18 +915,18 @@ void BundleAgent::recvHello(Packet * p){
 			nb_insert(p);
 	}
 	else {
-			//ÖØÖÃ±£ÁôÆÚ
-			nb->nb_expire = CURRENT_TIME + 0.7;
-		                  //(1.5 * ALLOWED_HELLO_LOSS * HELLO_INTERVAL);
-			//ÖØÖÃµØÖ·
-			nb->locX = bh->node_info.locX;
-			nb->locY = bh->node_info.locY;
+		//ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½
+		nb->nb_expire = CURRENT_TIME + 0.7;
+		//(1.5 * ALLOWED_HELLO_LOSS * HELLO_INTERVAL);
+		//ï¿½ï¿½ï¿½Ãµï¿½Ö·
+		nb->locX = bh->node_info.locX;
+		nb->locY = bh->node_info.locY;
 
-			//ÖØÖÃÐ§ÓÃÖµ
-			for (int i=0; i<BLOCK; i++)
-			{
-				nb->syn_utilValue[i] = bh->node_info.utiValue[i];
-			}
+		//ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½Öµ
+		for (int i=0; i<BLOCK; i++)
+		{
+			nb->syn_utilValue[i] = bh->node_info.utiValue[i];
+		}
 	}
 
 	Packet::free(p);
@@ -943,7 +945,7 @@ void BundleAgent::nb_insert(Packet * p) {
 	}
 
 	nb->nb_expire = CURRENT_TIME +
-		(1.5 * ALLOWED_HELLO_LOSS * HELLO_INTERVAL);
+			(1.5 * ALLOWED_HELLO_LOSS * HELLO_INTERVAL);
 	LIST_INSERT_HEAD(&nbhead, nb, nb_link);
 }
 
@@ -964,19 +966,19 @@ DTN_Neighbor* BundleAgent::nb_lookup(int id) {
 void BundleAgent::nb_delete(int id) {
 	DTN_Neighbor *nb = nbhead.lh_first;
 
-	 //log_link_del(id);
-	 //seqno += 2;     // Set of neighbors changed
-	 //assert ((seqno%2) == 0);
+	//log_link_del(id);
+	//seqno += 2;     // Set of neighbors changed
+	//assert ((seqno%2) == 0);
 
-	 for(; nb; nb = nb->nb_link.le_next) {
-	   if(nb->nb_addr == id) {
-		 LIST_REMOVE(nb,nb_link);
-		 delete nb;
-		 break;
-	   }
-	 }
+	for(; nb; nb = nb->nb_link.le_next) {
+		if(nb->nb_addr == id) {
+			LIST_REMOVE(nb,nb_link);
+			delete nb;
+			break;
+		}
+	}
 
-	 //handle_link_failure(id);
+	//handle_link_failure(id);
 
 }
 
@@ -986,80 +988,80 @@ void BundleAgent::nb_delete(int id) {
  * HELLO_INTERVAL * 1.5 seconds.
  */
 void BundleAgent::nb_purge() {
-DTN_Neighbor *nb = nbhead.lh_first;
-DTN_Neighbor *nbn;
-double now = CURRENT_TIME;
+	DTN_Neighbor *nb = nbhead.lh_first;
+	DTN_Neighbor *nbn;
+	double now = CURRENT_TIME;
 
- for(; nb; nb = nbn) {
-   nbn = nb->nb_link.le_next;
-   if(nb->nb_expire <= now) {
+	for(; nb; nb = nbn) {
+		nbn = nb->nb_link.le_next;
+		if(nb->nb_expire <= now) {
 #ifdef DEBUG
-		//for debugging
-		std::cout<<"Im node "<<m_uti_nodeInfo.index<<" PURGE "<<nb->nb_addr<<std::endl;
+			//for debugging
+			std::cout<<"Im node "<<m_uti_nodeInfo.index<<" PURGE "<<nb->nb_addr<<std::endl;
 #endif
-     nb_delete(nb->nb_addr);
-   }
- }
+			nb_delete(nb->nb_addr);
+		}
+	}
 }
 
 /*
-*	¼ÆËãÁÚ¾ÓÊýÁ¿
-*/
+ *	ï¿½ï¿½ï¿½ï¿½ï¿½Ú¾ï¿½ï¿½ï¿½ï¿½ï¿½
+ */
 int BundleAgent::nb_sum(){
 	int sum = 0;
 	DTN_Neighbor *nb = nbhead.lh_first;
 	DTN_Neighbor *nbn;
 	for(; nb; nb = nbn) {
-	  nbn = nb->nb_link.le_next;
-	  sum++;
+		nbn = nb->nb_link.le_next;
+		sum++;
 	}
 	return sum;
 }
 
 /*
-*
-*
-*/
+ *
+ *
+ */
 
 /*
-*	¸üÐÂÁÚ¾ÓÂ·ÓÉ±í¡¾ÔÝ²»ÆôÓÃ¡¿
-*		1. ¼ÆËã³öÃ¿Ò»¿éµÄ×î¼ÑÏÂÒ»Ìø
-*		2. ²ÎÊýÎª±¾½ÚµãÎ»ÖÃ
-*		3. ·Ö¿é£¬×÷Îª¸üÐÂ²ßÂÔ
-*/
+ *	ï¿½ï¿½ï¿½ï¿½ï¿½Ú¾ï¿½Â·ï¿½É±?ï¿½Ý²ï¿½ï¿½ï¿½ï¿½Ã¡ï¿½
+ *		1. ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+ *		2. ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½Úµï¿½Î»ï¿½ï¿½
+ *		3. ï¿½Ö¿é£¬ï¿½ï¿½Îªï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½
+ */
 void BundleAgent::rt_update(int locX, int locY){
-	//ÏÈËãÃ¿¸öÁÚ¾ÓËù´¦µÄ¿é£¬È¡³öÃ¿Ò»¿éµÄ×î´ó
+	//ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½Ú¾ï¿½ï¿½ï¿½Ä¿é£¬È¡ï¿½ï¿½Ã¿Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	DTN_Neighbor *nb = nbhead.lh_first;
 	DTN_Neighbor *nbn;
-//	int temp_max[BLOCK];//´æÃ¿Ò»¿éµ±Ç°×îÓÅÁÚ¾Ó
+	//	int temp_max[BLOCK];//ï¿½ï¿½Ã¿Ò»ï¿½éµ±Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ú¾ï¿½
 	for (int i=0; i<BLOCK; i++)
 	{
-//		temp_max[i] = -1;
+		//		temp_max[i] = -1;
 	}
 	for(; nb; nb = nbn) {
 		nb->orient = m_uti_nodeInfo.orient_block_cal(nb->locX - locX, nb->locY - locY);
 		//int a = (nb->syn_utilValue[nb->orient] - m_uti_nodeInfo.getSynValue(nb->orient))/m_uti_nodeInfo.getSynValue(nb->orient);
-		//int b = ()//Õâ¸öÊ±ºò»¹Ã»ÓÐÄ¿µÄ½ÚµãµÄ×ø±ê£¡£¡
+		//int b = ()//ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ã»ï¿½ï¿½Ä¿ï¿½Ä½Úµï¿½ï¿½ï¿½ï¿½ê£¡ï¿½ï¿½
 		nbn = nb->nb_link.le_next;
 
 	}
 }
 
 /*
-*	×é×°²¢·µ»ØBundle£¬¡¾Ö±½Ó´æÈë¶ÓÁÐ¶ø²»ÊÇ·µ»Ø¡¿×îºó¡¾Çå¿ÕÏàÓ¦±íÏî¡¿
-*/
+ *	ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bundleï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó´ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ø¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½î¡¿
+ */
 Packet* BundleAgent::process_for_reassembly(int bundle_id){
 	Packet* newpkt = allocpkt();
 	hdr_cmn* newch = hdr_cmn::access(newpkt);
 	hdr_bundle* newbh = hdr_bundle::access(newpkt);
-//	hdr_ip* iph=hdr_ip::access(newpkt);
+	//	hdr_ip* iph=hdr_ip::access(newpkt);
 
 	std::map<int, packet_info>::iterator itr = fragMap[bundle_id].begin();
 	std::map<int, std::map<int,packet_info> >::iterator itr_L = fragMap.begin();
 
 	hdr_bundle* fragbh = hdr_bundle::access(itr->second.p);
 
-	//·ÖÆ¬·¢ËÍµÄÊ±ºòÃ»ÓÐ¸Ä¶¯bundle_size
+	//ï¿½ï¿½Æ¬ï¿½ï¿½ï¿½Íµï¿½Ê±ï¿½ï¿½Ã»ï¿½Ð¸Ä¶ï¿½bundle_size
 	newbh->bundle_size = fragbh->bundle_size;
 	newch->size() = fragbh->bundle_size;
 
@@ -1070,7 +1072,7 @@ Packet* BundleAgent::process_for_reassembly(int bundle_id){
 	newbh->lifetime = fragbh->lifetime;
 	newbh->type = fragbh->type;
 	newbh->src = fragbh->src;
-//	newbh->prev = here_.addr_;
+	//	newbh->prev = here_.addr_;
 	newbh->dst = fragbh->dst;
 	//    newbh->hop_count=bh->hop_count+1;
 	newbh->bundle_id = fragbh->bundle_id;
@@ -1090,12 +1092,12 @@ Packet* BundleAgent::process_for_reassembly(int bundle_id){
 		myBundleBuffer->enque(newpkt);
 
 	}
-	//ÊÍ·Å×ÊÔ´
+	//ï¿½Í·ï¿½ï¿½ï¿½Ô´
 	for(; itr != fragMap[bundle_id].end(); itr++){
-//		ch->size() =
+		//		ch->size() =
 		Packet::free(itr->second.p);
 	}
-	//É¾³ý±íÏî
+	//É¾ï¿½ï¿½ï¿½ï¿½ï¿½
 	recivedBundle.push_back(bundle_id);
 	itr_L = fragMap.find(bundle_id);
 	if(itr_L != fragMap.end())
@@ -1105,10 +1107,10 @@ Packet* BundleAgent::process_for_reassembly(int bundle_id){
 }
 
 /*
-*	ÅÐ¶ÏBundleÀ´Ô´£¬ÊÇÄ¿µÄµØÎª±¾½Úµã/ÎªÖ¸¶¨ÏÂÒ»Ìø »¹ÊÇ
-*				ÖÐ¼ä»º´æÊý¾Ý,¸ù¾ÝÕâ¸öÀ´Ñ¡ÔñÈëÄÄ¸ö¶ÓÁÐ
-²»ÊÇ¹ýÂ·Êý¾Ý·µ»Øtrue
-*/
+ *	ï¿½Ð¶ï¿½Bundleï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½Äµï¿½Îªï¿½ï¿½ï¿½Úµï¿½/ÎªÖ¸ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+ *				ï¿½Ð¼ä»ºï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½Ç¹ï¿½Â·ï¿½ï¿½Ý·ï¿½ï¿½ï¿½true
+ */
 bool BundleAgent::check_bundle(Packet * p){
 	hdr_bundle* bh=hdr_bundle::access(p);
 	hdr_ip* iph=hdr_ip::access(p);
@@ -1151,8 +1153,8 @@ bool BundleAgent::check_bundle(Packet * p){
 //}
 
 /*
-*	Í¨¹ý·½ÏòÊ¸Á¿¼ÆËã³ö¶ÔÓ¦¿éÖµ
-*/
+ *	Í¨ï¿½ï¿½ï¿½ï¿½Ê¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Öµ
+ */
 int Util_nodeInfo::orient_block_cal(double locX, double locY){
 	int orient;
 	double tempOrient = 0.0;
@@ -1188,37 +1190,37 @@ int Util_nodeInfo::orient_block_cal(double locX, double locY){
 	return orient;
 }
 /*
-*	Ð§ÓÃÖµ¼ÆËã£¬°´ÖÜÆÚ¼ÆËã¡¾@!@»¹Î´¿¼ÂÇµØÍ¼¡¿
-*/
+ *	Ð§ï¿½ï¿½Öµï¿½ï¿½ï¿½ã£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ã¡¾@!@ï¿½ï¿½Î´ï¿½ï¿½ï¿½Çµï¿½Í¼ï¿½ï¿½
+ */
 
 void Util_nodeInfo::uvalue_block_cal(){
 
 #ifdef UTIL_DEBUG
 	//for debugging
-//	std::cout<<"I am node "<<index<<"uvalue_block_cal"<<endl;
+	//	std::cout<<"I am node "<<index<<"uvalue_block_cal"<<endl;
 	int temorient = orient_block_cal(orientX, orientY);
 	if(index == 1){
-			f1<<"ORIENT: "<<temorient<<"\r\n";
-	//		if(orient != 11){
-	//			assert(1);
-	//			std::cout<<"ORIENT!!!!!!!!!!!!!!!"<<orient<<std::endl;
-	//		}
-		}
+		f1<<"ORIENT: "<<temorient<<"\r\n";
+		//		if(orient != 11){
+		//			assert(1);
+		//			std::cout<<"ORIENT!!!!!!!!!!!!!!!"<<orient<<std::endl;
+		//		}
+	}
 	if(index == 1&&CURRENT_TIME>155.0){
 		cout<<"Time: "<<CURRENT_TIME<<"\r\n";
-				for (int orient11=0; orient11<BLOCK; orient11++)
-				{
-		//			std::cout<<orient11<<": "<<getSynValue(orient11)<<std::endl;//"                      "<<this->getUtilValue(orient11)<<std::endl;
-					cout<<'O'<<orient11<<": "<<getSynValue(orient11)<<std::endl;
-				}
+		for (int orient11=0; orient11<BLOCK; orient11++)
+		{
+			//			std::cout<<orient11<<": "<<getSynValue(orient11)<<std::endl;//"                      "<<this->getUtilValue(orient11)<<std::endl;
+			cout<<'O'<<orient11<<": "<<getSynValue(orient11)<<std::endl;
+		}
 	}
 	if(index == 1){
-//		std::cout<<"I am node "<<index<<"++++++++++++++++++++++++++++++ AT "<<this->locX<<" "<<this->locY<<std::endl;
-//		std::cout<<"nb->syn_utilValue[orient]:"<<nb->syn_utilValue[orient]<<" m_uti_nodeInfo.getSynValue(orient): "<<m_uti_nodeInfo.getSynValue(orient)<<endl;
+		//		std::cout<<"I am node "<<index<<"++++++++++++++++++++++++++++++ AT "<<this->locX<<" "<<this->locY<<std::endl;
+		//		std::cout<<"nb->syn_utilValue[orient]:"<<nb->syn_utilValue[orient]<<" m_uti_nodeInfo.getSynValue(orient): "<<m_uti_nodeInfo.getSynValue(orient)<<endl;
 		f1<<"Time: "<<CURRENT_TIME<<"\r\n";
 		for (int orient11=0; orient11<BLOCK; orient11++)
 		{
-//			std::cout<<orient11<<": "<<getSynValue(orient11)<<std::endl;//"                      "<<this->getUtilValue(orient11)<<std::endl;
+			//			std::cout<<orient11<<": "<<getSynValue(orient11)<<std::endl;//"                      "<<this->getUtilValue(orient11)<<std::endl;
 			f1<<'O'<<orient11<<": "<<getSynValue(orient11)<<"\r\n";
 		}
 		f1<<"\r\n";
@@ -1228,34 +1230,34 @@ void Util_nodeInfo::uvalue_block_cal(){
 
 #endif
 
-	//»ñÈ¡½ÚµãËÙ¶ÈºÍ·½ÏòÊ¸Á¿£»Í¬Ê±¸üÐÂ±¾½ÚµãµÄËÙ¶ÈºÍÎ»ÖÃ
+	//ï¿½ï¿½È¡ï¿½Úµï¿½ï¿½Ù¶ÈºÍ·ï¿½ï¿½ï¿½Ê¸ï¿½ï¿½ï¿½ï¿½Í¬Ê±ï¿½ï¿½ï¿½Â±ï¿½ï¿½Úµï¿½ï¿½ï¿½Ù¶Èºï¿½Î»ï¿½ï¿½
 	Node *thisnode; //
 	thisnode = Node::get_node_by_address(index);//index);
 	speed = ((MobileNode *)thisnode)->speed();
-	//·½ÏòÊ¸Á¿
+	//ï¿½ï¿½ï¿½ï¿½Ê¸ï¿½ï¿½
 	((MobileNode *)thisnode)->getVelo(&orientX, &orientY, &orientZ);
-	//µØÖ·
+	//ï¿½ï¿½Ö·
 	((MobileNode *)thisnode)->getLoc(&locX, &locY, &locZ);
 
-	//Í¨¹ý·½ÏòÊ¸Á¿¼ÆËã³ö¶ÔÓ¦¿éÖµ
+	//Í¨ï¿½ï¿½ï¿½ï¿½Ê¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Öµ
 	int orient = orient_block_cal(orientX, orientY);
 
 #ifdef UTIL_DEBUG
-//	if(orient == 10){
-//		orient = orient_block_cal(orientX, orientY);
-//	}
+	//	if(orient == 10){
+	//		orient = orient_block_cal(orientX, orientY);
+	//	}
 
 
 #endif
 
-	//»ñÈ¡¿éÊý¾Ý
+	//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½
 	double dTemple0 = this->getUtilValue(orient);
 	double dTemple1 = this->getUtilValue((orient+1)%BLOCK);
 	double dTemple2 = this->getUtilValue((orient+BLOCK-1)%BLOCK);
 	double dA0 = exp(0.35*dTemple0*dTemple0)-0.2;
 	double dA1 = exp(0.35*dTemple1*dTemple1)-0.2;
 	double dA2 = exp(0.35*dTemple2*dTemple2)-0.2;
-	//ÈôÐ§ÓÃÖµÐ¡ÓÚÁãÔò¼Ó´óÔöÁ¿
+	//ï¿½ï¿½Ð§ï¿½ï¿½ÖµÐ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó´ï¿½ï¿½ï¿½ï¿½ï¿½
 	if(dTemple0 < 0)
 		dA0 *= 5;
 	if(dTemple1 < 0)
@@ -1268,7 +1270,7 @@ void Util_nodeInfo::uvalue_block_cal(){
 	dTemple0 += uti_increase0;
 	dTemple1 += uti_increase1;
 	dTemple2 += uti_increase2;
-	//ËãÉÏË¥¼õ
+	//ï¿½ï¿½ï¿½ï¿½Ë¥ï¿½ï¿½
 	if (dTemple0<1){
 		setUtilValue(orient, dTemple0);
 	}
@@ -1278,15 +1280,15 @@ void Util_nodeInfo::uvalue_block_cal(){
 	if (dTemple2<1){
 		setUtilValue((orient+BLOCK-1)%BLOCK, dTemple2);
 	}
-//	increaseCal(dA*speed, orient);
+	//	increaseCal(dA*speed, orient);
 	decayCal2();
 	decayCal(uti_increase0, orient);
 	synCal(orient);
 
 }
 /*
-*	×ÛºÏÐ§ÓÃÖµ¼ÆËã,Í¬ÔöÍ¬¼õ
-*/
+ *	ï¿½Ûºï¿½Ð§ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½,Í¬ï¿½ï¿½Í¬ï¿½ï¿½
+ */
 void Util_nodeInfo::synCal(int ori_orient){
 	bool de_flag = 1;
 	double synValue = -1;
@@ -1297,11 +1299,11 @@ void Util_nodeInfo::synCal(int ori_orient){
 			de_flag = 0;
 		double synNum0 = getUtilValue(orient);
 		double synNum1 = getUtilValue((orient+1)%BLOCK);
-//		double synNum2 = getUtilValue((orient+2)%BLOCK); //0;
+		//		double synNum2 = getUtilValue((orient+2)%BLOCK); //0;
 		double synNum3 = getUtilValue((orient+BLOCK-1)%BLOCK);
-//		double synNum4 = getUtilValue((orient+BLOCK-2)%BLOCK);//0;
+		//		double synNum4 = getUtilValue((orient+BLOCK-2)%BLOCK);//0;
 		double sum_1_3 = synNum1 + synNum3;
-//		double sum_2_4 = synNum2 + synNum4;
+		//		double sum_2_4 = synNum2 + synNum4;
 
 		if(this->getSynValue(orient) < -0.5){
 			sum_1_3 = 0;
@@ -1315,37 +1317,37 @@ void Util_nodeInfo::synCal(int ori_orient){
 				synValue = 0.99;
 			if(synValue < -1.0)
 				synValue = -0.99;
-//			setSynValue(orient,synValue);
+			//			setSynValue(orient,synValue);
 
 		}
-//		else if(this->getSynValue(orient) < 0.3){
-//			sum_1_3 = 0;
-////			sum_2_4 = 0;
-//			if(abs(synNum1) > abs(synNum3)){
-//				if(synNum1 > 0)
-//					sum_1_3 += abs(synNum1) - abs(synNum3);
-//				else
-//					sum_1_3 += -(abs(synNum1) - abs(synNum3));
-//			}else
-//				if(synNum3 > 0)
-//					sum_1_3 += abs(synNum3) - abs(synNum1);
-//				else
-//					sum_1_3 += -(abs(synNum3) - abs(synNum1));
-//			synValue = synNum0 + (sum_1_3)*0.5 ;//+ (sum_2_4)*0.2;
-//			if(synValue > 1.0)
-//				synValue = 0.99;
-//			if(synValue < -1.0)
-//				synValue = -0.99;
-//
-////			setSynValue(orient,synValue);
-//
-////			if(abs(synNum2) > abs(synNum4)){
-////				if(synNum2 > 0)
-////					sum_2_4 += synNum2 * 0.5;
-////			}else
-////				if(synNum4 > 0)
-////					sum_2_4 += synNum4 * 0.5;
-//		}
+		//		else if(this->getSynValue(orient) < 0.3){
+		//			sum_1_3 = 0;
+		////			sum_2_4 = 0;
+		//			if(abs(synNum1) > abs(synNum3)){
+		//				if(synNum1 > 0)
+		//					sum_1_3 += abs(synNum1) - abs(synNum3);
+		//				else
+		//					sum_1_3 += -(abs(synNum1) - abs(synNum3));
+		//			}else
+		//				if(synNum3 > 0)
+		//					sum_1_3 += abs(synNum3) - abs(synNum1);
+		//				else
+		//					sum_1_3 += -(abs(synNum3) - abs(synNum1));
+		//			synValue = synNum0 + (sum_1_3)*0.5 ;//+ (sum_2_4)*0.2;
+		//			if(synValue > 1.0)
+		//				synValue = 0.99;
+		//			if(synValue < -1.0)
+		//				synValue = -0.99;
+		//
+		////			setSynValue(orient,synValue);
+		//
+		////			if(abs(synNum2) > abs(synNum4)){
+		////				if(synNum2 > 0)
+		////					sum_2_4 += synNum2 * 0.5;
+		////			}else
+		////				if(synNum4 > 0)
+		////					sum_2_4 += synNum4 * 0.5;
+		//		}
 		else if(this->getSynValue(orient) > 0.7){
 			sum_1_3 = 0;
 			if(abs(synNum1) > abs(synNum3)){
@@ -1360,14 +1362,14 @@ void Util_nodeInfo::synCal(int ori_orient){
 				synValue = 0.99;
 			if(synValue < -1.0)
 				synValue = -0.99;
-//			setSynValue(orient,synValue);
+			//			setSynValue(orient,synValue);
 
-//			if(abs(synNum2) > abs(synNum4)){
-//				if(synNum2 < 0)
-//					sum_2_4 += synNum2;
-//			}else
-//				if(synNum4 < 0)
-//					sum_2_4 += synNum4;
+			//			if(abs(synNum2) > abs(synNum4)){
+			//				if(synNum2 < 0)
+			//					sum_2_4 += synNum2;
+			//			}else
+			//				if(synNum4 < 0)
+			//					sum_2_4 += synNum4;
 		}else {
 			synValue = synNum0 + (sum_1_3)*0.3 ;//+ (sum_2_4)*0.2;
 			if(synValue > 1.0)

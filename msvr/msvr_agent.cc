@@ -158,6 +158,8 @@ routing_proto_cb(char *p, int *n, CpcAgent *agent)
             break;
         default:
             fprintf(stderr, "Error with msvr packet type.\n");
+            return 1;//maybe got dtn broadcast things
+            recv_dtnbroad(p,agent);
             break;
     }
 

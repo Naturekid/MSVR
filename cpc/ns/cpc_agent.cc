@@ -68,14 +68,15 @@ void CpcAgent::recv(Packet *p, Handler *h)
 			//ch_up->direction() = hdr_cmn::UP;
 			//ih_up->dst_.port_ = 0;
 			//portDmux_->recv(up_p,(Handler *)0);
-			ch->direction() = hdr_cmn::UP;
-			portDmux_->recv(p,(Handler *)0);
+			//ch->direction() = hdr_cmn::UP;
+			//portDmux_->recv(p,(Handler *)0);
 		}
 		if( ih->ttl_ == 0 )
 		{
 			Packet::free(p);
 			return;
 		}
+
 		struct Broadcast_buffer a;
 		a.pkt = p->copy();
 		if(checker_.existBroadcast_buffer( &a )){
@@ -92,7 +93,7 @@ void CpcAgent::recv(Packet *p, Handler *h)
 	}
 	//当packet的类型等于62时,添加自己邻居等操作
 	if (ch->ptype() == type_) {
-		protHandler_((char*)access_cb(p), (int*)0, this);
+		int result = protHandler_((char*)access_cb(p), (int*)0, this);
 		//fprintf(stderr,"           neighbouring\n",this->addr());
 		Packet::free(p);
 	} else//当前简单例子中,当packet type 为  PBC=45时,会进入这里
@@ -139,7 +140,7 @@ void CpcAgent::processPacket(Packet *p)
 #endif
 		//upload
 		portDmux_->recv(up_p,(Handler *)0);
-		return ;
+		//return ;
 	}
 
 	next = cpc_rt_find(dst);
@@ -237,7 +238,7 @@ CpcAgent::sendProtPacket(char *p, int n, struct in_addr dst)
 	ih->saddr() = myAddr_.s_addr;
 	ih->daddr() = dst.s_addr;
 	//added by yyq
-	ih->ttl_ = 3;
+	//ih->ttl_ = 3;
 	ch->direction() = hdr_cmn::DOWN;
 	ch->addr_type() = NS_AF_INET;
 	ch->last_hop_ = myAddr_.s_addr;

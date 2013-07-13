@@ -1167,6 +1167,7 @@ CMUTrace::format_msvr(Packet* p, int offset)
 			fprintf(stderr,
 					  "CMUTrace::format_msvr: invalid MSVR packet type\n");
 #else
+			break;
 			fprintf(stderr,
 					  "%s: invalid MSVR packet type\n", __FUNCTION__);
 #endif
