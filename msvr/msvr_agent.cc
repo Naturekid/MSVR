@@ -370,6 +370,7 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 
     if (enpaths != NULL)
         free(enpaths);
-    fprintf(stderr, "src:%d----dst:%d----next:%d----length:%d\n",src,dst,next,packet.length);
+    //fprintf(stderr, "src:%d----dst:%d----next:%d----length:%d\n",src,dst,next,packet.length);
+    printf("src:%d----dst:%d----next:%d----length:%d\n",src,dst,next,packet.length);
     agent->sendProtPacketWithData((char *)&packet, packet.length, src, dst, next);
 }

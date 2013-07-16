@@ -290,7 +290,7 @@ MsvrMap::getPaths(double x1, double y1, double x2, double y2)
     vertex_descriptor src = vertex(path.first, map_);
     vertex_descriptor dst = vertex(path.second, map_);
     fprintf(stdout , "起点坐标:(%.0f,%.0f),终点坐标:(%.0f,%.0f)\n",x1 ,y1 , x2 , y2);
-    fprintf(stdout,"起点路口ID:终点路口ID:%d %d--------------------------msvr_map.cc292\n",path.first,path.second);
+    //fprintf(stdout,"起点路口ID:终点路口ID:%d %d--------------------------msvr_map.cc292\n",path.first,path.second);
 
     while (hasNextPath(src, dst)) {//判断src和dst是不是在同一个路上,src距离dst到底有多近
         std::vector<vertex_descriptor> p(num_vertices(map_));
