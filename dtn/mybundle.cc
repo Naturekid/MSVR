@@ -664,10 +664,10 @@ void BundleAgent::sendHello() {
 	//TTL�����ã�
 	if (nb_sum() < NB_THRESHOLD)
 		//iph->ttl_ = HELLO_TTL_L;
-		iph->ttl_ = 15;
+		iph->ttl_ = 5;
 	else
 		//iph->ttl_ = HELLO_TTL_S;
-		iph->ttl_ = 15;
+		iph->ttl_ = 5;
 
 	hdr_bundle* bh=hdr_bundle::access(pkt);
 	bh->type= TYPE_HELLO;

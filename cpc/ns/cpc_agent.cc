@@ -49,60 +49,53 @@ void CpcAgent::recv(Packet *p, Handler *h)
 			return;
 		}
 	}
-	//check if there is a type means self DTN ,change the flag = 1
-	if ( 1 == ch->size()  )
-	{
-		SetDTNFlag( 1 );
-		drop(p);
-		return;
-	}
-	// DTN  broadcast conditions //对于DTN广播包,上传,处理,再转发
-	else if( ch->ptype_ == PT_DTNBUNDLE && (u_int32_t)ih->daddr() == IP_BROADCAST){
-
-		if(GetDTNFlag())
+	if (ch->ptype()==PT_DTNBUNDLE) {
+		if ( 1 == ch->size()  )
 		{
-			//upload 广播包的内容,暂时有问题
-			//Packet *up_p = p->copy();
-			//struct hdr_cmn *ch_up = HDR_CMN(up_p);
-			//struct hdr_ip *ih_up = HDR_IP(up_p);
-			//ch_up->direction() = hdr_cmn::UP;
-			//ih_up->dst_.port_ = 0;
-			//portDmux_->recv(up_p,(Handler *)0);
-			//ch->direction() = hdr_cmn::UP;
-			//portDmux_->recv(p,(Handler *)0);
-		}
-		if( ih->ttl_ == 0 )
-		{
+			//std::cout<<"Im node "<<index<<" RIGISTRATION "<<std::endl;
+			SetDTNFlag( 1 );
 			Packet::free(p);
 			return;
 		}
-
-		struct Broadcast_buffer a;
-		a.pkt = p->copy();
-		if(checker_.existBroadcast_buffer( &a )){
-			Packet::free(p);
-			return ;//遇到了重复的广播分组,直接退出处理就好.
+		if( (u_int32_t)ih->daddr() == IP_BROADCAST){
+			if (ch->direction() == hdr_cmn::UP){
+				if(ih->ttl_!= 0){
+					Packet* copyPkt = p->copy();
+					portDmux_->recv(copyPkt, 0);
+				}else{
+					portDmux_->recv(p, 0);
+					return;
+				}
+			}
+		}else if (ch->direction() == hdr_cmn::UP) {
+			if ((u_int32_t)ih->daddr() == here_.addr_){
+				portDmux_->recv(p, 0);
+				return;
+			}
 		}
-		checker_.addBroadcast_buffer(&a);
-
-		ih->ttl_ -= 1;
-		struct in_addr dst;
-		dst.s_addr = IP_BROADCAST;
-		this->sendProtPacket((char *)p, sizeof(struct Packet) , dst);
-		return;
 	}
+
 	//当packet的类型等于62时,添加自己邻居等操作
 	if (ch->ptype() == type_) {
 		int result = protHandler_((char*)access_cb(p), (int*)0, this);
 		//fprintf(stderr,"           neighbouring\n",this->addr());
 		Packet::free(p);
-	} else//当前简单例子中,当packet type 为  PBC=45时,会进入这里
-	{
-#ifdef DEBUG
-		fprintf(stdout,"           processing\n",this->addr());
-#endif
-		processPacket(p);
+		return ;
 	}
+
+	if(--ih->ttl_ == 0) {
+		drop(p, DROP_RTR_TTL);
+		return;
+	}
+	if ( (u_int32_t)ih->daddr() == IP_BROADCAST){
+		assert(ih->daddr() == (nsaddr_t) IP_BROADCAST);
+		ih->ttl_ --;
+		ch->addr_type() = NS_AF_NONE;
+		ch->direction() = hdr_cmn::DOWN;
+		Scheduler::instance().schedule(target_, p, 0.);
+	}else
+		processPacket(p);
+
 	/*end:*/
 	/*scheduleNextEvent();*/
 }

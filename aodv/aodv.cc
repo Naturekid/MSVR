@@ -628,9 +628,9 @@ AODV::recv(Packet *p, Handler*) {
 		}
 		// Added by Parag Dadhania && John Novatnack to handle broadcasting
 		if ( (u_int32_t)ih->daddr() != IP_BROADCAST) {
-			printf("%d\n",ih->ttl_);
+			//printf("1:%d\n",ih->ttl_);
 			ih->ttl_ = NETWORK_DIAMETER;
-			printf("%d\n",ih->ttl_);
+			//printf("2;%d\n",ih->ttl_);
 		}
 	}
 	/*
@@ -638,6 +638,7 @@ AODV::recv(Packet *p, Handler*) {
 	 *  a routing loop.
 	 */
 	else if(ih->saddr() == index) {
+		//printf("3;%d\n",ih->ttl_);
 		drop(p, DROP_RTR_ROUTE_LOOP);
 		return;
 	}
@@ -649,6 +650,7 @@ AODV::recv(Packet *p, Handler*) {
 		 *  Check the TTL.  If it is zero, then discard.
 		 */
 		if(--ih->ttl_ == 0) {
+			//printf("4;%d\n",ih->ttl_);
 			drop(p, DROP_RTR_TTL);
 			return;
 		}
@@ -656,8 +658,11 @@ AODV::recv(Packet *p, Handler*) {
 	// Added by Parag Dadhania && John Novatnack to handle broadcasting
 	if ( (u_int32_t)ih->daddr() != IP_BROADCAST)
 		rt_resolve(p);
-	else
+	else{
+		//if((u_int32_t)ih->daddr() == IP_BROADCAST)
+			//printf("forward broadcast\n");
 		forward((aodv_rt_entry*) 0, p, NO_DELAY);
+	}
 }
 
 
