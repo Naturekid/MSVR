@@ -10,6 +10,8 @@
 #include "../../msvr/msvr_packet.h"
 #include  "Checker.h"
 
+#include "../../dtn/mybundle.h"
+
 CpcAgent::CpcAgent(packet_t type)
 : Agent(type)
 {
@@ -28,6 +30,7 @@ CpcAgent::~CpcAgent()
 
 void CpcAgent::recv(Packet *p, Handler *h)
 {
+	//fprintf(stdout,"%d cpc recv\n",(int)myAddr_.s_addr);
 	struct hdr_cmn *ch = HDR_CMN(p);
 	struct hdr_ip *ih = HDR_IP(p);
 	struct in_addr src, dst;
@@ -121,7 +124,7 @@ void CpcAgent::processPacket(Packet *p)
 		return;
 	}
 	//得先copy数据 再处理
-	if( GetDTNFlag() ){
+	if( GetDTNFlag() && src.s_addr != myAddr_.s_addr){
 		//how to modify the current packet
 		msvrh->dtn_recent_.addr_ = this->addr();
 		//copy the packet and upload
@@ -255,6 +258,7 @@ CpcAgent::sendProtPacketWithData(char *p, int n, struct in_addr src, struct in_a
 	struct hdr_ip *ih = HDR_IP(npkt);
 	struct hdr_cmn *ch = HDR_CMN(npkt);
 	struct hdr_msvr_routing *rh = HDR_MSVR_ROUTING(npkt);
+	struct hdr_bundle* bundleh=hdr_bundle::access(npkt);
 
 	ih->saddr() = src.s_addr;
 	ih->daddr() = dst.s_addr;
@@ -271,7 +275,9 @@ CpcAgent::sendProtPacketWithData(char *p, int n, struct in_addr src, struct in_a
 	Packet::free(opkt);
 	cpc_queue_ns_remove(dst);
 	/*fprintf(stderr, "!!!! next %d opkt(src %d dst %d) npkt(src %d dst %d) para_dst %d\n", next, oih->saddr(), oih->daddr(), ih->saddr(), ih->daddr(), dst);*/
-	send(npkt, 0);
+	fprintf(stdout,"%d cpc send prot with data\n",(int)myAddr_.s_addr);
+	Scheduler::instance().schedule(target_, npkt, 0.01 * bundleh->fragment);
+	//send(npkt, 0);
 #if 0
 	Packet *pkt;
 

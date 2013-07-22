@@ -573,8 +573,8 @@ AODV::recv(Packet *p, Handler*) {
 			return;
 		}
 
-		if(ch->size()!=20 && ch->size()!=40)
-			std::cout<<"Im node "<<index<<" recv "<<ch->size()<<" from node "<<ih->saddr()<<std::endl;
+		//if(ch->size()!=20 && ch->size()!=40)
+		//	std::cout<<"Im node "<<index<<" recv "<<ch->size()<<" from node "<<ih->saddr()<<std::endl;
 
 		if( (u_int32_t)ih->daddr() == IP_BROADCAST){
 			//		 ch->uid() = 0;

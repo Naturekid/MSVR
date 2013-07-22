@@ -255,6 +255,7 @@ Packet* BundleAgent::copyBundle(Packet* pkt) {
  *first���Ҫ������ʼ��Ƭ��last
  */
 void BundleAgent::sendBundle(Packet* pkt, int next_hop, int first, int last) {
+	fprintf(stdout,"%d send bundle\n",(int)m_uti_nodeInfo.index);
 	hdr_cmn* ch=hdr_cmn::access(pkt);
 	hdr_bundle* bh=hdr_bundle::access(pkt);
 	//fragments: �ֳɶ���Ƭ
@@ -664,10 +665,10 @@ void BundleAgent::sendHello() {
 	//TTL�����ã�
 	if (nb_sum() < NB_THRESHOLD)
 		//iph->ttl_ = HELLO_TTL_L;
-		iph->ttl_ = 2;
+		iph->ttl_ = 5;
 	else
 		//iph->ttl_ = HELLO_TTL_S;
-		iph->ttl_ = 2;
+		iph->ttl_ = 5;
 
 	hdr_bundle* bh=hdr_bundle::access(pkt);
 	bh->type= TYPE_HELLO;
@@ -685,6 +686,7 @@ void BundleAgent::sendHello() {
 }
 
 void BundleAgent::recv(Packet* pkt, Handler*) {
+	//printf("dtn recv\n");
 	//	hdr_cmn* ch=hdr_cmn::access(pkt);
 	//	hdr_ip* iph=hdr_ip::access(pkt);
 	hdr_bundle* bh=hdr_bundle::access(pkt);
@@ -765,6 +767,7 @@ void BundleAgent::recvACK(Packet * p){
  */
 void BundleAgent::recvData(Packet * p){
 	//	hdr_cmn* ch=hdr_cmn::access(p);
+	fprintf(stdout," %d  dtn recv data\n",(int)m_uti_nodeInfo.index);
 	hdr_ip* iph=hdr_ip::access(p);
 	hdr_bundle* bh=hdr_bundle::access(p);
 
