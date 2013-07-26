@@ -61,7 +61,7 @@ void CpcAgent::recv(Packet *p, Handler *h)
 			return;
 		}
 		if( (u_int32_t)ih->daddr() == IP_BROADCAST){
-			if (ch->direction() == hdr_cmn::UP){
+			if (ch->direction() == hdr_cmn::UP && GetDTNFlag() ){
 				if(ih->ttl_!= 0){
 					Packet* copyPkt = p->copy();
 					portDmux_->recv(copyPkt, 0);
