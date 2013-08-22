@@ -298,9 +298,7 @@ MsvrMap::getPaths(double x1, double y1, double x2, double y2)
         std::vector<int> paths;
 
         dijkstra_shortest_paths(map_, src,
-                predecessor_map(&p[0]).
-                weight_map(get(&Road::type_, map_)).
-                distance_map(&d[0]));
+                predecessor_map(&p[0]).weight_map(get(&Road::type_, map_)).distance_map(&d[0]));
 
         graph_traits<Map>::vertex_iterator src_iter, dst_iter;
         graph_traits<Map>::vertex_iterator vi, vend;
