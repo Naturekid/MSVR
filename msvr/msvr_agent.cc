@@ -200,6 +200,7 @@ int
 request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, CpcAgent *agent)
 {
     std::vector<int> paths;
+    std::vector<int> paths_new;
 	MobileNode *srcNode, *dstNode, *relayNode, *nextNode;
     struct point srcPos, dstPos, relayPos, nextPos;
     struct in_addr next;
@@ -244,7 +245,6 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 
             // get path
             paths = MSVRMAP->getPaths(srcPos.x, srcPos.y, dstPos.x, dstPos.y);
-
 //#if 0
             fprintf(stderr, "所有路口ID: ");
             for (std::vector<int>::iterator iter = paths.begin();
@@ -252,6 +252,13 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
                 fprintf(stderr, "---- %d ", *iter);
             fprintf(stderr, "\n");
 //#endif
+            paths_new = MSVRMAP->getPaths_new(srcPos.x, srcPos.y, dstPos.x, dstPos.y,paths);
+
+            fprintf(stderr, "new path 所有路口ID: ");
+            for (std::vector<int>::iterator iter = paths_new.begin();
+                 iter != paths_new.end(); ++iter)
+                fprintf(stderr, "---- %d ", *iter);
+            fprintf(stderr, "\n");
 
             // find next hop
             int roadid1 = MSVRMAP->getRoadByNode(paths[0], paths[1]);

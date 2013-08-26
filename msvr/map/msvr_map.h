@@ -54,6 +54,7 @@ class MsvrMap {
         int getRoadByNode(int src, int dst);
         std::vector<int> getPaths(double x1, double y1,
                                    double x2, double y2);
+        std::vector<int> getPaths_new(double x1 , double y1 , double x2 , double y2, std::vector<int>& paths_old);
         std::pair<int, int> getSrcAndDst(double x1, double y1,
                                           double x2, double y2);
 
