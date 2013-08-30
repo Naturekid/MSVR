@@ -209,7 +209,7 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
     char* enpaths = NULL;
 
     // firstly we find dst node in neighbour list
-    //fprintf(stderr , "here I am node :%d\n", agent->addr());
+    printf( "here I am node :%d\n", agent->addr());
     if (msvr_find_dst(((MsvrAgent *)(agent))->getNblist(), dst)) {
         // get src and dst node position
         srcNode = static_cast<MobileNode*>(Node::get_node_by_address(static_cast<nsaddr_t>(src.s_addr)));

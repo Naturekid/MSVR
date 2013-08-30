@@ -171,7 +171,7 @@ void CpcAgent::processPacket(Packet *p)
 					dst.s_addr = src.s_addr;
 				src.s_addr = this->addr();
 				ch->size_ = 2;
-				reqHandler_((char *)access_cb(p) , src,dst , 0 , this);
+				//reqHandler_((char *)access_cb(p) , src,dst , 0 , this);
 			}
 		}
 		else//ifsend == -1,发送失败,查broken_pair 表,添加broken_pair,并且通知上一跳dtn节点
@@ -189,7 +189,7 @@ void CpcAgent::processPacket(Packet *p)
 					dst.s_addr = src.s_addr;
 				src.s_addr = this->addr();
 				ch->size_ = 3;
-				reqHandler_((char *)access_cb(p) , src,dst , 0 , this);
+				//reqHandler_((char *)access_cb(p) , src,dst , 0 , this);
 			}
 		}
 	}
