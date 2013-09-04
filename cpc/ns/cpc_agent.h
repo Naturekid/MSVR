@@ -38,6 +38,7 @@ class CpcAgent : public Agent {
         int GetDTNFlag();
         void SetDTNFlag(int n);
         Checker checker_ ;
+        Packet* temppacket;
 
 	protected:
 		process_route_prot protHandler_;

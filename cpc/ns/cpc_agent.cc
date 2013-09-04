@@ -105,6 +105,7 @@ void CpcAgent::recv(Packet *p, Handler *h)
 
 void CpcAgent::processPacket(Packet *p)
 {
+	temppacket = p->copy();
 	struct hdr_ip *ih = HDR_IP(p);
 	struct hdr_cmn *ch = HDR_CMN(p);
 	struct hdr_msvr *msvrh = HDR_MSVR(p);
@@ -247,12 +248,16 @@ CpcAgent::sendProtPacket(char *p, int n, struct in_addr dst)
 #include <msvr/msvr_packet.h>
 
 void
-CpcAgent::sendProtPacketWithData(char *p, int n, struct in_addr src, struct in_addr dst, struct in_addr next)
+CpcAgent::sendProtPacketWithData(char *p, int n, struct in_addr src, struct in_addr dst, struct in_addr next )
 {
 	Packet* opkt, *npkt;
 
 	/*npkt = allocpkt();*/
 	opkt = cpc_queue_ns_get(dst);
+	if(opkt == NULL ){
+		cpc_queue_ns_add(temppacket,dst);
+		opkt = cpc_queue_ns_get(dst);
+	}
 	npkt = opkt->copy();
 
 	struct hdr_ip *ih = HDR_IP(npkt);
@@ -273,6 +278,7 @@ CpcAgent::sendProtPacketWithData(char *p, int n, struct in_addr src, struct in_a
 
 	memcpy(access_cb(npkt), p, n);
 	Packet::free(opkt);
+
 	cpc_queue_ns_remove(dst);
 	/*fprintf(stderr, "!!!! next %d opkt(src %d dst %d) npkt(src %d dst %d) para_dst %d\n", next, oih->saddr(), oih->daddr(), ih->saddr(), ih->daddr(), dst);*/
 	fprintf(stdout,"%d cpc send prot with data\n",(int)myAddr_.s_addr);
