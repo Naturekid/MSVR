@@ -11,7 +11,7 @@
 #include "map/msvr_map.h"
 #include "neigh/msvr_nblist.h"
 
-static MsvrMap *MSVRMAP = NULL;
+MsvrMap *MSVRMAP = NULL;
 
 int hdr_msvr::offset_;
 
@@ -299,13 +299,17 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 
 
 			int roadid3 = MSVRMAP->getRoadByPos(srcPos.x, srcPos.y).id_;
-
+			int roadid3_new = roadid3;
+			if( MSVRMAP->nodeInRoad(srcPos.x,srcPos.y,roadid1))
+				roadid3 = roadid1;
+			if( MSVRMAP->nodeInRoad(srcPos.x,srcPos.y,roadid1_new))
+				roadid3_new = roadid1_new;
 			// XXX: call old find a next hop method
 			/*next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, srcPos.x, srcPos.y, true);*/
 
 			// XXX:: call new find a next hop method
 			next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, roadid3, srcPos.x, srcPos.y, nextPos.x, nextPos.y, true);
-			next_new = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1_new, roadid2_new, roadid3, srcPos.x, srcPos.y, nextPos_new.x, nextPos_new.y, true);
+			next_new = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1_new, roadid2_new, roadid3_new, srcPos.x, srcPos.y, nextPos_new.x, nextPos_new.y, true);
 
 		} else {
 			// get src and dst node position

@@ -57,6 +57,7 @@ class MsvrMap {
         std::vector<int> getPaths_new(double x1 , double y1 , double x2 , double y2, std::vector<int>& paths_old);
         std::pair<int, int> getSrcAndDst(double x1, double y1,
                                           double x2, double y2);
+        bool nodeInRoad(double srcx, double srcy, int roadid);
 
         inline const Map& getMap() const {
             return map_;

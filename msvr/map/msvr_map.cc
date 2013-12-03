@@ -90,12 +90,12 @@ MsvrMap::MsvrMap()
 	};
 	Road weights[] = {
 			Road(0, 20), Road(1, 20), Road(2, 20), Road(3, 20),
-			Road(4, 20), Road(5, 60), Road(6, 20), Road(7, 100), Road(8, 20),
+			Road(4, 20), Road(5, 6000), Road(6, 20), Road(7, 100), Road(8, 20),
 			Road(9, 60), Road(10, 60),
 //			Road(0, 20), Road(1, 20), Road(2, 20), Road(3, 20),
 //			Road(4, 20), Road(5, 60), Road(6, 60), Road(7, 100), Road(8, 20),
 //			Road(9, 60), Road(10, 60),
-			Road(11, 20), Road(12, 60), Road(13, 100), Road(14, 100), Road(15, 100),
+			Road(11, 2000), Road(12, 60), Road(13, 100), Road(14, 100), Road(15, 100),
 			/*Road(16, 60), Road(17, 60), Road(18, 60), Road(19, 60),*/
 			Road(16, 60), Road(17, 100), Road(18, 60), Road(19, 60),
 			Road(20, 60), Road(21, 60), Road(22, 100), Road(23, 100), Road(24, 100),
@@ -518,4 +518,23 @@ MsvrMap::getSrcAndDst(double x1, double y1, double x2, double y2)
 	}
 	printf("paths second %d\n",path.second);
 	return path;
+}
+
+bool MsvrMap::nodeInRoad(double srcx, double srcy, int roadid){
+	graph_traits<Map>::edge_iterator ei, eend;
+	for (tie(ei, eend) = edges(map_); ei != eend; ++ei) {
+		if(map_[*ei].id_ == roadid){
+			vertex_descriptor srcVer = source(*ei,map_);
+			vertex_descriptor dstVer = target(*ei,map_);
+			if( srcx <= std::max(map_[srcVer].x_,map_[dstVer].x_) + MSVR_ROAD_PAD &&
+				srcx >= std::min(map_[srcVer].x_,map_[dstVer].x_) - MSVR_ROAD_PAD &&
+				srcy <= std::max(map_[srcVer].y_,map_[dstVer].y_) + MSVR_ROAD_PAD &&
+				srcy >= std::min(map_[srcVer].y_,map_[dstVer].y_) - MSVR_ROAD_PAD
+			)
+				return true;
+			else
+				return false;
+			break;
+		}
+	}
 }
