@@ -281,7 +281,7 @@ CpcAgent::sendProtPacketWithData(char *p, int n, struct in_addr src, struct in_a
 
 	cpc_queue_ns_remove(dst);
 	/*fprintf(stderr, "!!!! next %d opkt(src %d dst %d) npkt(src %d dst %d) para_dst %d\n", next, oih->saddr(), oih->daddr(), ih->saddr(), ih->daddr(), dst);*/
-	fprintf(stdout,"%d cpc send prot with data\n",(int)myAddr_.s_addr);
+	//fprintf(stdout,"%d cpc send prot with data\n",(int)myAddr_.s_addr);
 	Scheduler::instance().schedule(target_, npkt, 0.01 * bundleh->fragment);
 	//send(npkt, 0);
 #if 0

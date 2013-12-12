@@ -415,7 +415,7 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 		packet_new.type = MSVR_TYPE_ROUTING;
 		packet_new.length = packet_new.size() + paths_new.size() * 2 + applen;
 		packet_new.hlen = packet_new.size() + paths_new.size() * 2;
-		packet_new.seq = time(NULL);
+		packet_new.seq = time(NULL)+1;
 		packet_new.m = 0x0;
 		packet_new.t = 0x0;
 		packet_new.c = 0x0;
