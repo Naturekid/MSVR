@@ -7,7 +7,7 @@
 
 #include <list>
 
-#define MSVR_MAX_NB_AGING 4.0
+#define MSVR_MAX_NB_AGING 5.0
 
 struct msvr_ninfo {
     int    n_id;     /* NOTE: it need a char * type */

@@ -90,14 +90,18 @@ MsvrMap::MsvrMap()
 	};
 	Road weights[] = {
 			Road(0, 20), Road(1, 20), Road(2, 20), Road(3, 20),
-			Road(4, 20), Road(5, 6000), Road(6, 20), Road(7, 100), Road(8, 20),
-			Road(9, 60), Road(10, 60),
+			//Road(4, 20), Road(5, 60), Road(6, 20), Road(7, 100), Road(8, 20),
+			//Road(9, 60), Road(10, 60),
+			Road(4, 20), Road(5, 20), Road(6, 20), Road(7, 20), Road(8, 20),
+			Road(9, 20), Road(10, 20),
 //			Road(0, 20), Road(1, 20), Road(2, 20), Road(3, 20),
 //			Road(4, 20), Road(5, 60), Road(6, 60), Road(7, 100), Road(8, 20),
 //			Road(9, 60), Road(10, 60),
-			Road(11, 2000), Road(12, 60), Road(13, 100), Road(14, 100), Road(15, 100),
+//			Road(11, 20), Road(12, 60), Road(13, 100), Road(14, 100), Road(15, 100),
+			Road(11, 20), Road(12, 20), Road(13, 20), Road(14, 20), Road(15, 20),
 			/*Road(16, 60), Road(17, 60), Road(18, 60), Road(19, 60),*/
-			Road(16, 60), Road(17, 100), Road(18, 60), Road(19, 60),
+//			Road(16, 60), Road(17, 100), Road(18, 60), Road(19, 60),
+			Road(16, 20), Road(17, 20), Road(18, 20), Road(19, 20),
 			Road(20, 60), Road(21, 60), Road(22, 100), Road(23, 100), Road(24, 100),
 			Road(25, 60),                Road(26, 60), Road(27, 60),
 			/*Road(28, 60), Road(29, 60), Road(30, 100), Road(31, 100), Road(32, 100),*/
@@ -139,30 +143,44 @@ MsvrMap::getRoadByPos(double x, double y)
 	Road r;
 	graph_traits<Map>::vertex_iterator vi, vend;//准备循环地图所有的顶点
 
-	r.id_ = -1;
+	r.id_ = 0;
 
-	for (tie(vi, vend) = vertices(map_); vi != vend; ++vi) {
-		graph_traits<Map>::adjacency_iterator ai, aend;
-		for (tie(ai, aend) = adjacent_vertices(*vi, map_);//循环扫描某个点的所有 相邻的点
-				ai != aend; ++ai) {
-			if (std::min(map_[*vi].x_, map_[*ai].x_) - MSVR_ROAD_PAD <= x &&
-					x <= std::max(map_[*vi].x_, map_[*ai].x_) + MSVR_ROAD_PAD &&
-					std::min(map_[*vi].y_, map_[*ai].y_) - MSVR_ROAD_PAD <= y &&
-					y <= std::max(map_[*vi].y_, map_[*ai].y_) + MSVR_ROAD_PAD) {
+//	for (tie(vi, vend) = vertices(map_); vi != vend; ++vi) {
+//		graph_traits<Map>::adjacency_iterator ai, aend;
+//		for (tie(ai, aend) = adjacent_vertices(*vi, map_);//循环扫描某个点的所有 相邻的点
+//				ai != aend; ++ai) {
+//			if (std::min(map_[*vi].x_, map_[*ai].x_) - MSVR_ROAD_PAD <= x &&
+//					x <= std::max(map_[*vi].x_, map_[*ai].x_) + MSVR_ROAD_PAD &&
+//					std::min(map_[*vi].y_, map_[*ai].y_) - MSVR_ROAD_PAD <= y &&
+//					y <= std::max(map_[*vi].y_, map_[*ai].y_) + MSVR_ROAD_PAD) {
+//
+//				graph_traits<Map>::edge_iterator ei, eend;
+//				for (tie(ei, eend) = edges(map_); ei != eend; ++ei) {
+//					if (source(*ei, map_) == *vi &&
+//							target(*ei, map_) == *ai) {
+//						r.id_ = map_[*ei].id_;
+//						r.type_ = map_[*ei].type_;
+//						return r;
+//					}
+//				}
+//			}
+//		}
+//	}
 
-				graph_traits<Map>::edge_iterator ei, eend;
-				for (tie(ei, eend) = edges(map_); ei != eend; ++ei) {
-					if (source(*ei, map_) == *vi &&
-							target(*ei, map_) == *ai) {
-						r.id_ = map_[*ei].id_;
-						r.type_ = map_[*ei].type_;
-						return r;
-					}
-				}
-			}
+	int nearest_node_id = 0;
+	double nearest_distance = msvr_cal_dist(0,0,x,y);
+	graph_traits<Map>::edge_iterator ei, eend;
+	for (tie(ei, eend) = edges(map_); ei != eend; ++ei) {
+		double road_x_center = (map_[source(*ei,map_)].x_ + map_[target(*ei,map_)].x_)/2;
+		double road_y_center = (map_[source(*ei,map_)].y_ + map_[target(*ei,map_)].y_)/2;
+		double temp_distance = msvr_cal_dist(x,y,road_x_center,road_y_center);
+		if(temp_distance < nearest_distance){
+			nearest_node_id = map_[*ei].id_;
+			nearest_distance = temp_distance;
+			r.id_= map_[*ei].id_;
+			r.type_=map_[*ei].type_;
 		}
 	}
-
 	return r;
 }
 
@@ -435,7 +453,7 @@ MsvrMap::getSrcAndDst(double x1, double y1, double x2, double y2)
 				path.first = map_[srcVer].id_;
 			}else if(map_[dstVer].x_ == x1 && map_[dstVer].y_ == y1){
 				path.first = map_[dstVer].id_;
-			}else if(msvr_cal_dist(map_[srcVer].x_,map_[srcVer].y_, x2, y2) <=
+			}else if(msvr_cal_dist(map_[srcVer].x_,map_[srcVer].y_, x2, y2) >=
 					msvr_cal_dist(map_[dstVer].x_,map_[dstVer].y_, x2, y2)){
 				path.first = map_[srcVer].id_;
 			}else {
@@ -478,7 +496,7 @@ MsvrMap::getSrcAndDst(double x1, double y1, double x2, double y2)
 				path.second = map_[srcVer].id_;
 			}else if(map_[dstVer].x_ == x2 && map_[dstVer].y_ == y2){
 				path.second = map_[dstVer].id_;
-			}else if(msvr_cal_dist(map_[srcVer].x_,map_[srcVer].y_, x1, y1) <=
+			}else if(msvr_cal_dist(map_[srcVer].x_,map_[srcVer].y_, x1, y1) >=
 					msvr_cal_dist(map_[dstVer].x_,map_[dstVer].y_, x1, y1)){
 				path.second = map_[srcVer].id_;
 			}else {

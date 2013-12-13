@@ -29,9 +29,9 @@ MsvrNeighTimer::expire(Event *e)
     sendInfo();
 
     // Scan neighbor list to remove old neighbors
-    msvr_nblaging(agent_->getNblist());
+    //msvr_nblaging(agent_->getNblist());
 
-    resched(NEIGH_TIMER + randSend_.uniform(0.0,0.25));
+    resched(NEIGH_TIMER + randSend_.uniform(0.0,0.025));
 }
 
 void
@@ -62,8 +62,9 @@ msvr_get_next_hop(std::list<msvr_nbentry>& nbl, int roadid1,
 {
     struct msvr_nbentry *ep;
 
-    if (first) {
-        // XXX: old find a next hop method
+    //if (first) {
+    if(true){
+		// XXX: old find a next hop method
         /*ep = msvr_nbl_find_furthest_nhop(nbl, roadid1, roadid2, x1, y1);*/
 
         // XXX: new find a next hop method
@@ -72,12 +73,46 @@ msvr_get_next_hop(std::list<msvr_nbentry>& nbl, int roadid1,
         if (ep == NULL) {
             struct in_addr res;
             res.s_addr = -1;
-            return res;
+            printf("Impossible , no next/n");
+            return (struct in_addr){-1};
         }
 
         return ep->nbe_ninfo.n_dst;
     }
+
 }
+
+struct in_addr
+msvr_get_next_hop_yyq(std::list<msvr_nbentry>& nbl, std::vector<int>& paths , double self_x , double self_y){
+	struct msvr_nbentry *ep = NULL;
+	struct point target;
+	extern MsvrMap *MSVRMAP;
+	if(paths.size() > 2){
+		target.x = MSVRMAP->getMap()[paths[2]].x_;
+		target.y = MSVRMAP->getMap()[paths[2]].y_;
+	}else{
+		target.x = MSVRMAP->getMap()[paths[1]].x_;
+		target.y = MSVRMAP->getMap()[paths[1]].y_;
+	}
+	double current_distance = msvr_cal_dist(self_x,self_y,target.x,target.y);
+	double min_distance = current_distance;
+	for (std::list<msvr_nbentry>::iterator iter = nbl.begin(); iter != nbl.end(); ++iter){
+		double temp_distance = msvr_cal_dist(target.x , target.y , iter->nbe_ninfo.n_x, iter->nbe_ninfo.n_y);
+		if(temp_distance < min_distance &&
+				( MSVRMAP->nodeInRoad(iter->nbe_ninfo.n_x,iter->nbe_ninfo.n_y,MSVRMAP->getRoadByNode(paths[0], paths[1])) ||
+				  MSVRMAP->nodeInRoad(iter->nbe_ninfo.n_x,iter->nbe_ninfo.n_y,MSVRMAP->getRoadByNode(paths[1], paths[2]))	))
+		{
+			min_distance = temp_distance;
+			ep = &(*iter);
+		}
+	}
+
+	if(NULL != ep)
+		return ep->nbe_ninfo.n_dst;
+	else
+		return (struct in_addr){-1};
+}
+
 
 bool
 msvr_find_dst(std::list<msvr_nbentry>& nbl, struct in_addr dst)

@@ -8,7 +8,7 @@
 #ifndef CHECKER_H_
 #define CHECKER_H_
 
-#define EXPIRETIME 5.0
+#define EXPIRETIME 15.0
 #include <vector>
 #include <list>
 #include <timer-handler.h>

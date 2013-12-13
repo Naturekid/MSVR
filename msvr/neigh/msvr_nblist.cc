@@ -174,6 +174,7 @@ msvr_nbl_find_next_hop(std::list<msvr_nbentry>& nbl, int roadid1,
     extern MsvrMap *MSVRMAP;
 
     //msvr_nbl_print(nbl);//added by yyq
+    assert(nbl.size());
     for (std::list<msvr_nbentry>::iterator iter = nbl.begin();
          iter != nbl.end(); ++iter) {
     	//printf("x:%f y:%f roadid:%d roadid1:%d\n",iter->nbe_ninfo.n_x,iter->nbe_ninfo.n_y,iter->nbe_ninfo.n_roadid,roadid1);

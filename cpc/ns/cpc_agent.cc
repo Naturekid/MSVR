@@ -30,13 +30,16 @@ CpcAgent::~CpcAgent()
 
 void CpcAgent::recv(Packet *p, Handler *h)
 {
-	//fprintf(stdout,"%d cpc recv\n",(int)myAddr_.s_addr);
+	//printf("%d cpc recv\n",this->addr());
 	struct hdr_cmn *ch = HDR_CMN(p);
 	struct hdr_ip *ih = HDR_IP(p);
 	struct in_addr src, dst;
 
 	src.s_addr = ih->saddr();
 	dst.s_addr = ih->daddr();
+//	if(this->addr()==2 ){
+//		printf("Here!\n");
+//	}
 #ifdef DEBUG
 	fprintf(stdout,"node %d is recving\n",this->addr());
 #endif

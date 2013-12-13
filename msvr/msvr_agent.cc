@@ -283,9 +283,11 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 				nextPos.y = MSVRMAP->getMap()[paths[2]].y_;
 			} else
 				roadid2 = -1;
-			if (roadid2 == -1 && roadid1 != MSVRMAP->getRoadByPos(dstPos.x, dstPos.y).id_)
+			if (roadid2 == -1 && roadid1 != MSVRMAP->getRoadByPos(dstPos.x, dstPos.y).id_){
 				roadid2 = MSVRMAP->getRoadByPos(dstPos.x, dstPos.y).id_;
-
+				nextPos.x = dstPos.x;
+				nextPos.y = dstPos.y;
+			}
 
 			int roadid2_new;
 			if (paths_new.size() > 2) {
@@ -294,8 +296,11 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 				nextPos_new.y = MSVRMAP->getMap()[paths_new[2]].y_;
 			} else
 				roadid2_new = -1;
-			if (roadid2_new == -1 && roadid1_new != MSVRMAP->getRoadByPos(dstPos.x, dstPos.y).id_)
+			if (roadid2_new == -1 && roadid1_new != MSVRMAP->getRoadByPos(dstPos.x, dstPos.y).id_){
 				roadid2_new = MSVRMAP->getRoadByPos(dstPos.x, dstPos.y).id_;
+				nextPos_new.x = dstPos.x;
+				nextPos_new.y = dstPos.y;
+			}
 
 
 			int roadid3 = MSVRMAP->getRoadByPos(srcPos.x, srcPos.y).id_;
@@ -310,7 +315,8 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 			// XXX:: call new find a next hop method
 			next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, roadid3, srcPos.x, srcPos.y, nextPos.x, nextPos.y, true);
 			next_new = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1_new, roadid2_new, roadid3_new, srcPos.x, srcPos.y, nextPos_new.x, nextPos_new.y, true);
-
+			//next = msvr_get_next_hop_yyq(((MsvrAgent *)(agent))->getNblist() , paths , relayPos.x , relayPos.y);
+			//next_new = msvr_get_next_hop_yyq(((MsvrAgent *)(agent))->getNblist() , paths_new , relayPos.x , relayPos.y);
 		} else {
 			// get src and dst node position
 			srcNode = static_cast<MobileNode*>(Node::get_node_by_address(static_cast<nsaddr_t>(src.s_addr)));
@@ -355,11 +361,15 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 			} else
 				roadid2 = -1;
 
-			if (roadid2 == -1 && roadid1 != MSVRMAP->getRoadByPos(dstPos.x, dstPos.y).id_)
+			if (roadid2 == -1 && roadid1 != MSVRMAP->getRoadByPos(dstPos.x, dstPos.y).id_){
 				roadid2 = MSVRMAP->getRoadByPos(dstPos.x, dstPos.y).id_;
+				nextPos.x = dstPos.x;
+				nextPos.y = dstPos.y;
+			}
 
 			int roadid3 = MSVRMAP->getRoadByPos(srcPos.x, srcPos.y).id_;
-
+			if( MSVRMAP->nodeInRoad(srcPos.x,srcPos.y,roadid1))
+							roadid3 = roadid1;
 
 			// XXX: call old find a next hop method
 			/*next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, srcPos.x, srcPos.y, true);*/
@@ -367,6 +377,8 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 			// XXX: call new find a next hop method
 			/*next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, relayPos.x, relayPos.y, dstPos.x, dstPos.y, true);*/
 			next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, roadid3, relayPos.x, relayPos.y, nextPos.x, nextPos.y, true);
+			//struct in_addr mynext = msvr_get_next_hop_yyq(((MsvrAgent *)(agent))->getNblist() , paths , relayPos.x , relayPos.y);
+
 		}
 	}
 

@@ -31,6 +31,9 @@ class MsvrNeighTimer : public TimerHandler {
                                  /*double x1, double y1, bool first);*/
 struct in_addr msvr_get_next_hop(std::list<msvr_nbentry>& nbl, int roadid1, int roadid2, int roadid3,
                                  double x1, double y1, double x2, double y2, bool first);
+
+struct in_addr msvr_get_next_hop_yyq(std::list<msvr_nbentry>& nbl, std::vector<int>& paths, double self_x , double self_y );
+
 bool msvr_find_dst(std::list<msvr_nbentry>& nbl, struct in_addr dst);
 
 #endif /* MSVR_NEIGH_H */
