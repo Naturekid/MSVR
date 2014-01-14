@@ -313,10 +313,16 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 			/*next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, srcPos.x, srcPos.y, true);*/
 
 			// XXX:: call new find a next hop method
-			next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, roadid3, srcPos.x, srcPos.y, nextPos.x, nextPos.y, true);
-			next_new = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1_new, roadid2_new, roadid3_new, srcPos.x, srcPos.y, nextPos_new.x, nextPos_new.y, true);
-			//next = msvr_get_next_hop_yyq(((MsvrAgent *)(agent))->getNblist() , paths , relayPos.x , relayPos.y);
-			//next_new = msvr_get_next_hop_yyq(((MsvrAgent *)(agent))->getNblist() , paths_new , relayPos.x , relayPos.y);
+			//next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, roadid3, srcPos.x, srcPos.y, nextPos.x, nextPos.y, true);
+			//next_new = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1_new, roadid2_new, roadid3_new, srcPos.x, srcPos.y, nextPos_new.x, nextPos_new.y, true);
+			next = msvr_get_next_hop_yyq(((MsvrAgent *)(agent))->getNblist() , paths , relayPos.x , relayPos.y);
+			if(next.s_addr == -1){
+				next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, roadid3, srcPos.x, srcPos.y, nextPos.x, nextPos.y, true);
+			}
+			next_new = msvr_get_next_hop_yyq(((MsvrAgent *)(agent))->getNblist() , paths_new , relayPos.x , relayPos.y);
+			if(next_new.s_addr == -1){
+				next_new = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1_new, roadid2_new, roadid3_new, srcPos.x, srcPos.y, nextPos_new.x, nextPos_new.y, true);
+			}
 		} else {
 			// get src and dst node position
 			srcNode = static_cast<MobileNode*>(Node::get_node_by_address(static_cast<nsaddr_t>(src.s_addr)));
@@ -338,10 +344,10 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 			// decode path, which is from recved packet
 			decode_path(paths, enpaths);
 
-			fprintf(stderr , "paths.size():%d;...", paths.size());
+			printf( "paths.size():%d;...", paths.size());
 			for( int tempx = 0 ; tempx < paths.size() ; tempx ++ )
-				fprintf(stderr , "--%d--",paths[tempx]);
-			fprintf(stderr , "\n");
+				printf( "--%d--",paths[tempx]);
+			printf( "\n");
 
 			if (paths.size() < 2) {
 				agent->dropPacket(dst, DROP_RTR_NO_ROUTE);
@@ -376,8 +382,8 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 
 			// XXX: call new find a next hop method
 			/*next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, relayPos.x, relayPos.y, dstPos.x, dstPos.y, true);*/
-			next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, roadid3, relayPos.x, relayPos.y, nextPos.x, nextPos.y, true);
-			//struct in_addr mynext = msvr_get_next_hop_yyq(((MsvrAgent *)(agent))->getNblist() , paths , relayPos.x , relayPos.y);
+			//next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, roadid3, relayPos.x, relayPos.y, nextPos.x, nextPos.y, true);
+			next = msvr_get_next_hop_yyq(((MsvrAgent *)(agent))->getNblist() , paths , relayPos.x , relayPos.y);
 
 		}
 	}
@@ -442,7 +448,8 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 			free(enpaths_new);
 		//fprintf(stderr, "src:%d----dst:%d----next:%d----length:%d\n",src,dst,next,packet.length);
 		printf("src:%d----dst:%d----next:%d----length:%d\n",src,dst,next_new,packet_new.length);
-		agent->sendProtPacketWithData((char *)&packet_new, packet_new.length, src, dst, next_new);
+		if(next_new.s_addr != -1)
+			agent->sendProtPacketWithData((char *)&packet_new, packet_new.length, src, dst, next_new);
 
 	}
 }

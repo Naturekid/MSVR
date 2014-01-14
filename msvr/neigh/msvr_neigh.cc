@@ -87,6 +87,7 @@ msvr_get_next_hop_yyq(std::list<msvr_nbentry>& nbl, std::vector<int>& paths , do
 	struct msvr_nbentry *ep = NULL;
 	struct point target;
 	extern MsvrMap *MSVRMAP;
+//	bool temp = MSVRMAP->nodeInRoad(self_x,self_y,MSVRMAP->getRoadByNode(paths[0],paths[1]));
 	if(paths.size() > 2){
 		target.x = MSVRMAP->getMap()[paths[2]].x_;
 		target.y = MSVRMAP->getMap()[paths[2]].y_;
@@ -109,8 +110,11 @@ msvr_get_next_hop_yyq(std::list<msvr_nbentry>& nbl, std::vector<int>& paths , do
 
 	if(NULL != ep)
 		return ep->nbe_ninfo.n_dst;
-	else
-		return (struct in_addr){-1};
+	else{
+		struct in_addr tempaddr;
+		tempaddr.s_addr = -1;
+		return tempaddr;
+	}
 }
 
 

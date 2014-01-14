@@ -1,9 +1,9 @@
 SRC = list.c routing_table.c cpc_prot.c cpc_rt.c cpc_queue.c \
 	  linux/nl.c linux/cpc_prot_linux.c linux/cpc_rt_linux.c
-SRC_CPP = ns/cpc_queue_ns.cc ns/cpc_agent.cc ns/Checker.cc
+SRC_CPP = ns/cpc_queue_ns.cc ns/cpc_agent.cc ns/Checker.cc ns/fec.cc
 
 NS_SRC = list.c routing_table.c cpc_prot.c cpc_rt.c
-NS_SRC_CPP = ns/cpc_queue_ns.cc ns/cpc_agent.cc ns/Checker.cc
+NS_SRC_CPP = ns/cpc_queue_ns.cc ns/cpc_agent.cc ns/Checker.cc ns/fec.cc
 
 NS_OBJ = $(NS_SRC:%.c=%.o)
 NS_CPP_OBJ = $(NS_SRC_CPP:%.cc=%.o)
