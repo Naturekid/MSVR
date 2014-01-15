@@ -43,7 +43,7 @@
  * exception.
  *
  */
- 
+
 /*
  * For further information see: 
  * http://dsn.tm.uni-karlsruhe.de/english/Overhaul_NS-2.php
@@ -54,13 +54,14 @@
 #include <iostream>
 #include "random.h"
 #include "pbc.h"
+//#include "fec.h"
 int hdr_pbc::offset_;
 
 /**********************TCL Classes***************************/
 static class PBCHeaderClass : public PacketHeaderClass {
 public:
 	PBCHeaderClass() : PacketHeaderClass("PacketHeader/PBC",
-					      sizeof(hdr_pbc)) {
+			sizeof(hdr_pbc)) {
 		bind_offset(&hdr_pbc::offset_);
 	}
 } class_pbchdr;
@@ -77,11 +78,11 @@ public:
 /**********************PBC Agent****Constructor*************************/
 PBCAgent::PBCAgent() : Agent(PT_PBC), timer(this)
 {
-  bind("payloadSize", &size);
-  bind("periodicBroadcastVariance", &msgVariance);
-  bind("periodicBroadcastInterval", &msgInterval);
-  bind("modulationScheme",&modulationScheme);
-  periodicBroadcast = false;
+	bind("payloadSize", &size);
+	bind("periodicBroadcastVariance", &msgVariance);
+	bind("periodicBroadcastInterval", &msgInterval);
+	bind("modulationScheme",&modulationScheme);
+	periodicBroadcast = false;
 }
 
 PBCAgent::~PBCAgent()
@@ -92,66 +93,104 @@ PBCAgent::~PBCAgent()
 /**********************PBC Agent****Member functions *************************/
 void PBCAgent::singleBroadcast()
 {
-  Packet* pkt = allocpkt();
-  hdr_cmn *cmnhdr = hdr_cmn::access(pkt);
-  hdr_pbc* pbchdr = hdr_pbc::access(pkt);
-  hdr_ip*  iphdr  = hdr_ip::access(pkt);
+	Packet* pkt = allocpkt();
+	hdr_cmn *cmnhdr = hdr_cmn::access(pkt);
+	hdr_pbc* pbchdr = hdr_pbc::access(pkt);
+	hdr_ip*  iphdr  = hdr_ip::access(pkt);
 
-  cmnhdr->next_hop() = IP_BROADCAST;
+	cmnhdr->next_hop() = IP_BROADCAST;
 
-  cmnhdr->size()    = size;
-  iphdr->src_.addr_ = here_.addr_;  //LL will fill MAC addresses in the MAC header
-  iphdr->dst_.addr_ = IP_BROADCAST;
-  iphdr->dst_.port_ = this->port();
-  pbchdr->send_time	= Scheduler::instance().clock();
+	cmnhdr->size()    = size;
+	iphdr->src_.addr_ = here_.addr_;  //LL will fill MAC addresses in the MAC header
+	iphdr->dst_.addr_ = IP_BROADCAST;
+	iphdr->dst_.port_ = this->port();
+	pbchdr->send_time	= Scheduler::instance().clock();
 
-  switch (modulationScheme)
-    {
-    case BPSK:   cmnhdr->mod_scheme_ = BPSK;break;
-    case QPSK:   cmnhdr->mod_scheme_ = QPSK;break;
-    case QAM16:  cmnhdr->mod_scheme_ = QAM16;break;
-    case QAM64:  cmnhdr->mod_scheme_ = QAM64;break;
-    default :
-      cmnhdr->mod_scheme_ = BPSK;
-    }
-  send(pkt,0);
+	switch (modulationScheme)
+	{
+	case BPSK:   cmnhdr->mod_scheme_ = BPSK;break;
+	case QPSK:   cmnhdr->mod_scheme_ = QPSK;break;
+	case QAM16:  cmnhdr->mod_scheme_ = QAM16;break;
+	case QAM64:  cmnhdr->mod_scheme_ = QAM64;break;
+	default :
+		cmnhdr->mod_scheme_ = BPSK;
+	}
+	send(pkt,0);
 }
 
 
 void PBCAgent::singleUnicast(int addr)
 {
 
-  Packet* pkt = allocpkt();
-  hdr_cmn *cmnhdr = hdr_cmn::access(pkt);
-  hdr_pbc* pbchdr = hdr_pbc::access(pkt);
-  hdr_ip*  iphdr  = hdr_ip::access(pkt);
+	Packet* pkt = allocpkt();
+	hdr_cmn *cmnhdr = hdr_cmn::access(pkt);
+	hdr_pbc* pbchdr = hdr_pbc::access(pkt);
+	hdr_ip*  iphdr  = hdr_ip::access(pkt);
 
 
-  cmnhdr->addr_type() = NS_AF_ILINK;
-  cmnhdr->next_hop()  = (u_int32_t)(addr);
-  cmnhdr->size()      = size; 
-  iphdr->src_.addr_ = here_.addr_;  //MAC will fill this address
-  iphdr->dst_.addr_ = (u_int32_t)(addr);
-  iphdr->dst_.port_ = this->port();
+	cmnhdr->addr_type() = NS_AF_ILINK;
+	cmnhdr->next_hop()  = (u_int32_t)(addr);
+	cmnhdr->size()      = size;
+	iphdr->src_.addr_ = here_.addr_;  //MAC will fill this address
+	iphdr->dst_.addr_ = (u_int32_t)(addr);
+	iphdr->dst_.port_ = this->port();
 
-  pbchdr->send_time 	= Scheduler::instance().clock();
+	pbchdr->send_time 	= Scheduler::instance().clock();
 
-  switch (modulationScheme)
-    {
-    case BPSK:   cmnhdr->mod_scheme_ = BPSK;break;
-    case QPSK:   cmnhdr->mod_scheme_ = QPSK;break;
-    case QAM16:  cmnhdr->mod_scheme_ = QAM16;break;
-    case QAM64:  cmnhdr->mod_scheme_ = QAM64;break;
-    default :
-      cmnhdr->mod_scheme_ = BPSK;
-    }
-  send(pkt,0);
+	switch (modulationScheme)
+	{
+	case BPSK:   cmnhdr->mod_scheme_ = BPSK;break;
+	case QPSK:   cmnhdr->mod_scheme_ = QPSK;break;
+	case QAM16:  cmnhdr->mod_scheme_ = QAM16;break;
+	case QAM64:  cmnhdr->mod_scheme_ = QAM64;break;
+	default :
+		cmnhdr->mod_scheme_ = BPSK;
+	}
+	send(pkt,0);
+
+
+	//  Packet* pkt_1 = allocpkt();
+	//    hdr_cmn *cmnhdr_1 = hdr_cmn::access(pkt_1);
+	//    hdr_pbc* pbchdr_1 = hdr_pbc::access(pkt_1);
+	//    hdr_ip*  iphdr_1  = hdr_ip::access(pkt_1);
+	//
+	//
+	//    cmnhdr_1->addr_type() = NS_AF_ILINK;
+	//    cmnhdr_1->next_hop()  = (u_int32_t)(addr);
+	//    cmnhdr_1->size()      = size;
+	//    iphdr_1->src_.addr_ = here_.addr_;  //MAC will fill this address
+	//    iphdr_1->dst_.addr_ = (u_int32_t)(addr);
+	//    iphdr_1->dst_.port_ = this->port();
+	//
+	//    pbchdr_1->send_time 	= Scheduler::instance().clock()+0.25;
+	//    strcpy( pbchdr_1->content,"World\n");
+	//
+	//    switch (modulationScheme)
+	//      {
+	//      case BPSK:   cmnhdr_1->mod_scheme_ = BPSK;break;
+	//      case QPSK:   cmnhdr_1->mod_scheme_ = QPSK;break;
+	//      case QAM16:  cmnhdr_1->mod_scheme_ = QAM16;break;
+	//      case QAM64:  cmnhdr_1->mod_scheme_ = QAM64;break;
+	//      default :
+	//        cmnhdr_1->mod_scheme_ = BPSK;
+	//      }
+	//    //send(pkt_1,0);
+	//    Scheduler::instance().schedule(target_, pkt_1, 0.25 );
 }
 
+
+void PBCAgent::singleUnicast_fec(int addr)
+{
+	fec *myfec = new fec();
+	unsigned int *x =myfec->encode(NULL,(unsigned int *)"Hello World\n",0);
+	unsigned int *y = myfec->decode(NULL,(unsigned int *)myfec->packets);
+	printf("%s--",(char *)y);
+}
 
 
 void PBCAgent::recv(Packet* pkt, Handler*)
 {
+
 	Packet::free(pkt);
 }
 
@@ -160,47 +199,47 @@ void PBCAgent::recv(Packet* pkt, Handler*)
 void
 PBCTimer::start(void)
 {
-  if(!started)
-    {
-      Scheduler &s = Scheduler::instance();
-      started = 1;
-      variance = agent->msgVariance;
-      period = agent->msgInterval;
-      double offset = Random::uniform(0.0,period);
-      s.schedule(this, &intr, offset);
-    }
+	if(!started)
+	{
+		Scheduler &s = Scheduler::instance();
+		started = 1;
+		variance = agent->msgVariance;
+		period = agent->msgInterval;
+		double offset = Random::uniform(0.0,period);
+		s.schedule(this, &intr, offset);
+	}
 }
 
 
 void PBCTimer::stop(void)
 {
-  	Scheduler &s = Scheduler::instance();
-  	if(started)
-  	{
-  		s.cancel(&intr);
-  	}
-  	started = 0;
+	Scheduler &s = Scheduler::instance();
+	if(started)
+	{
+		s.cancel(&intr);
+	}
+	started = 0;
 }
 
 void PBCTimer::setVariance(double v)
 {
-  if(v >= 0) variance = v;
+	if(v >= 0) variance = v;
 }
 
 void PBCTimer::setPeriod(double p)
 {
-  if(p >= 0) period = p;
+	if(p >= 0) period = p;
 }
 
 void PBCTimer::handle(Event *e)
 {
 	agent->singleBroadcast();
 	if(agent->periodicBroadcast)
-	  {
-	    Scheduler &s = Scheduler::instance();
-	    double t = period - variance + Random::uniform(variance*2);
-	    s.schedule(this, &intr, t>0.0 ? t : 0.0);
-	  }
+	{
+		Scheduler &s = Scheduler::instance();
+		double t = period - variance + Random::uniform(variance*2);
+		s.schedule(this, &intr, t>0.0 ? t : 0.0);
+	}
 }
 
 
@@ -218,32 +257,38 @@ int PBCAgent::command(int argc, const char*const* argv)
 		}
 		if (strcmp(argv[1], "stop") == 0)
 		{
-		  timer.stop();
-		  return (TCL_OK);
+			timer.stop();
+			return (TCL_OK);
 		}
 	}
 	if (argc == 3)
 	{
 		if(strcmp(argv[1],"unicast")==0)
-		  {
-		    int addr =atoi(argv[2]);
-		    singleUnicast(addr);
-		    return TCL_OK;
-		  }
+		{
+			int addr =atoi(argv[2]);
+			singleUnicast(addr);
+			return TCL_OK;
+		}
+		if(strcmp(argv[1],"unicast_fec")==0)
+		{
+			int addr =atoi(argv[2]);
+			singleUnicast_fec(addr);
+			return TCL_OK;
+		}
 		if(strcmp(argv[1],"PeriodicBroadcast") ==0)
 		{
-		  if (strcmp(argv[2],"ON") == 0 )
-		    {
-		      periodicBroadcast = true;
-		      timer.start();
-		      return TCL_OK;
-		    }
-		  if(strcmp(argv[2],"OFF") ==0 )
-		    {
-		      periodicBroadcast = false;
-		      timer.stop();
-		      return TCL_OK;
-		    }
+			if (strcmp(argv[2],"ON") == 0 )
+			{
+				periodicBroadcast = true;
+				timer.start();
+				return TCL_OK;
+			}
+			if(strcmp(argv[2],"OFF") ==0 )
+			{
+				periodicBroadcast = false;
+				timer.stop();
+				return TCL_OK;
+			}
 		}
 
 

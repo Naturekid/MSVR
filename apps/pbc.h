@@ -59,11 +59,13 @@
 #include "packet.h"
 #include "address.h"
 #include "ip.h"
+#include "fec.h"
 
 
 
 struct hdr_pbc {
 	double 	send_time;
+	char content[200];
 	static int offset_; // required by PacketHeaderManager
 	inline static int& offset() { return offset_; }
 	inline static hdr_pbc* access(const Packet* p) {
@@ -103,14 +105,18 @@ public:
 	virtual void recv(Packet*, Handler*);
 	void	singleBroadcast();
 	void    singleUnicast(int addr);
+	void    singleUnicast_fec(int addr);
 	bool    periodicBroadcast;
 
 	double msgInterval;
 	double msgVariance;
+
+
 private:
 	PBCTimer  timer;
 	int size;
 	int modulationScheme;
+
 };
 
 #endif // ns_pbc_h

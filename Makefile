@@ -336,6 +336,7 @@ OBJ_CC = \
 	wpan/p802_15_4sscs.o wpan/p802_15_4timer.o \
 	wpan/p802_15_4trace.o wpan/p802_15_4transac.o \
 	apps/pbc.o \
+	apps/fec.o \
 	dtn/mybundle.o \
 	cpc/libcpc.a \
 	msvr/msvr_agent.o msvr/list.o \

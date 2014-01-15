@@ -9,7 +9,6 @@
 #include "../cpc_prot.h"
 
 #include "Checker.h"
-#include "fec.h"
 
 //#define DEBUG
 
@@ -40,7 +39,6 @@ class CpcAgent : public Agent {
         void SetDTNFlag(int n);
         Checker checker_ ;
         Packet* temppacket;
-        fec myfec;
 
 	protected:
 		process_route_prot protHandler_;
