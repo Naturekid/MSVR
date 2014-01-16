@@ -65,7 +65,8 @@
 
 struct hdr_pbc {
 	double 	send_time;
-	char content[200];
+	char content[51*4];
+
 	static int offset_; // required by PacketHeaderManager
 	inline static int& offset() { return offset_; }
 	inline static hdr_pbc* access(const Packet* p) {

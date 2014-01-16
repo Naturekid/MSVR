@@ -1,3 +1,4 @@
 *.o
 *nam
 out.nam
+apps/pbc.o

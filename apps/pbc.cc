@@ -52,6 +52,7 @@
 
 
 #include <iostream>
+#include <stdio.h>
 #include "random.h"
 #include "pbc.h"
 //#include "fec.h"
@@ -137,6 +138,19 @@ void PBCAgent::singleUnicast(int addr)
 
 	pbchdr->send_time 	= Scheduler::instance().clock();
 
+	Fec *myfec;
+	myfec= new Fec();
+	myfec->Get_msg(myfec->message);
+	myfec->Encode(myfec->COLBIT, myfec->BIT, myfec->ExptoFE, myfec->FEtoExp, myfec->packets, myfec->message);
+
+	//memcpy(pbchdr->content , myfec->packets , sizeof(unsigned int) * 255);
+	memcpy( pbchdr->content , myfec->packets,4*51);
+	memcpy( pbchdr->content+4*51 , myfec->packets+51,4*51);
+	memcpy( pbchdr->content+4*102 , myfec->packets+102,4*51);
+	memcpy( pbchdr->content+4*153 , myfec->packets+153,4*51);
+	memcpy( pbchdr->content+4*204 , myfec->packets+204,4*51);
+
+
 	switch (modulationScheme)
 	{
 	case BPSK:   cmnhdr->mod_scheme_ = BPSK;break;
@@ -178,18 +192,62 @@ void PBCAgent::singleUnicast(int addr)
 	//    Scheduler::instance().schedule(target_, pkt_1, 0.25 );
 }
 
-
 void PBCAgent::singleUnicast_fec(int addr)
 {
-	fec *myfec = new fec();
-	unsigned int *x =myfec->encode(NULL,(unsigned int *)"Hello World\n",0);
-	unsigned int *y = myfec->decode(NULL,(unsigned int *)myfec->packets);
-	printf("%s--",(char *)y);
+	Fec *myfec;
+	myfec= new Fec();
+	myfec->Get_msg(myfec->message);
+	myfec->Encode(myfec->COLBIT, myfec->BIT, myfec->ExptoFE, myfec->FEtoExp, myfec->packets, myfec->message);
+	double the_time = Scheduler::instance().clock();
+	for( int fecid = 0 ; fecid < myfec->Npackets; fecid ++){
+
+		Packet* pkt = allocpkt();
+		hdr_cmn *cmnhdr = hdr_cmn::access(pkt);
+		hdr_pbc* pbchdr = hdr_pbc::access(pkt);
+		hdr_ip*  iphdr  = hdr_ip::access(pkt);
+
+
+		cmnhdr->addr_type() = NS_AF_ILINK;
+		cmnhdr->next_hop()  = (u_int32_t)(addr);
+		cmnhdr->size()      = size;
+		iphdr->src_.addr_ = here_.addr_;  //MAC will fill this address
+		iphdr->dst_.addr_ = (u_int32_t)(addr);
+		iphdr->dst_.port_ = this->port();
+
+		pbchdr->send_time 	= the_time;
+
+		memcpy( pbchdr->content , myfec->packets+fecid*51 , 4*51);
+
+		switch (modulationScheme)
+			{
+			case BPSK:   cmnhdr->mod_scheme_ = BPSK;break;
+			case QPSK:   cmnhdr->mod_scheme_ = QPSK;break;
+			case QAM16:  cmnhdr->mod_scheme_ = QAM16;break;
+			case QAM64:  cmnhdr->mod_scheme_ = QAM64;break;
+			default :
+				cmnhdr->mod_scheme_ = BPSK;
+			}
+		Scheduler::instance().schedule(target_, pkt, 0.1 * fecid );
+	}
+
 }
 
 
 void PBCAgent::recv(Packet* pkt, Handler*)
 {
+	hdr_ip*  iphdr  = hdr_ip::access(pkt);
+
+	if(	iphdr->dst_.addr_ == here_.addr_){
+
+		hdr_pbc* pbchdr = hdr_pbc::access(pkt);
+//		Fec *myfec2 ;
+//		myfec2 = new Fec();
+//		memcpy( myfec2->rec_packets,pbchdr->content,255*4);
+//		int temp = 3;
+//		myfec2->Decode(myfec2->COLBIT, myfec2->BIT, myfec2->ExptoFE, myfec2->FEtoExp, myfec2->rec_packets, &temp, myfec2->rec_message);
+		printf("arrived %d---fecid %d ---------%lf\n", here_.addr_,*pbchdr->content,pbchdr->send_time);
+		//fprintf(stderr," the time :%lf",pbchdr->send_time);
+	}
 
 	Packet::free(pkt);
 }

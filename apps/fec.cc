@@ -6,31 +6,122 @@
 //  Copyright (c) 2013 Yang YanQing. All rights reserved.
 //
 
-#include "fec.h"
+#include <iostream>
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "fec.h"
 
-fec::fec(){
-    this->prepareWork();
-    this->init_field();
+
+Fec::Fec(){
+    this->Prepare();
+    this->Init_field(&COLBIT, BIT, ExptoFE, FEtoExp);
 }
 
-fec::~fec(){
-    free(ExptoFE);
-    free(FEtoExp);
-    free(rec_message);
-    free(message);
-    free(packets);
-    free(rec_packets);
+
+Fec::~Fec(){
+
 }
 
-unsigned int * fec::encode(unsigned int * output , unsigned int * input , int size){
 
-    strcpy( (char *)message,(char *)input);
-    //printf("%s",message);
-    //output = message;
 
+
+
+
+
+void Fec::Prepare(){
+    ExptoFE = (UNSIGNED *)calloc(TableLength + Lfield, sizeof(UNSIGNED));
+    if (!(ExptoFE)) {
+        printf("\ndriver: ExptoFE malloc failed\n"); exit(434);
+    }
+
+    FEtoExp = (UNSIGNED *)calloc(TableLength, sizeof(UNSIGNED));
+    if (!(FEtoExp)) {
+        printf("\ndriver: FEtoExp malloc failed\n"); exit(434);
+    }
+
+    rec_message = (UNSIGNED *)calloc(Mlen, sizeof(UNSIGNED));
+    if (!(rec_message)) {
+        printf("\ndriver: rec_message malloc failed\n"); exit(434);
+    }
+
+    message = (UNSIGNED *)calloc(Mlen, sizeof(UNSIGNED));
+    printf("Message len %d * unsigned int\n",Mlen);
+    if (!(message)) {
+        printf("\ndriver: message malloc failed\n"); exit(434);
+    }
+
+    packets = (UNSIGNED *)calloc(Npackets * Plentot, sizeof(UNSIGNED));
+    printf("packets len %d * unsigned int\n",Npackets * Plentot);
+    if (!(packets)) {
+        printf("\ndriver: packets malloc failed\n"); exit(434);
+    }
+
+    rec_packets = (UNSIGNED *)calloc(Npackets * Plentot, sizeof(UNSIGNED));
+    if (!(rec_packets)) {
+        printf("\ndriver: rec_packets malloc failed\n"); exit(434);
+    }
+}
+
+void Fec::Init_field(UNSIGNED *pCOLBIT, UNSIGNED *BIT, UNSIGNED *ExptoFE,UNSIGNED *FEtoExp)
+{
+    /* POLYMASK is the irreducible polynomial */
+    /* CARRYMASK is used to see when there is a carry in the polynomial
+     and when it should be XOR'd with POLYMASK */
+
+    int i ;
+    static UNSIGNED CARRYMASK ;
+    static UNSIGNED POLYMASK[16] =
+    {0x0,     0x3,   0x7,   0xB,   0x13,   0x25,  0x43,    0x83,
+        0x11D, 0x211, 0x409, 0x805, 0x1053, 0x201B, 0x402B, 0x8003} ;
+
+    /* Lfield is the length of the field (This can from the table above
+     be between 1 and 15, but because of restrictions in the driver.c
+     program this value currently can be at most 10).
+     SMultField = TableLength - 1 is the number of elements in the multiplicative
+     group of the field.  COLBIT is used to make sure rows and columns have
+     distinct field elements associated with them
+     The BIT array is used to mask out single bits in equations: bit
+     ExptoFE is the table that goes from the exponent to the finite field element
+     FEtoExp is the table that goes from the finite field element to the exponent */
+
+    BIT[0] = 0x1 ;
+    for (i=1; i < Lfield ; i++) BIT[i] = BIT[i-1] << 1 ;
+    *pCOLBIT = BIT[Lfield-1] ;
+    CARRYMASK = *pCOLBIT << 1 ;
+
+    ExptoFE[0] = 0x1 ;
+    for (i=1; i < SMultField + Lfield - 1 ; i++)
+    {
+        ExptoFE[i] = ExptoFE[i-1] << 1 ;
+        if (ExptoFE[i]&CARRYMASK)
+            ExptoFE[i] ^= POLYMASK[Lfield] ;
+    } ;
+
+    FEtoExp[0] = -1 ;
+    for (i=0; i < SMultField ; i++)
+        FEtoExp[ExptoFE[i]] = i ;
+}
+
+
+void Fec::Get_msg(UNSIGNED *message)
+{
+    //int i;
+    char *x = (char *)message;
+    char hello[14]="Hello World!\n";
+    //for (i=0; i < Mlen; i++) message[i] = i ;
+    strcpy(x, hello);
+    //memcpy(x, hello, sizeof(100));
+    //for (i=0; i < 4*Mlen; i++)
+    //    x[i] = "abcdefghijklmnopwrstuvwxyz"[rand()%26] ;
+}
+
+void Fec::Encode(UNSIGNED COLBIT, UNSIGNED *BIT, UNSIGNED *ExptoFE,
+            UNSIGNED *FEtoExp, UNSIGNED *packets, UNSIGNED *message)
+{
     int i,j,k,l,m, ind_seg,col_eqn,row_eqn,ind_eqn ;
     int row, col, ExpFE ;
+    //struct timeval start_time, end_time ;
 
     /* Set the identifier in all the packets to be sent */
 
@@ -38,6 +129,7 @@ unsigned int * fec::encode(unsigned int * output , unsigned int * input , int si
         packets[i*Plentot] = i;
 
     /* Copy the message into the first Mpackets packets */
+
 
     k = 0 ;
     j = 0 ;
@@ -92,13 +184,44 @@ unsigned int * fec::encode(unsigned int * output , unsigned int * input , int si
             } ;
         } ;
     } ;
-    return packets;
+
+#ifdef PRINT
+    printf ("\n------------------------------------------------") ;
+    printf ("\n encode: number of seconds is %f",
+            (float)(end_time.tv_sec-start_time.tv_sec)+
+            (float)(end_time.tv_usec-start_time.tv_usec)/1000000.0) ;
+    printf ("\n------------------------------------------------\n\n") ;
+    fflush(stdout) ;
+#endif
 }
 
-unsigned int * fec::decode(unsigned int * output , unsigned int * input){
 
-    strcpy((char *)rec_packets,(char *)input );
+void Fec::Lose_Packets(UNSIGNED *packets, UNSIGNED *rec_packets, int *pNrec)
 
+{
+    int i,j,k,m;
+
+    *pNrec = 0 ;
+    k = 0 ;
+    m = 0 ;
+    for (i=(Npackets-Mpackets)/2 ; i < (Npackets+Mpackets)/2 ; i++)
+        //for (i=1 ; i < 400 ; i+= 2)
+
+    {
+        k = Plentot * i ;
+        m = Plentot * (*pNrec) ;
+        for (j=0; j < Plentot; j++)
+            rec_packets[m+j] = packets[k+j] ;
+        (*pNrec)++ ;
+    } ;
+
+}
+
+
+void Fec::Decode(UNSIGNED COLBIT, UNSIGNED *BIT, UNSIGNED *ExptoFE,
+       UNSIGNED *FEtoExp, UNSIGNED *rec_packets, int *pNrec,
+       UNSIGNED *rec_message)
+{
     int i,j,k,l,m, index, seg_ind ;
     int col_ind, row_ind, col_eqn, row_eqn ;
     int Nfirstrec, Nextra ;
@@ -106,6 +229,7 @@ unsigned int * fec::decode(unsigned int * output , unsigned int * input){
     int *Col_Ind, *Row_Ind, ExpFE ;
     UNSIGNED  *M ;
     UNSIGNED *C, *D, *E, *F ;
+    //struct timeval start_time, end_time;
 
     Rec_index = (int *) calloc(Mpackets, sizeof(int));
     if (!(Rec_index)) {printf("\ndecode: Rec_index malloc failed\n"); exit(434); }
@@ -131,15 +255,32 @@ unsigned int * fec::decode(unsigned int * output , unsigned int * input){
     M = (UNSIGNED *) calloc(Nsegs*Rpackets*Lfield, sizeof(UNSIGNED));
     if (!(M)) {printf("\ndecode: M malloc failed\n"); exit(434); }
 
+    if (*pNrec < Mpackets)
+    {
+        printf("*** Need %d packets to recover message",Mpackets) ;
+        printf(" but only %d packets received *** \n",*pNrec) ;
+    } ;
 
     /* Initialize the received message */
 
     for (i=0; i < Mlen ; i++) rec_message[i] = 0 ;
 
+    /* Move information from packets into received message.
+     Fill in parts of received message that
+     requires no processing and figure out how
+     many of the redundant packets are needed.
+     Nfirstrec is the number of packets received
+     from among the first Mpackets that carry portions
+     of the unprocessed original message.
+     Rec_index is an array that indicates which parts
+     of the message are received.  The pattern is
+     the same within all Nsegs segments,  */
+
+
     Nfirstrec = 0 ;
     for (i=0; i < Mpackets; i++) Rec_index[i] = 0 ;
     m = 0 ;
-    for (i=0; i < 1 ; i++)
+    for (i=0; i < *pNrec ; i++)
     {
         index = rec_packets[m] ;
         if (index < Mpackets)
@@ -179,7 +320,7 @@ unsigned int * fec::decode(unsigned int * output , unsigned int * input){
 
     row_ind = 0 ;
     m = 0 ;
-    for (i=0; i < 1 ; i++)
+    for (i=0; i < *pNrec ; i++)
     {
         if (rec_packets[m] >= Mpackets)
         {
@@ -276,79 +417,13 @@ unsigned int * fec::decode(unsigned int * output , unsigned int * input){
         } ;
     } ;
 
-    return rec_message;
-}
-
-void fec::set_msg(){
-    char *x = (char *)message;
-    char hello[14]="Hello World!\n";
-    strcpy(x, hello);
-}
-
-void fec::set_msg(UNSIGNED *message_input, int size){
-    for (int temp = 0; temp < size; temp ++) {
-        message[temp] = message_input[temp];
-    }
-}
-
-void fec::prepareWork(){
-    ExptoFE = (UNSIGNED *)calloc(TableLength + Lfield, sizeof(UNSIGNED));
-    if (!(ExptoFE)) {
-        printf("\ndriver: ExptoFE malloc failed\n"); exit(434);
-    }
-
-    FEtoExp = (UNSIGNED *)calloc(TableLength, sizeof(UNSIGNED));
-    if (!(FEtoExp)) {
-        printf("\ndriver: FEtoExp malloc failed\n"); exit(434);
-    }
-
-    rec_message = (UNSIGNED *)calloc(Mlen, sizeof(UNSIGNED));
-    if (!(rec_message)) {
-        printf("\ndriver: rec_message malloc failed\n"); exit(434);
-    }
-
-    message = (UNSIGNED *)calloc(Mlen, sizeof(UNSIGNED));
-    //printf("Message len %d\n",Mlen);
-    if (!(message)) {
-        printf("\ndriver: message malloc failed\n"); exit(434);
-    }
-
-    packets = (UNSIGNED *)calloc(Npackets * Plentot, sizeof(UNSIGNED));
-    //printf("packets len %d\n",Npackets * Plentot);
-    if (!(packets)) {
-        printf("\ndriver: packets malloc failed\n"); exit(434);
-    }
-
-    rec_packets = (UNSIGNED *)calloc(Npackets * Plentot, sizeof(UNSIGNED));
-    if (!(rec_packets)) {
-        printf("\ndriver: rec_packets malloc failed\n"); exit(434);
-    }
-
-}
-
-void fec::init_field(){
-
-
-    int i ;
-    static UNSIGNED CARRYMASK ;
-    static UNSIGNED POLYMASK[16] =
-    {0x0,     0x3,   0x7,   0xB,   0x13,   0x25,  0x43,    0x83,
-        0x11D, 0x211, 0x409, 0x805, 0x1053, 0x201B, 0x402B, 0x8003} ;
-    BIT[0] = 0x1 ;
-    for (i=1; i < Lfield ; i++) BIT[i] = BIT[i-1] << 1 ;
-    COLBIT = BIT[Lfield-1] ;
-    CARRYMASK = COLBIT << 1 ;
-
-    ExptoFE[0] = 0x1 ;
-    for (i=1; i < SMultField + Lfield - 1 ; i++)
-    {
-        ExptoFE[i] = ExptoFE[i-1] << 1 ;
-        if (ExptoFE[i]&CARRYMASK)
-            ExptoFE[i] ^= POLYMASK[Lfield] ;
-    } ;
-
-    FEtoExp[0] = -1 ;
-    for (i=0; i < SMultField ; i++)
-        FEtoExp[ExptoFE[i]] = i ;
+#ifdef PRINT
+    printf ("\n------------------------------------------------") ;
+    printf ("\n decode: number of seconds is %f",
+            (float)(end_time.tv_sec-start_time.tv_sec)+
+            (float)(end_time.tv_usec-start_time.tv_usec)/1000000.0) ;
+    printf ("\n------------------------------------------------\n\n") ;
+    fflush(stdout) ;
+#endif
 
 }
