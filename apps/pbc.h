@@ -74,6 +74,14 @@ struct hdr_pbc {
 	}
 };
 
+struct fec_list{
+	double time;
+	int receive[5];
+	int receive_n;
+	char content[255*4];
+	struct fec_list * next;
+};
+
 class PBCAgent;
 
 
@@ -112,6 +120,7 @@ public:
 	double msgInterval;
 	double msgVariance;
 
+	struct fec_list * fec_list_head;
 
 private:
 	PBCTimer  timer;

@@ -84,6 +84,8 @@ PBCAgent::PBCAgent() : Agent(PT_PBC), timer(this)
 	bind("periodicBroadcastInterval", &msgInterval);
 	bind("modulationScheme",&modulationScheme);
 	periodicBroadcast = false;
+
+	this->fec_list_head = NULL;
 }
 
 PBCAgent::~PBCAgent()
@@ -236,17 +238,63 @@ void PBCAgent::singleUnicast_fec(int addr)
 void PBCAgent::recv(Packet* pkt, Handler*)
 {
 	hdr_ip*  iphdr  = hdr_ip::access(pkt);
-
+	//if the destination is me, O, FEC things is on duty
 	if(	iphdr->dst_.addr_ == here_.addr_){
 
 		hdr_pbc* pbchdr = hdr_pbc::access(pkt);
-//		Fec *myfec2 ;
-//		myfec2 = new Fec();
-//		memcpy( myfec2->rec_packets,pbchdr->content,255*4);
-//		int temp = 3;
-//		myfec2->Decode(myfec2->COLBIT, myfec2->BIT, myfec2->ExptoFE, myfec2->FEtoExp, myfec2->rec_packets, &temp, myfec2->rec_message);
 		printf("arrived %d---fecid %d ---------%lf\n", here_.addr_,*pbchdr->content,pbchdr->send_time);
-		//fprintf(stderr," the time :%lf",pbchdr->send_time);
+
+		int inthelist = 0;
+		struct fec_list * temp = fec_list_head;
+		struct fec_list * temp_delete = NULL;
+		//check fec list queue, use the send time as the ID.
+		//if the send_time is the same ,then check the fec_position,
+		//if there are M different fec_packets enough, Decode it.Got the message.
+		//if there aren't M enough , put in the list, continue
+
+		while(temp != NULL){
+			if(temp->time == pbchdr->send_time){
+				inthelist = 1;
+				int position = *pbchdr->content;
+				if( temp->receive[position] == 1)
+					break;
+				else{
+					temp->receive[position] = 1;
+					temp->receive_n ++;
+					memcpy( temp->content+4*51*position, pbchdr->content,4*51);
+					if(temp->receive_n >= 3){
+						temp_delete = temp;
+						Fec * myfec = new Fec();
+						memcpy( myfec->rec_packets,temp->content,255*4);
+						myfec->Decode(myfec->COLBIT, myfec->BIT, myfec->ExptoFE, myfec->FEtoExp, myfec->rec_packets, &temp->receive_n, myfec->rec_message);
+						printf("Got right message %s at %d \n",(char *)myfec->rec_message,here_.addr_);
+					}
+					break;
+				}
+			}else
+				temp = temp->next;
+		}
+		if(inthelist == 0){
+			struct fec_list * newnode = (struct fec_list *)malloc(sizeof(struct fec_list));
+			memset( newnode , 0 , sizeof(struct fec_list) );
+			newnode->time = pbchdr->send_time;
+			newnode->receive_n++;
+			int position = *pbchdr->content;
+			newnode->receive[position] = 1;
+			memcpy( newnode->content+4*51*position, pbchdr->content, 4*51);
+			newnode->next = fec_list_head;
+			fec_list_head = newnode;
+		}
+		if(temp_delete!=NULL){
+			if(temp_delete == fec_list_head){
+				fec_list_head = fec_list_head->next;
+				free(temp_delete);
+			}else{
+				temp = fec_list_head;
+				//while()
+			}
+		}
+
 	}
 
 	Packet::free(pkt);
