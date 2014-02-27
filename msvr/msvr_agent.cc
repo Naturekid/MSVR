@@ -31,8 +31,8 @@ public:
 } class_msvr;
 
 MsvrAgent::MsvrAgent() :
-    										CpcAgent(PT_MSVR),neighTimer_(this),
-    										map_(), gps_(this)
+    												CpcAgent(PT_MSVR),neighTimer_(this),
+    												map_(), gps_(this)
 {
 	// init callback function pointers
 	protHandler_ = routing_proto_cb;
@@ -375,7 +375,7 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 
 			int roadid3 = MSVRMAP->getRoadByPos(srcPos.x, srcPos.y).id_;
 			if( MSVRMAP->nodeInRoad(srcPos.x,srcPos.y,roadid1))
-							roadid3 = roadid1;
+				roadid3 = roadid1;
 
 			// XXX: call old find a next hop method
 			/*next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, srcPos.x, srcPos.y, true);*/
@@ -384,7 +384,9 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 			/*next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, relayPos.x, relayPos.y, dstPos.x, dstPos.y, true);*/
 			//next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, roadid3, relayPos.x, relayPos.y, nextPos.x, nextPos.y, true);
 			next = msvr_get_next_hop_yyq(((MsvrAgent *)(agent))->getNblist() , paths , relayPos.x , relayPos.y);
-
+			if(next.s_addr == -1){
+				next = msvr_get_next_hop(((MsvrAgent *)(agent))->getNblist(), roadid1, roadid2, roadid3, srcPos.x, srcPos.y, nextPos.x, nextPos.y, true);
+			}
 		}
 	}
 
@@ -428,7 +430,7 @@ request_routing_cb(char *p, struct in_addr src, struct in_addr dst, int applen, 
 	agent->sendProtPacketWithData((char *)&packet, packet.length, src, dst, next);
 
 	if(Packet_New_Send == true){
-	//if(false){
+		//if(false){
 		enpaths_new = encode_path(paths_new);
 		packet_new.type = MSVR_TYPE_ROUTING;
 		packet_new.length = packet_new.size() + paths_new.size() * 2 + applen;

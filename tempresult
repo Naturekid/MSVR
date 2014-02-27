@@ -1,0 +1,866 @@
+Starting Simulation...
+num_nodes is set 160
+channel.cc:sendUp - Calc highestAntennaZ_ and distCST_
+highestAntennaZ_ = 1.5,  distCST_ = 550.0
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+arrived 159---fecid 0 ---------8.000000
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+arrived 159---fecid 0 ---------18.000000
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+arrived 159---fecid 0 ---------18.000000
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+arrived 159---fecid 0 ---------28.000000
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+arrived 159---fecid 0 ---------28.000000
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+arrived 159---fecid 0 ---------30.000000
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+arrived 159---fecid 0 ---------30.000000
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+arrived 159---fecid 0 ---------33.100000
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+arrived 159---fecid 0 ---------33.100000
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+arrived 159---fecid 0 ---------33.200000
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+arrived 159---fecid 0 ---------33.200000
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+arrived 159---fecid 0 ---------33.300000
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+arrived 159---fecid 0 ---------33.300000
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+arrived 159---fecid 0 ---------33.400000
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+arrived 159---fecid 0 ---------33.400000
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+arrived 159---fecid 0 ---------33.500000
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+arrived 159---fecid 0 ---------33.500000
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+arrived 159---fecid 0 ---------33.600000
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+arrived 159---fecid 0 ---------33.600000
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+arrived 159---fecid 0 ---------33.700000
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+here I am node :148
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:126----length:32
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :126
+paths.size():2;...--7----12--
+src:100----dst:159----next:128----length:32
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :128
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+arrived 159---fecid 0 ---------33.700000
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+hns: _o161 setdest -0.53 503.36 0: 
+    (_o161 cmd line 1)
+    invoked from within
+"_o161 cmd setdest -0.53 503.36 0"
+    invoked from within
+"catch "$self cmd $args" ret"
+    invoked from within
+"if [catch "$self cmd $args" ret] {
+set cls [$self info class]
+global errorInfo
+set savedInfo $errorInfo
+error "error when calling class $cls: $args" $..."
+    (procedure "_o161" line 2)
+    (SplitObject unknown line 2)
+    invoked from within
+"_o161 setdest -0.53 503.36 0"
+ere I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+Message len 150 * unsigned int
+packets len 255 * unsigned int
+here I am node :100
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:131----length:38
+src:100----dst:159----next:102----length:38
+arrived 159---fecid 0 ---------33.800000
+here I am node :131
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:133----length:38
+here I am node :133
+paths.size():5;...--0----1----6----11----12--
+src:100----dst:159----next:111----length:36
+here I am node :111
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:113----length:36
+here I am node :113
+paths.size():4;...--1----6----11----12--
+src:100----dst:159----next:115----length:34
+here I am node :115
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:117----length:34
+here I am node :117
+paths.size():3;...--6----11----12--
+src:100----dst:159----next:31----length:32
+here I am node :102
+paths.size():5;...--0----5----6----7----12--
+src:100----dst:159----next:13----length:36
+here I am node :31
+paths.size():2;...--11----12--
+src:100----dst:159----next:157----length:32
+here I am node :13
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:142----length:36
+here I am node :157
+srcRoad dstRoad 0 17
+paths first 0
+paths second 12
+起点坐标:(0,25),终点坐标:(975,1000)
+src:100----dst:159----next:159----length:36
+here I am node :142
+paths.size():4;...--5----6----7----12--
+src:100----dst:159----next:22----length:34
+arrived 159---fecid 0 ---------33.900000
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :22
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:146----length:34
+here I am node :146
+paths.size():3;...--6----7----12--
+src:100----dst:159----next:148----length:34
