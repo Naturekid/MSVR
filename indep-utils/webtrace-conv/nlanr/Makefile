@@ -49,10 +49,10 @@ prefix  = /usr/local
 BINDEST = /usr/local/bin
 
 CC = g++
-INCLUDE = -I. -I../../.. -I/home/david/ns-allinone-2.34/tclcl-1.19 -I/home/david/ns-allinone-2.34/otcl-1.13 -I/home/david/ns-allinone-2.34/include -I/home/david/ns-allinone-2.34/include -I/home/david/ns-allinone-2.34/include -I/usr/include/pcap
+INCLUDE = -I. -I../../.. -I/home/cai/ns-allinone-2.34/tclcl-1.19 -I/home/cai/ns-allinone-2.34/otcl -I/home/cai/ns-allinone-2.34/include -I/home/cai/ns-allinone-2.34/include -I/home/cai/ns-allinone-2.34/include -I/usr/include/pcap
 CFLAGS =  -Wall -Wno-write-strings -DCPP_NAMESPACE=std
 LDFLAGS = 
-LIBS = -L/home/david/ns-allinone-2.34/lib -ltcl8.4  -lnsl -ldl -lm 
+LIBS = -L/home/cai/ns-allinone-2.34/lib -ltcl8.4  -lnsl -ldl -lm 
 INSTALL = /usr/bin/install -c
 
 SRC = tr-stat.cc logparse.cc

@@ -30,6 +30,9 @@ BINDEST	= /usr/local/bin
 # Pathname of directory to install the man page
 MANDEST	= /usr/local/man
 
+#NS PATH
+NS_PATH = /home/cai/ns-allinone-2.34
+
 BLANK	= # make a blank space.  DO NOT add anything to this line
 
 # The following will be redefined under Windows (see WIN32 lable below)
@@ -38,7 +41,7 @@ CPP	= g++
 LINK	= $(CPP)
 LINK_SHLIB = gcc -shared
 MKDEP	= ./conf/mkdep
-TCLSH	= /home/david/ns-allinone-2.34/bin/tclsh8.4
+TCLSH	= $(NS_PATH)/bin/tclsh8.4
 TCL2C	= ../tclcl-1.19/tcl2c++
 AR	= ar rc $(BLANK)
 
@@ -65,7 +68,7 @@ DEFINE	= -DTCP_DELAY_BIND_ALL -DNO_TK -DTCLCL_CLASSINSTVAR  -DNDEBUG -DLINUX_TCP
 INCLUDES = \
 	-I.  \
 	-I. \
-	-I/home/david/ns-allinone-2.34/tclcl-1.19 -I/home/david/ns-allinone-2.34/otcl-1.13 -I/home/david/ns-allinone-2.34/include -I/home/david/ns-allinone-2.34/include -I/home/david/ns-allinone-2.34/include -I/usr/include/pcap \
+	-I$(NS_PATH)/tclcl-1.19 -I$(NS_PATH)/otcl-1.13 -I$(NS_PATH)/include -I$(NS_PATH)/include -I$(NS_PATH)/include -I/usr/include/pcap \
 	-I./tcp -I./sctp -I./common -I./link -I./queue \
 	-I./adc -I./apps -I./mac -I./mobile -I./trace \
 	-I./routing -I./tools -I./classifier -I./mcast \
@@ -80,7 +83,7 @@ INCLUDES = \
 
 
 LIB	= \
-	-L/home/david/ns-allinone-2.34/tclcl-1.19 -ltclcl -L/home/david/ns-allinone-2.34/otcl-1.13 -lotcl -L/home/david/ns-allinone-2.34/lib -ltk8.4 -L/home/david/ns-allinone-2.34/lib -ltcl8.4 \
+	-L$(NS_PATH)/tclcl-1.19 -ltclcl -L$(NS_PATH)/otcl-1.13 -lotcl -L$(NS_PATH)/lib -ltk8.4 -L$(NS_PATH)/lib -ltcl8.4 \
 	-lX11 \
 	 -lnsl -ldl \
 	-lm -lm  \
